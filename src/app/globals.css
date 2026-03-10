@@ -5,13 +5,17 @@
   --font-inter: var(--font-inter);
 
   --color-brand-50: #fdfdfe;
+  --color-brand-100: #d6d9e7;
   --color-brand-200: #b0b6cf;
+  --color-brand-500: #405a86;
   --color-brand-600: #1b3e6d;
-  --color-brand-700: #152e52;
+  --color-brand-700: #163061;
+  --color-brand-800: #122354;
   --color-brand-900: #0e1847;
 
   --color-neutral-50: #fefefe;
-  --color-neutral-300: #d0d5dd;
+  --color-neutral-100: #eeeeee;
+  --color-neutral-300: #cecece;
   --color-neutral-400: #adadad;
   --color-neutral-500: #959595;
   --color-neutral-600: #646464;
