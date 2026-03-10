@@ -15,6 +15,7 @@
 
   --color-neutral-50: #fefefe;
   --color-neutral-100: #eeeeee;
+  --color-neutral-200: #dedede;
   --color-neutral-300: #cecece;
   --color-neutral-400: #adadad;
   --color-neutral-500: #959595;
@@ -23,7 +24,8 @@
   --color-neutral-900: #111418;
 
   --color-red-500: #ef4444;
-  --color-green-500: #7b8966;
+  --color-green-500: #889d77;
+  --color-green-600: #7b8966;
 }
 
 body {

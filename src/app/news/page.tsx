@@ -9,6 +9,7 @@ import { CategoryChips } from "@/components/news/category-chips";
 import { SortSheet } from "@/components/news/sort-sheet";
 import { SideDrawer } from "@/components/news/side-drawer";
 import { LogoutModal } from "@/components/news/logout-modal";
+import { BottomTabBar } from "@/components/ui/bottom-tab-bar";
 import type { Article } from "@/components/news/featured-carousel";
 
 const CATEGORIES = ["All News", "Announcement", "Agenda"];
@@ -124,7 +125,7 @@ export default function NewsPage() {
           hasUnread
         />
 
-        <div className="flex flex-col gap-6 pt-2 pb-8">
+        <div className="flex flex-col gap-6 pt-2 pb-24">
           <FeaturedCarousel
             articles={FEATURED_ARTICLES}
             onReadMore={(id) => router.push(`/news/${id}`)}
@@ -178,6 +179,8 @@ export default function NewsPage() {
           router.push("/login");
         }}
       />
+
+      <BottomTabBar />
     </div>
   );
 }
