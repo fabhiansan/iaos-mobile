@@ -1,0 +1,4 @@
+web/
+server/
+docker-compose.yml
+.ebextensions/01-increase-timeout.config
