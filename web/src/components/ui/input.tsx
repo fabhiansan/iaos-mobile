@@ -14,6 +14,7 @@ interface TextInputProps {
   success?: string;
   name?: string;
   children?: React.ReactNode;
+  disabled?: boolean;
 }
 
 export function TextInput({
@@ -27,6 +28,7 @@ export function TextInput({
   success,
   name,
   children,
+  disabled,
 }: TextInputProps) {
   const [showPassword, setShowPassword] = useState(false);
 
@@ -59,7 +61,8 @@ export function TextInput({
                 name={name}
                 value={value}
                 onChange={onChange as unknown as React.ChangeEventHandler<HTMLSelectElement>}
-                className="w-full bg-transparent font-[family-name:var(--font-work-sans)] text-sm text-neutral-800 outline-none appearance-none cursor-pointer"
+                disabled={disabled}
+                className={`w-full bg-transparent font-[family-name:var(--font-work-sans)] text-sm text-neutral-800 outline-none appearance-none ${disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
               >
                 {children}
               </select>
@@ -71,7 +74,8 @@ export function TextInput({
               value={value}
               onChange={onChange}
               placeholder={placeholder}
-              className="w-full bg-transparent font-[family-name:var(--font-work-sans)] text-sm text-neutral-800 outline-none placeholder:text-neutral-500"
+              disabled={disabled}
+              className={`w-full bg-transparent font-[family-name:var(--font-work-sans)] text-sm text-neutral-800 outline-none placeholder:text-neutral-500 ${disabled ? "opacity-50 cursor-not-allowed" : ""}`}
             />
           )}
         </div>

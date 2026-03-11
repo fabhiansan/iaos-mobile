@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { signOut } from "next-auth/react";
 import { Menu, ChevronRight, LogOut, Check } from "lucide-react";
@@ -12,44 +12,74 @@ import { SideDrawer } from "@/components/news/side-drawer";
 import { LogoutModal } from "@/components/news/logout-modal";
 import { Button } from "@/components/ui/button";
 
-const PROFILE = {
-  name: "Budi Santoso",
-  title: "Chief Executive Officer at PT Eksekusi Teknologi Nusantara",
-  verified: true,
-  yearOfEntry: 2008,
-  jobPosted: 5,
-  totalDonated: "Rp600.000",
-  email: "budsans@gmail.com",
-  phone: "+62 812 8491 2857",
-  careers: [
-    {
-      position: "Chief Executive Officer",
-      company: "PT Eksekusi Teknologi Nusantara",
-      period: "2020 - Recent",
-    },
-    {
-      position: "Chief Marketing Officer",
-      company: "PT Eksekusi Teknologi Nusantara",
-      period: "2017 - 2020",
-    },
-    {
-      position: "Head of Marketing",
-      company: "PT Sarana Canggih Semesta",
-      period: "2015 - 2017",
-    },
-    {
-      position: "Marketing Staff",
-      company: "PT Sarana Canggih Semesta",
-      period: "2013 - 2015",
-    },
-  ],
-};
+interface Profile {
+  id: string;
+  name: string;
+  email: string;
+  nim: string;
+  yearOfEntry: number;
+  phone: string;
+  role: string;
+  emailVerified: boolean;
+  profileImageUrl: string | null;
+  profileImageSignedUrl: string | null;
+}
 
 export default function ProfilePage() {
   const router = useRouter();
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [logoutOpen, setLogoutOpen] = useState(false);
   const [photoSheetOpen, setPhotoSheetOpen] = useState(false);
+  const [profile, setProfile] = useState<Profile | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  const fetchProfile = useCallback(async () => {
+    try {
+      const res = await fetch("/api/profile");
+      if (!res.ok) {
+        if (res.status === 401) {
+          router.push("/login");
+          return;
+        }
+        return;
+      }
+      const { data } = await res.json();
+      setProfile(data);
+    } catch (error) {
+      console.error("Failed to fetch profile:", error);
+    } finally {
+      setLoading(false);
+    }
+  }, [router]);
+
+  useEffect(() => {
+    fetchProfile();
+  }, [fetchProfile]);
+
+  const handlePhotoUploaded = () => {
+    setPhotoSheetOpen(false);
+    fetchProfile();
+  };
+
+  if (loading) {
+    return (
+      <div className="bg-white min-h-screen max-w-[390px] mx-auto flex items-center justify-center">
+        <p className="font-[family-name:var(--font-work-sans)] text-sm text-neutral-500">
+          Loading profile...
+        </p>
+      </div>
+    );
+  }
+
+  if (!profile) {
+    return (
+      <div className="bg-white min-h-screen max-w-[390px] mx-auto flex items-center justify-center">
+        <p className="font-[family-name:var(--font-work-sans)] text-sm text-red-500">
+          Failed to load profile.
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-white min-h-screen max-w-[390px] mx-auto relative overflow-hidden">
@@ -82,18 +112,19 @@ export default function ProfilePage() {
         {/* Avatar Section */}
         <div className="flex flex-col items-center gap-3 pt-4 pb-6">
           <ProfileAvatar
-            name={PROFILE.name}
+            name={profile.name}
+            imageUrl={profile.profileImageSignedUrl}
             onEditPhoto={() => setPhotoSheetOpen(true)}
           />
           <div className="flex flex-col items-center gap-1">
             <h2 className="font-[family-name:var(--font-work-sans)] text-xl font-semibold text-neutral-900">
-              {PROFILE.name}
+              {profile.name}
             </h2>
             <p className="font-[family-name:var(--font-work-sans)] text-xs text-neutral-500 text-center px-8">
-              {PROFILE.title}
+              {profile.nim}
             </p>
           </div>
-          {PROFILE.verified && (
+          {profile.emailVerified && (
             <div className="flex items-center gap-1 bg-green-500/20 px-3 py-1 rounded-full">
               <Check size={14} className="text-green-500" />
               <span className="font-[family-name:var(--font-work-sans)] text-xs font-medium text-green-500">
@@ -105,9 +136,9 @@ export default function ProfilePage() {
 
         {/* Stats */}
         <ProfileStats
-          yearOfEntry={PROFILE.yearOfEntry}
-          jobPosted={PROFILE.jobPosted}
-          totalDonated={PROFILE.totalDonated}
+          yearOfEntry={profile.yearOfEntry}
+          jobPosted={0}
+          totalDonated="Rp0"
         />
 
         {/* Contact Information */}
@@ -123,7 +154,7 @@ export default function ProfilePage() {
                 Email
               </p>
               <p className="font-[family-name:var(--font-work-sans)] text-sm font-medium text-neutral-900">
-                {PROFILE.email}
+                {profile.email}
               </p>
             </div>
             <div>
@@ -131,35 +162,11 @@ export default function ProfilePage() {
                 Phone Number
               </p>
               <p className="font-[family-name:var(--font-work-sans)] text-sm font-medium text-neutral-900">
-                {PROFILE.phone}
+                {profile.phone}
               </p>
             </div>
           </div>
           <div className="h-px bg-neutral-100 mt-4" />
-        </div>
-
-        {/* Career Section */}
-        <div className="px-4 pt-4">
-          <div className="border-l-2 border-brand-600 pl-3">
-            <h3 className="font-[family-name:var(--font-work-sans)] text-base font-semibold text-neutral-900">
-              Career
-            </h3>
-          </div>
-          <div className="mt-4 flex flex-col gap-3">
-            {PROFILE.careers.map((career, index) => (
-              <div key={index}>
-                <p className="font-[family-name:var(--font-work-sans)] text-sm font-semibold text-neutral-900">
-                  {career.position}
-                </p>
-                <p className="font-[family-name:var(--font-work-sans)] text-xs text-neutral-500">
-                  {career.company}
-                </p>
-                <p className="font-[family-name:var(--font-work-sans)] text-xs text-neutral-500">
-                  {career.period}
-                </p>
-              </div>
-            ))}
-          </div>
         </div>
 
         {/* Edit Career Button */}
@@ -206,8 +213,7 @@ export default function ProfilePage() {
       <ChangePhotoSheet
         isOpen={photoSheetOpen}
         onClose={() => setPhotoSheetOpen(false)}
-        onTakePhoto={() => setPhotoSheetOpen(false)}
-        onChooseLibrary={() => setPhotoSheetOpen(false)}
+        onPhotoUploaded={handlePhotoUploaded}
       />
 
       <SideDrawer
