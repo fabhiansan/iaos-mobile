@@ -3,6 +3,8 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
 import { TextInput } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
@@ -41,10 +43,34 @@ function AppleIcon() {
 
 export default function Home() {
   const [phase, setPhase] = useState<SplashPhase>(0);
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const isFormValid = email.trim() !== "" && password.trim() !== "";
+
+  const handleLogin = async () => {
+    setIsLoading(true);
+    setError("");
+    try {
+      const result = await signIn("credentials", {
+        email,
+        password,
+        redirect: false,
+      });
+      if (result?.error) {
+        setError("Invalid email or password");
+      } else {
+        router.push("/news");
+      }
+    } catch {
+      setError("Something went wrong");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   useEffect(() => {
     const timers = [
@@ -149,11 +175,16 @@ export default function Home() {
               Forget Password?
             </Link>
 
+            {error && (
+              <p className="text-sm text-red-500">{error}</p>
+            )}
+
             <Button
-              variant={isFormValid ? "primary" : "disabled"}
-              disabled={!isFormValid}
+              variant={isFormValid && !isLoading ? "primary" : "disabled"}
+              disabled={!isFormValid || isLoading}
+              onClick={handleLogin}
             >
-              Login
+              {isLoading ? "Signing in..." : "Login"}
             </Button>
 
             {/* Divider */}
