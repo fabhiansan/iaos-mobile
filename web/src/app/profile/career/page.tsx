@@ -1,56 +1,45 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { Plus } from "lucide-react";
 import { AuthHeader } from "@/components/ui/auth-header";
 import { Button } from "@/components/ui/button";
-
-interface Career {
-  id: string;
-  position: string;
-  company: string;
-  startYear: string;
-  endYear: string;
-}
-
-const INITIAL_CAREERS: Career[] = [
-  {
-    id: "1",
-    position: "Chief Executive Officer",
-    company: "PT Eksekusi Teknologi Nusantara",
-    startYear: "2020",
-    endYear: "Recent",
-  },
-  {
-    id: "2",
-    position: "Chief Marketing Officer",
-    company: "PT Eksekusi Teknologi Nusantara",
-    startYear: "2017",
-    endYear: "2020",
-  },
-  {
-    id: "3",
-    position: "Head of Marketing",
-    company: "PT Sarana Canggih Semesta",
-    startYear: "2015",
-    endYear: "2017",
-  },
-  {
-    id: "4",
-    position: "Marketing Staff",
-    company: "PT Sarana Canggih Semesta",
-    startYear: "2013",
-    endYear: "2015",
-  },
-];
+import { CareerItem, type Career } from "@/components/profile/career-item";
 
 export default function EditCareerListPage() {
   const router = useRouter();
-  const [careers, setCareers] = useState<Career[]>(INITIAL_CAREERS);
+  const [careers, setCareers] = useState<Career[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const handleDelete = (id: string) => {
-    setCareers((prev) => prev.filter((c) => c.id !== id));
+  const fetchCareers = useCallback(async () => {
+    try {
+      setLoading(true);
+      const res = await fetch("/api/career-history");
+      if (!res.ok) throw new Error("Failed to fetch");
+      const json = await res.json();
+      setCareers(json.data ?? []);
+    } catch (error) {
+      console.error("Failed to fetch careers:", error);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchCareers();
+  }, [fetchCareers]);
+
+  const handleDelete = async (id: string) => {
+    try {
+      const res = await fetch(`/api/career-history/${id}`, {
+        method: "DELETE",
+      });
+      if (!res.ok) throw new Error("Failed to delete");
+      await fetchCareers();
+    } catch (error) {
+      console.error("Failed to delete career:", error);
+    }
   };
 
   return (
@@ -92,37 +81,26 @@ export default function EditCareerListPage() {
             Saved Career
           </h3>
 
-          <div className="flex flex-col gap-4">
-            {careers.map((career) => (
-              <div key={career.id} className="flex flex-col gap-2">
-                <p className="font-[family-name:var(--font-work-sans)] text-sm font-semibold text-neutral-900">
-                  {career.position}
-                </p>
-                <p className="font-[family-name:var(--font-work-sans)] text-xs text-neutral-500">
-                  {career.company}
-                </p>
-                <p className="font-[family-name:var(--font-work-sans)] text-xs text-neutral-500">
-                  {career.startYear} - {career.endYear}
-                </p>
-                <div className="flex gap-3">
-                  <Button
-                    variant="secondary"
-                    onClick={() => handleDelete(career.id)}
-                    className="flex-1 !border-red-500 !text-red-500 !py-2 !text-xs"
-                  >
-                    Delete
-                  </Button>
-                  <Button
-                    variant="secondary"
-                    onClick={() => router.push(`/profile/career/${career.id}`)}
-                    className="flex-1 !py-2 !text-xs"
-                  >
-                    Edit
-                  </Button>
-                </div>
-              </div>
-            ))}
-          </div>
+          {loading ? (
+            <p className="font-[family-name:var(--font-work-sans)] text-sm text-neutral-400">
+              Loading...
+            </p>
+          ) : careers.length === 0 ? (
+            <p className="font-[family-name:var(--font-work-sans)] text-sm text-neutral-400">
+              No career entries yet.
+            </p>
+          ) : (
+            <div className="flex flex-col gap-4">
+              {careers.map((career) => (
+                <CareerItem
+                  key={career.id}
+                  career={career}
+                  onEdit={(id) => router.push(`/profile/career/${id}`)}
+                  onDelete={handleDelete}
+                />
+              ))}
+            </div>
+          )}
         </div>
 
         <div className="px-4 py-6">
