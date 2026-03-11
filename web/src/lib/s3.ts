@@ -20,14 +20,14 @@ const bucket = process.env.STORAGE_S3_BUCKET || "iaos-connect";
 const root = process.env.STORAGE_S3_ROOT || "iaos-mobile";
 
 export function getS3Key(folder: string, filename: string): string {
-  return `${root}/${folder}/${filename}`;
+  return `${root}/${folder}/${Date.now()}-${filename}`;
 }
 
 export async function uploadToS3(
   key: string,
   body: Buffer | Uint8Array | ReadableStream,
   contentType: string
-): Promise<void> {
+): Promise<string> {
   await s3Client.send(
     new PutObjectCommand({
       Bucket: bucket,
@@ -36,14 +36,15 @@ export async function uploadToS3(
       ContentType: contentType,
     })
   );
+  return key;
 }
 
-export async function getSignedDownloadUrl(key: string): Promise<string> {
+export async function getSignedDownloadUrl(key: string, expiresIn = 3600): Promise<string> {
   const command = new GetObjectCommand({
     Bucket: bucket,
     Key: key,
   });
-  return getSignedUrl(s3Client, command, { expiresIn: 3600 });
+  return getSignedUrl(s3Client, command, { expiresIn });
 }
 
 export async function deleteFromS3(key: string): Promise<void> {
