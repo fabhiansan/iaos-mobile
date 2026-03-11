@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { signOut } from "next-auth/react";
 import { NewsHeader } from "@/components/news/news-header";
 import { FeaturedCarousel } from "@/components/news/featured-carousel";
 import { ArticleCard } from "@/components/news/article-card";
@@ -174,9 +175,9 @@ export default function NewsPage() {
       <LogoutModal
         isOpen={logoutOpen}
         onClose={() => setLogoutOpen(false)}
-        onConfirm={() => {
+        onConfirm={async () => {
           setLogoutOpen(false);
-          router.push("/login");
+          await signOut({ callbackUrl: "/login" });
         }}
       />
 

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { signOut } from "next-auth/react";
 import { Menu, ChevronRight, LogOut, Check } from "lucide-react";
 import { ProfileAvatar } from "@/components/profile/profile-avatar";
 import { ProfileStats } from "@/components/profile/profile-stats";
@@ -226,9 +227,9 @@ export default function ProfilePage() {
       <LogoutModal
         isOpen={logoutOpen}
         onClose={() => setLogoutOpen(false)}
-        onConfirm={() => {
+        onConfirm={async () => {
           setLogoutOpen(false);
-          router.push("/login");
+          await signOut({ callbackUrl: "/login" });
         }}
       />
     </div>
