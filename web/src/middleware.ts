@@ -24,6 +24,14 @@ export default auth((req) => {
     return NextResponse.redirect(loginUrl);
   }
 
+  // Admin route protection
+  if (pathname.startsWith("/admin")) {
+    if (req.auth.user?.role !== "admin") {
+      const newsUrl = new URL("/news", req.nextUrl.origin);
+      return NextResponse.redirect(newsUrl);
+    }
+  }
+
   return NextResponse.next();
 });
 
