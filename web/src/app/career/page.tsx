@@ -1,66 +1,16 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { signOut } from "next-auth/react";
-import { Menu, Search, SlidersHorizontal, Plus } from "lucide-react";
+import { Menu, Search, SlidersHorizontal, Plus, Loader2 } from "lucide-react";
 import { JobCard } from "@/components/career/job-card";
 import { FilterSortSheet } from "@/components/career/filter-sort-sheet";
 import { SideDrawer } from "@/components/news/side-drawer";
 import { LogoutModal } from "@/components/news/logout-modal";
 import { BottomTabBar } from "@/components/ui/bottom-tab-bar";
 import type { Job } from "@/components/career/job-card";
-
-const MOCK_JOBS: Job[] = [
-  {
-    id: "1",
-    title: "Oceanographer Analyst",
-    company: "PT. GeoSurvey Indonesia",
-    location: "Jakarta, Indonesia",
-    postedBy: "Budi Santoso",
-    postedByDepartment: "Oceanography",
-    postedByYear: "2015",
-    contractType: "Full-time",
-    workingType: "On-site",
-    timeAgo: "2d ago",
-  },
-  {
-    id: "2",
-    title: "Junior Marine Surveyor",
-    company: "PT. Marine Corp",
-    location: "Surabaya, Indonesia",
-    postedBy: "Siti Aminah",
-    postedByDepartment: "Oceanography",
-    postedByYear: "2018",
-    contractType: "Contract",
-    workingType: "Hybrid",
-    timeAgo: "5h ago",
-  },
-  {
-    id: "3",
-    title: "Coastal Data Scientist",
-    company: "Blue Ocean Research",
-    location: "Bali, Indonesia",
-    postedBy: "Rizky",
-    postedByDepartment: "Oceanography",
-    postedByYear: "2012",
-    contractType: "Full-time",
-    workingType: "Remote",
-    timeAgo: "1w ago",
-  },
-  {
-    id: "4",
-    title: "Aquaculture Consultant",
-    company: "PT Eksekusi Teknologi Nusantara",
-    location: "Yogyakarta, Indonesia",
-    postedBy: "Budi Santoso",
-    postedByDepartment: "Oceanography",
-    postedByYear: "2008",
-    contractType: "Project Based",
-    workingType: "On-site",
-    timeAgo: "just now",
-  },
-];
+import { type ApiJob, mapApiJobToJob } from "@/lib/jobs";
 
 const FILTER_CHIPS = ["All Jobs", "Full-time", "Internship", "Remote", "Hybrid"] as const;
 
@@ -77,25 +27,54 @@ export default function CareerPage() {
   const [filterContractType, setFilterContractType] = useState("All Contract");
   const [filterWorkingType, setFilterWorkingType] = useState("All Type");
 
-  const filteredJobs = MOCK_JOBS.filter((job) => {
-    const matchesSearch =
-      searchQuery === "" ||
-      job.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      job.company.toLowerCase().includes(searchQuery.toLowerCase());
+  const [jobs, setJobs] = useState<Job[]>([]);
+  const [loading, setLoading] = useState(true);
 
-    let matchesFilter = true;
-    if (activeFilter === "Full-time") {
-      matchesFilter = job.contractType === "Full-time";
-    } else if (activeFilter === "Internship") {
-      matchesFilter = job.contractType === "Internship";
-    } else if (activeFilter === "Remote") {
-      matchesFilter = job.workingType === "Remote";
-    } else if (activeFilter === "Hybrid") {
-      matchesFilter = job.workingType === "Hybrid";
+  const fetchJobs = useCallback(async () => {
+    setLoading(true);
+    try {
+      const params = new URLSearchParams();
+      if (searchQuery) params.set("search", searchQuery);
+
+      // Map chip filter to API params
+      if (activeFilter === "Full-time" || activeFilter === "Internship") {
+        params.set("contractType", activeFilter);
+      } else if (activeFilter === "Remote" || activeFilter === "Hybrid") {
+        params.set("workingType", activeFilter);
+      }
+
+      // Map sheet filters
+      if (filterContractType !== "All Contract") {
+        params.set("contractType", filterContractType);
+      }
+      if (filterWorkingType !== "All Type") {
+        params.set("workingType", filterWorkingType);
+      }
+
+      const res = await fetch(`/api/jobs?${params.toString()}`);
+      if (!res.ok) throw new Error("Failed to fetch jobs");
+      const json = await res.json();
+      setJobs((json.data as ApiJob[]).map(mapApiJobToJob));
+    } catch (err) {
+      console.error("Failed to fetch jobs:", err);
+      setJobs([]);
+    } finally {
+      setLoading(false);
     }
+  }, [searchQuery, activeFilter, filterContractType, filterWorkingType]);
 
-    return matchesSearch && matchesFilter;
-  });
+  const initialFetchDone = useRef(false);
+  useEffect(() => {
+    if (!initialFetchDone.current) {
+      initialFetchDone.current = true;
+      fetchJobs();
+      return;
+    }
+    const debounce = setTimeout(() => {
+      fetchJobs();
+    }, 300);
+    return () => clearTimeout(debounce);
+  }, [fetchJobs]);
 
   return (
     <div className="bg-white min-h-screen max-w-[390px] mx-auto relative overflow-hidden">
@@ -181,18 +160,26 @@ export default function CareerPage() {
 
         {/* Job list */}
         <div className="flex flex-col gap-2 px-4 mt-4 pb-24">
-          {filteredJobs.map((job) => (
-            <JobCard
-              key={job.id}
-              job={job}
-              onClick={(id) => router.push(`/career/${id}`)}
-            />
-          ))}
+          {loading ? (
+            <div className="flex items-center justify-center py-12">
+              <Loader2 size={28} className="text-brand-600 animate-spin" />
+            </div>
+          ) : (
+            <>
+              {jobs.map((job) => (
+                <JobCard
+                  key={job.id}
+                  job={job}
+                  onClick={(id) => router.push(`/career/${id}`)}
+                />
+              ))}
 
-          {filteredJobs.length === 0 && (
-            <p className="font-[family-name:var(--font-work-sans)] text-sm text-neutral-500 text-center py-8">
-              No jobs found matching your criteria.
-            </p>
+              {jobs.length === 0 && (
+                <p className="font-[family-name:var(--font-work-sans)] text-sm text-neutral-500 text-center py-8">
+                  No jobs found matching your criteria.
+                </p>
+              )}
+            </>
           )}
         </div>
       </div>

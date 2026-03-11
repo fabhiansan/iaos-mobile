@@ -1,42 +1,34 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { useRouter } from "next/navigation";
-import { MapPin, ImagePlus } from "lucide-react";
+import { MapPin, ImagePlus, Loader2 } from "lucide-react";
 import { AuthHeader } from "@/components/ui/auth-header";
 import { TextInput } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { DraftJobCard } from "@/components/career/draft-job-card";
 import type { Job } from "@/components/career/job-card";
-
-const MOCK_DRAFT_JOBS: Job[] = [
-  {
-    id: "draft-1",
-    title: "Aquaculture Consultant",
-    company: "PT Eksekusi Teknologi Nusantara",
-    location: "Yogyakarta, Indonesia",
-    postedBy: "Budi Santoso",
-    postedByDepartment: "Oceanography",
-    postedByYear: "2008",
-    contractType: "Project Based",
-    workingType: "On-site",
-    timeAgo: "just now",
-  },
-];
+import { type ApiJob, mapDraftToJob } from "@/lib/jobs";
 
 export default function AddJobPage() {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<"new" | "draft">("new");
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Form state
   const [position, setPosition] = useState("");
   const [company, setCompany] = useState("");
-  const [companyPicture, setCompanyPicture] = useState("");
+  const [companyPictureFile, setCompanyPictureFile] = useState<File | null>(null);
   const [location, setLocation] = useState("");
   const [contractType, setContractType] = useState("");
   const [workingType, setWorkingType] = useState("");
   const [contactName, setContactName] = useState("");
   const [contactPhone, setContactPhone] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+
+  // Draft state
+  const [drafts, setDrafts] = useState<Job[]>([]);
+  const [draftsLoading, setDraftsLoading] = useState(false);
 
   const isFormComplete =
     position.trim() !== "" &&
@@ -46,6 +38,99 @@ export default function AddJobPage() {
     workingType !== "" &&
     contactName.trim() !== "" &&
     contactPhone.trim() !== "";
+
+  const fetchDrafts = useCallback(async () => {
+    setDraftsLoading(true);
+    try {
+      const res = await fetch("/api/jobs/drafts");
+      if (!res.ok) throw new Error("Failed to fetch drafts");
+      const json = await res.json();
+      setDrafts((json.data as ApiJob[]).map(mapDraftToJob));
+    } catch (err) {
+      console.error("Failed to fetch drafts:", err);
+      setDrafts([]);
+    } finally {
+      setDraftsLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (activeTab === "draft") {
+      fetchDrafts();
+    }
+  }, [activeTab, fetchDrafts]);
+
+  const handleSubmit = async (status: "published" | "draft") => {
+    if (!isFormComplete && status === "published") return;
+    setSubmitting(true);
+    try {
+      const formData = new FormData();
+      formData.set("title", position);
+      formData.set("company", company);
+      formData.set("location", location);
+      formData.set("contractType", contractType);
+      formData.set("workingType", workingType);
+      formData.set("contactName", contactName);
+      formData.set("contactPhone", contactPhone);
+      formData.set("status", status);
+      if (companyPictureFile) {
+        formData.set("companyImage", companyPictureFile);
+      }
+
+      const res = await fetch("/api/jobs", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!res.ok) {
+        const err = await res.json();
+        alert(err.error || "Failed to create job");
+        return;
+      }
+
+      router.push("/career");
+    } catch (err) {
+      console.error("Submit error:", err);
+      alert("An error occurred while saving the job.");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const handleDeleteDraft = async (id: string) => {
+    try {
+      const res = await fetch(`/api/jobs/${id}`, { method: "DELETE" });
+      if (!res.ok) {
+        const err = await res.json();
+        alert(err.error || "Failed to delete draft");
+        return;
+      }
+      setDrafts((prev) => prev.filter((d) => d.id !== id));
+    } catch (err) {
+      console.error("Delete draft error:", err);
+    }
+  };
+
+  const handlePublishDraft = async (id: string) => {
+    try {
+      const res = await fetch(`/api/jobs/${id}/publish`, { method: "POST" });
+      if (!res.ok) {
+        const err = await res.json();
+        alert(err.error || "Failed to publish draft");
+        return;
+      }
+      setDrafts((prev) => prev.filter((d) => d.id !== id));
+    } catch (err) {
+      console.error("Publish draft error:", err);
+    }
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setCompanyPictureFile(file);
+    }
+  };
 
   return (
     <div className="bg-white min-h-screen max-w-[390px] mx-auto relative overflow-hidden">
@@ -89,7 +174,7 @@ export default function AddJobPage() {
                 : "bg-white border border-brand-800 text-brand-800"
             }`}
           >
-            Draft ({MOCK_DRAFT_JOBS.length})
+            Draft ({drafts.length})
           </button>
         </div>
 
@@ -118,13 +203,20 @@ export default function AddJobPage() {
                   <label className="font-[family-name:var(--font-work-sans)] text-[10px] leading-tight text-neutral-500">
                     Add Company Picture (Optional)
                   </label>
-                  <span className="font-[family-name:var(--font-work-sans)] text-sm text-neutral-500">
-                    {companyPicture || "Upload image"}
+                  <span className="font-[family-name:var(--font-work-sans)] text-sm text-neutral-500 truncate">
+                    {companyPictureFile?.name || "Upload image"}
                   </span>
                 </div>
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={handleFileChange}
+                />
                 <button
                   type="button"
-                  onClick={() => setCompanyPicture("company-logo.png")}
+                  onClick={() => fileInputRef.current?.click()}
                   className="ml-2 flex-shrink-0 text-neutral-500 cursor-pointer"
                 >
                   <ImagePlus size={20} />
@@ -198,31 +290,53 @@ export default function AddJobPage() {
             {/* Bottom buttons */}
             <div className="flex flex-col gap-3 mt-4">
               <Button
-                variant={isFormComplete ? "primary" : "disabled"}
-                disabled={!isFormComplete}
+                variant={isFormComplete && !submitting ? "primary" : "disabled"}
+                disabled={!isFormComplete || submitting}
+                onClick={() => handleSubmit("published")}
               >
-                Post Job
+                {submitting ? (
+                  <span className="flex items-center justify-center gap-2">
+                    <Loader2 size={16} className="animate-spin" />
+                    Posting...
+                  </span>
+                ) : (
+                  "Post Job"
+                )}
               </Button>
-              <Button variant="secondary">Save Draft</Button>
+              <Button
+                variant="secondary"
+                disabled={submitting}
+                onClick={() => handleSubmit("draft")}
+              >
+                Save Draft
+              </Button>
             </div>
           </div>
         ) : (
           /* Draft tab */
           <div className="flex flex-col gap-3 px-4 mt-4 pb-8 flex-1">
-            {MOCK_DRAFT_JOBS.map((job) => (
-              <DraftJobCard
-                key={job.id}
-                job={job}
-                onDelete={(id) => console.log("Delete draft", id)}
-                onEdit={(id) => console.log("Edit draft", id)}
-                onPost={(id) => console.log("Post draft", id)}
-              />
-            ))}
+            {draftsLoading ? (
+              <div className="flex items-center justify-center py-12">
+                <Loader2 size={28} className="text-brand-600 animate-spin" />
+              </div>
+            ) : (
+              <>
+                {drafts.map((job) => (
+                  <DraftJobCard
+                    key={job.id}
+                    job={job}
+                    onDelete={(id) => handleDeleteDraft(id)}
+                    onEdit={(id) => console.log("Edit draft", id)}
+                    onPost={(id) => handlePublishDraft(id)}
+                  />
+                ))}
 
-            {MOCK_DRAFT_JOBS.length === 0 && (
-              <p className="font-[family-name:var(--font-work-sans)] text-sm text-neutral-500 text-center py-8">
-                No drafts saved yet.
-              </p>
+                {drafts.length === 0 && (
+                  <p className="font-[family-name:var(--font-work-sans)] text-sm text-neutral-500 text-center py-8">
+                    No drafts saved yet.
+                  </p>
+                )}
+              </>
             )}
           </div>
         )}
