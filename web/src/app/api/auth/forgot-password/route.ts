@@ -39,7 +39,8 @@ export async function POST(request: NextRequest) {
         })
         .where(eq(users.id, user.id));
 
-      // Log reset link for development (wire email service later)
+      // TODO: Send reset email via email service (e.g. Resend, SendGrid, AWS SES)
+      // For now, log the reset link to the console for development
       const resetUrl = `${process.env.NEXTAUTH_URL}/reset-password?token=${rawToken}`;
       console.log(`\n🔑 Password reset link for ${email}:\n${resetUrl}\n`);
     }

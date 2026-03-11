@@ -11,7 +11,7 @@ export const users = pgTable("users", {
   yearOfEntry: integer("year_of_entry").notNull(),
   phone: varchar("phone", { length: 20 }).notNull(),
   role: roleEnum("role").default("user").notNull(),
-  emailVerified: boolean("email_verified").default(false).notNull(),
+  emailVerified: boolean("email_verified").default(false).notNull(), // TODO: Implement email verification flow
   profileImageUrl: text("profile_image_url"),
   resetToken: varchar("reset_token", { length: 255 }),
   resetTokenExpires: timestamp("reset_token_expires"),

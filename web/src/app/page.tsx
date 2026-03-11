@@ -196,11 +196,13 @@ export default function Home() {
               <div className="h-px flex-1 bg-neutral-400" />
             </div>
 
-            <Button variant="secondary" icon={<GoogleIcon />}>
+            {/* TODO: Add Google OAuth provider to NextAuth config */}
+            <Button variant="secondary" icon={<GoogleIcon />} disabled>
               Continue with Google
             </Button>
 
-            <Button variant="secondary" icon={<AppleIcon />}>
+            {/* TODO: Add Apple OAuth provider to NextAuth config */}
+            <Button variant="secondary" icon={<AppleIcon />} disabled>
               Continue with Apple
             </Button>
 
