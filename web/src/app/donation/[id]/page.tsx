@@ -1,74 +1,134 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
-import { Upload, Copy } from "lucide-react";
+import { Upload, Copy, X } from "lucide-react";
 import { AuthHeader } from "@/components/ui/auth-header";
 import { CollapsibleSection } from "@/components/donation/collapsible-section";
 
-const CAMPAIGN_DETAIL = {
-  id: "1",
-  title: "Educational Support Program for the Children of Alumni",
-  category: "Scholarship",
-  imageUrl: "/images/donation-placeholder-1.jpg",
-  currentAmount: 45000000,
-  targetAmount: 60000000,
-  description: `Halo Rekan Alumni, banyak dari saudara kita sesama alumni Oseanografi yang saat ini sedang berjuang untuk memberikan pendidikan terbaik bagi putra-putri mereka di tengah himpitan ekonomi pasca-pandemi.
-
-Melalui program "Jalap Care: Pendidikan Untuk Semua", kita berikhtiar untuk mengumpulkan dana bantuan biaya sekolah bagi 15 keluarga alumni yang membutuhkan. Bantuan ini akan mencakup SPP, buku, dan seragam sekolah.
-
-Untuk memberikan donasi, silakan transfer ke rekening BCA dengan nomor 12345678. Setelah itu, unggah bukti transfer Anda melalui menu yang telah disediakan. Setiap donasi sangat berarti bagi anak-anak penerus bangsa!`,
-  accountNumber: "12345678",
-  bankName: "Bank Central Asia",
-  accountName: "Ikatan Alumni Oseanografi ITB",
-  donationInstructions: [
-    "View Detail Donation",
-    "Copy Account Number for transfer donation",
-    "Make sure the Account Number, Bank Name, and Account Name are correct",
-    "Transfer the donation",
-    'Select "Upload Donation Proof"',
-    "Upload your donation proof",
-    "Your donation confirmed",
-  ],
-  beneficiaryCount: 15,
-  donorCount: 120,
-  documentationImages: [
-    "/images/donation-doc-1.jpg",
-    "/images/donation-doc-2.jpg",
-    "/images/donation-doc-3.jpg",
-  ],
-  testimonials: [
-    {
-      id: "1",
-      quote:
-        "Terima kasih banyak kepada rekan-rekan alumni Oseanografi. Bantuan ini sangat berarti agar anak saya bisa melanjutkan sekolah tanpa hambatan biaya. Semoga kebaikan kalian dibalas Tuhan.",
-      name: "Budi Santoso",
-      year: "Angkatan 2008",
-    },
-    {
-      id: "2",
-      quote:
-        "Terima kasih banyak kepada rekan-rekan alumni Oseanografi. Bantuan ini sangat berarti agar anak saya bisa melanjutkan sekolah tanpa hambatan biaya. Semoga kebaikan kalian dibalas Tuhan.",
-      name: "Budi Santoso",
-      year: "Angkatan 2008",
-    },
-  ],
-};
+interface CampaignDetail {
+  id: string;
+  title: string;
+  description: string;
+  category: string;
+  imageUrl: string | null;
+  targetAmount: number;
+  currentAmount: number;
+  totalRaised: number;
+  donorCount: number;
+  accountNumber: string;
+  bankName: string;
+  accountName: string;
+  donationInstructions: string | null;
+  beneficiaryCount: number | null;
+  recentTransactions: {
+    id: string;
+    amount: number;
+    status: string;
+    createdAt: string;
+    donorName: string;
+    donorYearOfEntry: number;
+  }[];
+}
 
 function formatRupiah(amount: number): string {
   return `Rp ${amount.toLocaleString("id-ID").replace(/,/g, ".")}`;
+}
+
+function parseInstructions(raw: string | null): string[] {
+  if (!raw) return [];
+  try {
+    const parsed = JSON.parse(raw);
+    if (Array.isArray(parsed)) return parsed;
+  } catch {
+    // not JSON, fall through to newline split
+  }
+  return raw.split("\n").filter(Boolean);
 }
 
 export default function DonationDetailPage() {
   const router = useRouter();
   const params = useParams();
   const [activeTab, setActiveTab] = useState<"detail" | "report">("detail");
+  const [campaign, setCampaign] = useState<CampaignDetail | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  // In a real app, fetch campaign by params.id
-  const campaign = CAMPAIGN_DETAIL;
-  const progress = Math.round(
-    (campaign.currentAmount / campaign.targetAmount) * 100
-  );
+  // Upload proof state
+  const [showUploadModal, setShowUploadModal] = useState(false);
+  const [uploadFile, setUploadFile] = useState<File | null>(null);
+  const [uploadAmount, setUploadAmount] = useState("");
+  const [uploading, setUploading] = useState(false);
+
+  useEffect(() => {
+    async function fetchCampaign() {
+      setLoading(true);
+      try {
+        const res = await fetch(`/api/donations/${params.id}`);
+        if (res.ok) {
+          const json = await res.json();
+          setCampaign(json.data);
+        }
+      } catch {
+        // silently fail
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchCampaign();
+  }, [params.id]);
+
+  async function handleUploadProof() {
+    if (!uploadFile || !uploadAmount || !campaign) return;
+    setUploading(true);
+    try {
+      const formData = new FormData();
+      formData.append("file", uploadFile);
+      formData.append("amount", uploadAmount);
+      const res = await fetch(`/api/donations/${campaign.id}/upload-proof`, {
+        method: "POST",
+        body: formData,
+      });
+      if (res.ok) {
+        setShowUploadModal(false);
+        setUploadFile(null);
+        setUploadAmount("");
+        // Refresh campaign data
+        const refreshRes = await fetch(`/api/donations/${campaign.id}`);
+        if (refreshRes.ok) {
+          const json = await refreshRes.json();
+          setCampaign(json.data);
+        }
+      }
+    } catch {
+      // silently fail
+    } finally {
+      setUploading(false);
+    }
+  }
+
+  if (loading) {
+    return (
+      <div className="bg-white min-h-screen max-w-[390px] mx-auto flex items-center justify-center">
+        <span className="font-[family-name:var(--font-inter)] text-sm text-neutral-500">
+          Loading...
+        </span>
+      </div>
+    );
+  }
+
+  if (!campaign) {
+    return (
+      <div className="bg-white min-h-screen max-w-[390px] mx-auto flex items-center justify-center">
+        <span className="font-[family-name:var(--font-inter)] text-sm text-neutral-500">
+          Campaign not found.
+        </span>
+      </div>
+    );
+  }
+
+  const raisedAmount = Number(campaign.totalRaised) || campaign.currentAmount;
+  const progress = Math.round((raisedAmount / campaign.targetAmount) * 100);
+  const instructions: string[] = parseInstructions(campaign.donationInstructions);
 
   return (
     <div className="bg-white min-h-screen max-w-[390px] mx-auto relative overflow-hidden">
@@ -88,7 +148,7 @@ export default function DonationDetailPage() {
         <div className="overflow-y-auto px-4 pb-8">
           {/* Hero image */}
           <img
-            src={campaign.imageUrl}
+            src={campaign.imageUrl || "/images/donation-placeholder-1.jpg"}
             alt={campaign.title}
             className="w-full h-[222px] rounded-lg object-cover"
           />
@@ -109,7 +169,7 @@ export default function DonationDetailPage() {
           <div className="border border-neutral-100 rounded-lg p-2 mt-3">
             <div className="flex items-center justify-between">
               <span className="font-[family-name:var(--font-work-sans)] text-2xl font-semibold text-brand-600">
-                {formatRupiah(campaign.currentAmount)}
+                {formatRupiah(raisedAmount)}
               </span>
               <span className="font-[family-name:var(--font-work-sans)] text-sm font-medium text-brand-800">
                 {progress}%
@@ -129,6 +189,7 @@ export default function DonationDetailPage() {
           {/* Upload button */}
           <button
             type="button"
+            onClick={() => setShowUploadModal(true)}
             className="w-full flex items-center justify-center gap-2 bg-brand-600 text-white rounded-lg py-2 mt-3 cursor-pointer font-[family-name:var(--font-inter)] text-sm font-medium"
           >
             <Upload size={16} />
@@ -212,18 +273,20 @@ export default function DonationDetailPage() {
                   </div>
                 </CollapsibleSection>
 
-                <CollapsibleSection title="Donation Instruction">
-                  <ol className="flex flex-col gap-2 list-decimal list-inside">
-                    {campaign.donationInstructions.map((instruction, index) => (
-                      <li
-                        key={index}
-                        className="font-[family-name:var(--font-inter)] text-xs text-neutral-600 leading-5"
-                      >
-                        {instruction}
-                      </li>
-                    ))}
-                  </ol>
-                </CollapsibleSection>
+                {instructions.length > 0 && (
+                  <CollapsibleSection title="Donation Instruction">
+                    <ol className="flex flex-col gap-2 list-decimal list-inside">
+                      {instructions.map((instruction, index) => (
+                        <li
+                          key={index}
+                          className="font-[family-name:var(--font-inter)] text-xs text-neutral-600 leading-5"
+                        >
+                          {instruction}
+                        </li>
+                      ))}
+                    </ol>
+                  </CollapsibleSection>
+                )}
               </div>
             )}
 
@@ -236,7 +299,7 @@ export default function DonationDetailPage() {
                         Donation Beneficiaries
                       </span>
                       <span className="font-[family-name:var(--font-inter)] text-xs font-semibold text-neutral-800">
-                        {campaign.beneficiaryCount} Students
+                        {campaign.beneficiaryCount ?? 0} Students
                       </span>
                     </div>
                     <div className="flex items-center justify-between">
@@ -244,52 +307,118 @@ export default function DonationDetailPage() {
                         Number of Donors
                       </span>
                       <span className="font-[family-name:var(--font-inter)] text-xs font-semibold text-neutral-800">
-                        {campaign.donorCount} Donors
+                        {Number(campaign.donorCount)} Donors
                       </span>
                     </div>
                   </div>
                 </CollapsibleSection>
 
-                <CollapsibleSection title="Documentation">
-                  <div className="grid grid-cols-3 gap-2">
-                    {campaign.documentationImages.map((img, index) => (
-                      <img
-                        key={index}
-                        src={img}
-                        alt={`Documentation ${index + 1}`}
-                        className="rounded-lg aspect-square object-cover w-full"
-                      />
-                    ))}
-                  </div>
-                </CollapsibleSection>
-
-                <CollapsibleSection title="Beneficiaries Testimonies">
-                  <div className="flex flex-col gap-3">
-                    {campaign.testimonials.map((testimonial) => (
-                      <div
-                        key={testimonial.id}
-                        className="bg-brand-50 rounded-lg p-3"
-                      >
-                        <p className="font-[family-name:var(--font-inter)] text-xs text-neutral-700 leading-5 italic">
-                          &ldquo;{testimonial.quote}&rdquo;
-                        </p>
-                        <div className="mt-2">
-                          <span className="font-[family-name:var(--font-work-sans)] text-xs font-medium text-neutral-800">
-                            {testimonial.name}
-                          </span>
-                          <span className="font-[family-name:var(--font-work-sans)] text-xs text-neutral-500 ml-2">
-                            Class of {testimonial.year}
-                          </span>
+                <CollapsibleSection title="Recent Transactions">
+                  {campaign.recentTransactions.length === 0 ? (
+                    <p className="font-[family-name:var(--font-inter)] text-xs text-neutral-500">
+                      No transactions yet.
+                    </p>
+                  ) : (
+                    <div className="flex flex-col gap-2">
+                      {campaign.recentTransactions.map((tx) => (
+                        <div
+                          key={tx.id}
+                          className="flex items-center justify-between bg-neutral-50 rounded-lg p-2"
+                        >
+                          <div>
+                            <span className="font-[family-name:var(--font-work-sans)] text-xs font-medium text-neutral-800 block">
+                              {tx.donorName}
+                            </span>
+                            <span className="font-[family-name:var(--font-inter)] text-[10px] text-neutral-500">
+                              Class of {tx.donorYearOfEntry}
+                            </span>
+                          </div>
+                          <div className="text-right">
+                            <span className="font-[family-name:var(--font-work-sans)] text-xs font-semibold text-brand-600 block">
+                              {formatRupiah(tx.amount)}
+                            </span>
+                            <span
+                              className={`font-[family-name:var(--font-inter)] text-[10px] ${
+                                tx.status === "verified"
+                                  ? "text-green-600"
+                                  : tx.status === "rejected"
+                                    ? "text-red-500"
+                                    : "text-amber-500"
+                              }`}
+                            >
+                              {tx.status}
+                            </span>
+                          </div>
                         </div>
-                      </div>
-                    ))}
-                  </div>
+                      ))}
+                    </div>
+                  )}
                 </CollapsibleSection>
               </div>
             )}
           </div>
         </div>
       </div>
+
+      {/* Upload Proof Modal */}
+      {showUploadModal && (
+        <div className="fixed inset-0 z-50 flex items-end justify-center">
+          <div
+            className="absolute inset-0 bg-black/40"
+            onClick={() => setShowUploadModal(false)}
+          />
+          <div className="relative bg-white w-full max-w-[390px] rounded-t-2xl p-4 pb-8">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="font-[family-name:var(--font-work-sans)] text-base font-semibold text-neutral-800">
+                Upload Donation Proof
+              </h3>
+              <button
+                type="button"
+                onClick={() => setShowUploadModal(false)}
+                className="cursor-pointer"
+              >
+                <X size={20} className="text-neutral-500" />
+              </button>
+            </div>
+
+            <div className="flex flex-col gap-4">
+              <div>
+                <label className="font-[family-name:var(--font-inter)] text-sm text-neutral-700 block mb-1">
+                  Donation Amount (Rp)
+                </label>
+                <input
+                  type="number"
+                  value={uploadAmount}
+                  onChange={(e) => setUploadAmount(e.target.value)}
+                  placeholder="Enter amount"
+                  className="w-full border border-neutral-200 rounded-lg px-3 py-2 text-sm font-[family-name:var(--font-inter)] outline-none focus:border-brand-600"
+                />
+              </div>
+
+              <div>
+                <label className="font-[family-name:var(--font-inter)] text-sm text-neutral-700 block mb-1">
+                  Proof Image
+                </label>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => setUploadFile(e.target.files?.[0] || null)}
+                  className="w-full text-sm font-[family-name:var(--font-inter)]"
+                />
+              </div>
+
+              <button
+                type="button"
+                onClick={handleUploadProof}
+                disabled={uploading || !uploadFile || !uploadAmount}
+                className="w-full bg-brand-600 text-white rounded-lg py-2 text-sm font-medium cursor-pointer font-[family-name:var(--font-inter)] disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {uploading ? "Uploading..." : "Submit Proof"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
