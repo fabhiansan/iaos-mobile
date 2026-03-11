@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { signOut } from "next-auth/react";
 import { DonationHeader } from "@/components/donation/donation-header";
 import { DonationChips } from "@/components/donation/donation-chips";
 import { DonationCard } from "@/components/donation/donation-card";
@@ -111,9 +112,9 @@ export default function DonationPage() {
       <LogoutModal
         isOpen={logoutOpen}
         onClose={() => setLogoutOpen(false)}
-        onConfirm={() => {
+        onConfirm={async () => {
           setLogoutOpen(false);
-          router.push("/login");
+          await signOut({ callbackUrl: "/login" });
         }}
       />
 

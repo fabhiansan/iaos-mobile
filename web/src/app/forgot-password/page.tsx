@@ -8,6 +8,9 @@ import { TextInput } from "@/components/ui/input";
 export default function ForgotPasswordPage() {
   const router = useRouter();
   const [email, setEmail] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState("");
 
   const isValid = email.trim().length > 0;
 
@@ -37,10 +40,29 @@ export default function ForgotPasswordPage() {
         {/* Form */}
         <form
           className="mt-8 flex flex-col gap-6"
-          onSubmit={(e) => {
+          onSubmit={async (e) => {
             e.preventDefault();
-            if (isValid) {
-              // Handle send email
+            if (!isValid) return;
+            setIsLoading(true);
+            setError("");
+
+            try {
+              const res = await fetch("/api/auth/forgot-password", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email }),
+              });
+
+              if (res.ok) {
+                setSuccess(true);
+              } else {
+                const data = await res.json();
+                setError(data.error || "Something went wrong");
+              }
+            } catch {
+              setError("Something went wrong");
+            } finally {
+              setIsLoading(false);
             }
           }}
         >
@@ -52,16 +74,26 @@ export default function ForgotPasswordPage() {
             onChange={(e) => setEmail(e.target.value)}
           />
 
+          {success && (
+            <p className="text-sm text-green-600">
+              If an account with that email exists, a reset link has been sent.
+            </p>
+          )}
+
+          {error && (
+            <p className="text-sm text-red-500">{error}</p>
+          )}
+
           <button
             type="submit"
-            disabled={!isValid}
+            disabled={!isValid || isLoading}
             className={`w-full rounded-lg py-3 font-[family-name:var(--font-work-sans)] text-[14px] font-medium transition-colors ${
-              isValid
+              isValid && !isLoading
                 ? "bg-brand-600 text-white"
                 : "bg-neutral-400 text-neutral-500"
             }`}
           >
-            Send Email
+            {isLoading ? "Sending..." : "Send Email"}
           </button>
         </form>
       </div>

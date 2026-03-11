@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { signOut } from "next-auth/react";
 import { Menu, Search, SlidersHorizontal, Plus } from "lucide-react";
 import { JobCard } from "@/components/career/job-card";
 import { FilterSortSheet } from "@/components/career/filter-sort-sheet";
@@ -222,9 +223,9 @@ export default function CareerPage() {
       <LogoutModal
         isOpen={logoutOpen}
         onClose={() => setLogoutOpen(false)}
-        onConfirm={() => {
+        onConfirm={async () => {
           setLogoutOpen(false);
-          router.push("/login");
+          await signOut({ callbackUrl: "/login" });
         }}
       />
 

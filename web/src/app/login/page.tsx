@@ -3,6 +3,8 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
 import { TextInput } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
@@ -38,10 +40,34 @@ function AppleIcon() {
 }
 
 export default function LoginPage() {
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const isFormValid = email.trim() !== "" && password.trim() !== "";
+
+  const handleLogin = async () => {
+    setIsLoading(true);
+    setError("");
+    try {
+      const result = await signIn("credentials", {
+        email,
+        password,
+        redirect: false,
+      });
+      if (result?.error) {
+        setError("Invalid email or password");
+      } else {
+        router.push("/news");
+      }
+    } catch {
+      setError("Something went wrong");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <div className="auth-gradient flex min-h-screen flex-col items-center bg-white">
@@ -99,11 +125,16 @@ export default function LoginPage() {
             Forget Password?
           </Link>
 
+          {error && (
+            <p className="text-sm text-red-500">{error}</p>
+          )}
+
           <Button
-            variant={isFormValid ? "primary" : "disabled"}
-            disabled={!isFormValid}
+            variant={isFormValid && !isLoading ? "primary" : "disabled"}
+            disabled={!isFormValid || isLoading}
+            onClick={handleLogin}
           >
-            Login
+            {isLoading ? "Signing in..." : "Login"}
           </Button>
 
           {/* Divider */}
@@ -115,11 +146,13 @@ export default function LoginPage() {
             <div className="h-px flex-1 bg-neutral-400" />
           </div>
 
-          <Button variant="secondary" icon={<GoogleIcon />}>
+          {/* TODO: Add Google OAuth provider to NextAuth config */}
+          <Button variant="secondary" icon={<GoogleIcon />} disabled>
             Continue with Google
           </Button>
 
-          <Button variant="secondary" icon={<AppleIcon />}>
+          {/* TODO: Add Apple OAuth provider to NextAuth config */}
+          <Button variant="secondary" icon={<AppleIcon />} disabled>
             Continue with Apple
           </Button>
 

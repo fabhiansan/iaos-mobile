@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { signOut } from "next-auth/react";
 import { Menu } from "lucide-react";
 import { AlumniCard } from "@/components/connection/alumni-card";
 import { AlumniSearch } from "@/components/connection/alumni-search";
@@ -220,9 +221,9 @@ export default function ConnectionPage() {
       <LogoutModal
         isOpen={logoutOpen}
         onClose={() => setLogoutOpen(false)}
-        onConfirm={() => {
+        onConfirm={async () => {
           setLogoutOpen(false);
-          router.push("/login");
+          await signOut({ callbackUrl: "/login" });
         }}
       />
 

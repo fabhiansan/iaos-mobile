@@ -12,12 +12,53 @@ export default function ChangePasswordPage() {
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState(false);
 
   const hasUpperAndLower = /(?=.*[a-z])(?=.*[A-Z])/.test(newPassword);
   const hasNumbers = /\d/.test(newPassword);
   const hasMinLength = newPassword.length >= 8;
   const passwordsMatch = newPassword === confirmPassword && confirmPassword !== "";
   const isValid = hasUpperAndLower && hasNumbers && hasMinLength && passwordsMatch && currentPassword !== "";
+
+  const handleChangePassword = async () => {
+    setIsLoading(true);
+    setError("");
+    setSuccess(false);
+
+    if (newPassword !== confirmPassword) {
+      setError("Passwords do not match");
+      setIsLoading(false);
+      return;
+    }
+
+    try {
+      const res = await fetch("/api/auth/change-password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          currentPassword,
+          newPassword,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        setSuccess(true);
+        setCurrentPassword("");
+        setNewPassword("");
+        setConfirmPassword("");
+      } else {
+        setError(data.error || "Something went wrong");
+      }
+    } catch {
+      setError("Something went wrong");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <div className="bg-white min-h-screen max-w-[390px] mx-auto relative overflow-hidden">
@@ -90,13 +131,19 @@ export default function ChangePasswordPage() {
           </div>
         </div>
 
-        <div className="px-4 py-6">
+        <div className="px-4 py-6 flex flex-col gap-3">
+          {success && (
+            <p className="text-sm text-green-600">Password changed successfully.</p>
+          )}
+          {error && (
+            <p className="text-sm text-red-500">{error}</p>
+          )}
           <Button
-            variant={isValid ? "primary" : "disabled"}
-            disabled={!isValid}
-            onClick={() => router.back()}
+            variant={isValid && !isLoading ? "primary" : "disabled"}
+            disabled={!isValid || isLoading}
+            onClick={handleChangePassword}
           >
-            Change Password
+            {isLoading ? "Changing..." : "Change Password"}
           </Button>
         </div>
       </div>

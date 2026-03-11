@@ -1,14 +1,26 @@
 "use client";
 
-import { useState, useMemo } from "react";
-import { useRouter } from "next/navigation";
+import { Suspense, useState, useMemo } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { ChevronLeft, Info } from "lucide-react";
 import { TextInput } from "@/components/ui/input";
 
 export default function ResetPasswordPage() {
+  return (
+    <Suspense>
+      <ResetPasswordContent />
+    </Suspense>
+  );
+}
+
+function ResetPasswordContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const token = searchParams.get("token");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const requirements = useMemo(() => {
     const hasUpperAndLower =
@@ -53,10 +65,41 @@ export default function ResetPasswordPage() {
         {/* Form */}
         <form
           className="mt-8 flex flex-col gap-6"
-          onSubmit={(e) => {
+          onSubmit={async (e) => {
             e.preventDefault();
-            if (isValid) {
-              // Handle reset password
+            setIsLoading(true);
+            setError("");
+
+            if (!token) {
+              setError("Invalid reset link");
+              setIsLoading(false);
+              return;
+            }
+
+            if (newPassword !== confirmPassword) {
+              setError("Passwords do not match");
+              setIsLoading(false);
+              return;
+            }
+
+            try {
+              const res = await fetch("/api/auth/reset-password", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ token, password: newPassword }),
+              });
+
+              const data = await res.json();
+
+              if (res.ok) {
+                router.push("/login");
+              } else {
+                setError(data.error || "Something went wrong");
+              }
+            } catch {
+              setError("Something went wrong");
+            } finally {
+              setIsLoading(false);
             }
           }}
         >
@@ -112,16 +155,26 @@ export default function ResetPasswordPage() {
             </div>
           </div>
 
+          {!token && (
+            <p className="text-sm text-red-500">
+              Invalid reset link. Please request a new one.
+            </p>
+          )}
+
+          {error && (
+            <p className="text-sm text-red-500">{error}</p>
+          )}
+
           <button
             type="submit"
-            disabled={!isValid}
+            disabled={!isValid || isLoading || !token}
             className={`w-full rounded-lg py-3 font-[family-name:var(--font-work-sans)] text-[14px] font-medium transition-colors ${
-              isValid
+              isValid && !isLoading && token
                 ? "bg-brand-600 text-white"
                 : "bg-neutral-400 text-neutral-500"
             }`}
           >
-            Reset Password
+            {isLoading ? "Resetting..." : "Reset Password"}
           </button>
         </form>
       </div>

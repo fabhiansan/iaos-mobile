@@ -1,2 +1,25 @@
-.elasticbeanstalk/my-app.zip
+# dependencies
+node_modules/
+
+# env files
 .env*
+
+# next.js
+.next/
+out/
+next-env.d.ts
+
+# build
+build/
+dist/
+
+# typescript
+*.tsbuildinfo
+
+# elastic beanstalk
+.elasticbeanstalk/my-app.zip
+
+# misc
+.DS_Store
+*.pem
+excalidraw.log
