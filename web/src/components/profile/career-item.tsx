@@ -6,8 +6,9 @@ export interface Career {
   id: string;
   position: string;
   company: string;
-  startYear: string;
-  endYear: string;
+  startYear: number;
+  endYear: number | null;
+  isCurrent: boolean;
 }
 
 interface CareerItemProps {
@@ -17,6 +18,11 @@ interface CareerItemProps {
 }
 
 export function CareerItem({ career, onEdit, onDelete }: CareerItemProps) {
+  const endDisplay =
+    career.isCurrent || career.endYear == null
+      ? "Recent"
+      : career.endYear;
+
   return (
     <div className="flex flex-col gap-2 pb-4">
       <h4 className="font-[family-name:var(--font-work-sans)] text-sm font-semibold text-neutral-900">
@@ -26,7 +32,7 @@ export function CareerItem({ career, onEdit, onDelete }: CareerItemProps) {
         {career.company}
       </p>
       <p className="font-[family-name:var(--font-work-sans)] text-xs text-neutral-500">
-        {career.startYear} - {career.endYear}
+        {career.startYear} - {endDisplay}
       </p>
       <div className="flex gap-3">
         <Button
