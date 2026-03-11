@@ -2,14 +2,10 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
-import { signOut } from "next-auth/react";
-import { Menu, Loader2 } from "lucide-react";
+import { Loader2, ChevronDown } from "lucide-react";
 import { AlumniCard } from "@/components/connection/alumni-card";
-import { AlumniSearch } from "@/components/connection/alumni-search";
 import { FilterModal } from "@/components/connection/filter-modal";
-import { SideDrawer } from "@/components/news/side-drawer";
-import { LogoutModal } from "@/components/news/logout-modal";
-import { BottomTabBar } from "@/components/ui/bottom-tab-bar";
+import { MobilePageLayout, MobilePageHeader, MobileSearchBar } from "@/components/ui/mobile-page-layout";
 
 interface Alumni {
   id: string;
@@ -41,10 +37,14 @@ const EXPERTISE_OPTIONS = [
 
 type FilterType = "yearOfEntry" | "company" | "expertise";
 
+const FILTER_CHIPS: { label: string; key: FilterType }[] = [
+  { label: "Year of Entry", key: "yearOfEntry" },
+  { label: "Company Name", key: "company" },
+  { label: "Area of Expertise", key: "expertise" },
+];
+
 export default function ConnectionPage() {
   const router = useRouter();
-  const [drawerOpen, setDrawerOpen] = useState(false);
-  const [logoutOpen, setLogoutOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [activeFilter, setActiveFilter] = useState<FilterType | null>(null);
   const [selectedYears, setSelectedYears] = useState<string[]>([]);
@@ -117,109 +117,75 @@ export default function ConnectionPage() {
   }
 
   return (
-    <div className="bg-white min-h-screen max-w-[390px] mx-auto relative overflow-hidden">
-      {/* Gradient blob */}
-      <div
-        className="absolute -top-[142px] left-1/2 -translate-x-1/2 w-[493px] h-[474px] rounded-full pointer-events-none z-0"
-        style={{
-          background:
-            "radial-gradient(circle, rgba(101,119,159,0.4) 0%, transparent 70%)",
-          filter: "blur(50px)",
-        }}
-      />
+    <MobilePageLayout activeItem="connection">
+      {({ onMenuOpen }) => (
+        <>
+          <MobilePageHeader title="Alumni Directory" onMenuOpen={onMenuOpen} />
 
-      <div className="relative z-10">
-        {/* Header */}
-        <div className="flex items-center gap-4 px-4 py-2 h-11">
-          <button
-            type="button"
-            onClick={() => setDrawerOpen(true)}
-            className="shrink-0 cursor-pointer"
-          >
-            <Menu size={16} className="text-neutral-900" />
-          </button>
-          <h1 className="flex-1 font-[family-name:var(--font-work-sans)] text-xl font-semibold text-neutral-900 text-center">
-            Alumni Directory
-          </h1>
-          {/* Spacer to keep title centered */}
-          <div className="w-4 shrink-0" />
-        </div>
+          <div className="flex flex-col gap-4 pt-2 pb-24">
+            <div className="flex flex-col gap-3">
+              <MobileSearchBar value={searchQuery} onChange={setSearchQuery} placeholder="Search alumni..." />
+              <div className="flex items-center gap-2 px-4">
+                {FILTER_CHIPS.map((chip) => (
+                  <button
+                    key={chip.key}
+                    type="button"
+                    onClick={() => setActiveFilter(chip.key)}
+                    className="flex items-center gap-1 bg-white border border-brand-800 rounded-lg px-2 py-2 cursor-pointer"
+                  >
+                    <span className="font-[family-name:var(--font-inter)] text-xs font-medium text-brand-800 whitespace-nowrap">
+                      {chip.label}
+                    </span>
+                    <ChevronDown size={14} className="text-brand-800 shrink-0" />
+                  </button>
+                ))}
+              </div>
+            </div>
 
-        <div className="flex flex-col gap-4 pt-2 pb-24">
-          <AlumniSearch
-            searchQuery={searchQuery}
-            onSearchChange={setSearchQuery}
-            onFilterClick={(filter) => setActiveFilter(filter)}
-          />
+            <div className="px-4">
+              <p className="font-[family-name:var(--font-work-sans)] text-sm text-neutral-800">
+                {loading ? "Searching..." : `Found ${total} Alumni`}
+              </p>
+            </div>
 
-          <div className="px-4">
-            <p className="font-[family-name:var(--font-work-sans)] text-sm text-neutral-800">
-              {loading ? "Searching..." : `Found ${total} Alumni`}
-            </p>
+            {loading ? (
+              <div className="flex justify-center py-12">
+                <Loader2 size={32} className="text-brand-600 animate-spin" />
+              </div>
+            ) : (
+              <div className="flex flex-col gap-3 px-4">
+                {alumni.map((a) => (
+                  <AlumniCard
+                    key={a.id}
+                    id={a.id}
+                    name={a.name}
+                    role={a.currentPosition ?? "Alumni"}
+                    company={a.currentCompany ?? "-"}
+                    yearOfEntry={a.yearOfEntry}
+                    imageUrl={a.profileImageUrl ?? undefined}
+                    isVerified={a.isVerified}
+                    onViewProfile={() => router.push(`/connection/${a.id}`)}
+                  />
+                ))}
+                {alumni.length === 0 && (
+                  <p className="text-center text-sm text-neutral-500 py-8">
+                    No alumni found.
+                  </p>
+                )}
+              </div>
+            )}
           </div>
 
-          {loading ? (
-            <div className="flex justify-center py-12">
-              <Loader2 size={32} className="text-brand-600 animate-spin" />
-            </div>
-          ) : (
-            <div className="flex flex-col gap-3 px-4">
-              {alumni.map((a) => (
-                <AlumniCard
-                  key={a.id}
-                  id={a.id}
-                  name={a.name}
-                  role={a.currentPosition ?? "Alumni"}
-                  company={a.currentCompany ?? "-"}
-                  yearOfEntry={a.yearOfEntry}
-                  imageUrl={a.profileImageUrl ?? undefined}
-                  isVerified={a.isVerified}
-                  onViewProfile={() => router.push(`/connection/${a.id}`)}
-                />
-              ))}
-              {alumni.length === 0 && (
-                <p className="text-center text-sm text-neutral-500 py-8">
-                  No alumni found.
-                </p>
-              )}
-            </div>
+          {/* Filter Modal */}
+          {activeFilter && (
+            <FilterModal
+              isOpen={!!activeFilter}
+              onClose={() => setActiveFilter(null)}
+              {...getFilterProps(activeFilter)}
+            />
           )}
-        </div>
-      </div>
-
-      {/* Filter Modal */}
-      {activeFilter && (
-        <FilterModal
-          isOpen={!!activeFilter}
-          onClose={() => setActiveFilter(null)}
-          {...getFilterProps(activeFilter)}
-        />
+        </>
       )}
-
-      <SideDrawer
-        isOpen={drawerOpen}
-        onClose={() => setDrawerOpen(false)}
-        activeItem="connection"
-        onNavigate={(item) => {
-          setDrawerOpen(false);
-          if (item !== "connection") router.push(`/${item}`);
-        }}
-        onLogout={() => {
-          setDrawerOpen(false);
-          setLogoutOpen(true);
-        }}
-      />
-
-      <LogoutModal
-        isOpen={logoutOpen}
-        onClose={() => setLogoutOpen(false)}
-        onConfirm={async () => {
-          setLogoutOpen(false);
-          await signOut({ callbackUrl: "/login" });
-        }}
-      />
-
-      <BottomTabBar />
-    </div>
+    </MobilePageLayout>
   );
 }

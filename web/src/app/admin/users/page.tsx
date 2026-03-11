@@ -1,6 +1,14 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import {
+  AdminSearchInput,
+  AdminFilterSelect,
+  AdminTable,
+  AdminPagination,
+  AdminDeleteModal,
+  useDebounce,
+} from "@/components/admin/admin-table";
 
 interface User {
   id: string;
@@ -16,6 +24,23 @@ interface User {
   updatedAt: string;
 }
 
+const ROLE_OPTIONS = [
+  { label: "All Roles", value: "all" },
+  { label: "Admin", value: "admin" },
+  { label: "User", value: "user" },
+];
+
+const TABLE_COLUMNS = [
+  { key: "name", label: "Name" },
+  { key: "email", label: "Email" },
+  { key: "nim", label: "NIM" },
+  { key: "year", label: "Year" },
+  { key: "phone", label: "Phone" },
+  { key: "role", label: "Role" },
+  { key: "joined", label: "Joined" },
+  { key: "actions", label: "Actions" },
+];
+
 export default function AdminUsersPage() {
   const [users, setUsers] = useState<User[]>([]);
   const [total, setTotal] = useState(0);
@@ -28,11 +53,14 @@ export default function AdminUsersPage() {
   const [currentUserId, setCurrentUserId] = useState<string | null>(null);
   const limit = 20;
 
+  const debouncedSearch = useDebounce(search);
+  const totalPages = Math.ceil(total / limit);
+
   const fetchUsers = useCallback(async () => {
     setLoading(true);
     try {
       const params = new URLSearchParams();
-      if (search) params.set("search", search);
+      if (debouncedSearch) params.set("search", debouncedSearch);
       if (roleFilter !== "all") params.set("role", roleFilter);
       if (yearFilter) params.set("yearOfEntry", yearFilter);
       params.set("page", String(page));
@@ -48,11 +76,15 @@ export default function AdminUsersPage() {
     } finally {
       setLoading(false);
     }
-  }, [search, roleFilter, yearFilter, page]);
+  }, [debouncedSearch, roleFilter, yearFilter, page]);
 
   useEffect(() => {
     fetchUsers();
   }, [fetchUsers]);
+
+  useEffect(() => {
+    setPage(1);
+  }, [debouncedSearch]);
 
   useEffect(() => {
     fetch("/api/profile")
@@ -62,8 +94,6 @@ export default function AdminUsersPage() {
       })
       .catch(() => {});
   }, []);
-
-  const totalPages = Math.ceil(total / limit);
 
   async function toggleRole(user: User) {
     const newRole = user.role === "admin" ? "user" : "admin";
@@ -88,46 +118,24 @@ export default function AdminUsersPage() {
     }
   }
 
-  function handleSearchSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    setPage(1);
-    fetchUsers();
-  }
-
   return (
     <div>
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold text-neutral-900">
-          Users ({total})
-        </h1>
-      </div>
-
-      <form
-        onSubmit={handleSearchSubmit}
-        className="mb-4 flex flex-wrap items-center gap-2"
-      >
-        <input
-          type="text"
-          placeholder="Search name, email, or NIM..."
+      <div className="flex flex-col sm:flex-row gap-3 mb-4">
+        <AdminSearchInput
           value={search}
-          onChange={(e) => {
-            setSearch(e.target.value);
-            setPage(1);
+          onChange={(v) => {
+            setSearch(v);
           }}
-          className="rounded border border-neutral-300 px-2 py-1 text-sm focus:border-brand-500 focus:outline-none"
+          placeholder="Search name, email, or NIM..."
         />
-        <select
+        <AdminFilterSelect
+          options={ROLE_OPTIONS}
           value={roleFilter}
-          onChange={(e) => {
-            setRoleFilter(e.target.value);
+          onChange={(v) => {
+            setRoleFilter(v);
             setPage(1);
           }}
-          className="rounded border border-neutral-300 px-2 py-1 text-sm"
-        >
-          <option value="all">All Roles</option>
-          <option value="admin">Admin</option>
-          <option value="user">User</option>
-        </select>
+        />
         <input
           type="text"
           placeholder="Year"
@@ -136,133 +144,86 @@ export default function AdminUsersPage() {
             setYearFilter(e.target.value);
             setPage(1);
           }}
-          className="w-20 rounded border border-neutral-300 px-2 py-1 text-sm"
+          className="border border-neutral-200 rounded-md px-3 py-2 text-sm outline-none focus:border-brand-600 w-20"
         />
-      </form>
+      </div>
 
-      {loading ? (
-        <p className="text-sm text-neutral-500">Loading...</p>
-      ) : users.length === 0 ? (
-        <p className="text-sm text-neutral-500">No users found.</p>
-      ) : (
-        <div className="overflow-x-auto rounded border border-neutral-200">
-          <table className="w-full table-auto text-sm">
-            <thead className="bg-neutral-100 text-left text-xs text-neutral-600">
-              <tr>
-                <th className="px-3 py-2">Name</th>
-                <th className="px-3 py-2">Email</th>
-                <th className="px-3 py-2">NIM</th>
-                <th className="px-3 py-2">Year</th>
-                <th className="px-3 py-2">Phone</th>
-                <th className="px-3 py-2">Role</th>
-                <th className="px-3 py-2">Joined</th>
-                <th className="px-3 py-2">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {users.map((user) => (
-                <tr
-                  key={user.id}
-                  className="border-t border-neutral-100 hover:bg-neutral-50"
-                >
-                  <td className="px-3 py-2">{user.name}</td>
-                  <td className="px-3 py-2">{user.email}</td>
-                  <td className="px-3 py-2">{user.nim}</td>
-                  <td className="px-3 py-2">{user.yearOfEntry}</td>
-                  <td className="px-3 py-2">{user.phone}</td>
-                  <td className="px-3 py-2">
-                    <span
-                      className={`inline-block rounded-full px-2 py-0.5 text-xs ${
-                        user.role === "admin"
-                          ? "bg-brand-100 text-brand-800"
-                          : "bg-neutral-100 text-neutral-600"
-                      }`}
+      <AdminTable
+        columns={TABLE_COLUMNS}
+        loading={loading}
+        empty={users.length === 0}
+        emptyMessage="No users found."
+      >
+        {users.map((user) => (
+          <tr
+            key={user.id}
+            className="border-b border-neutral-100 hover:bg-neutral-50"
+          >
+            <td className="text-sm px-3 py-2">{user.name}</td>
+            <td className="text-sm px-3 py-2">{user.email}</td>
+            <td className="text-sm px-3 py-2">{user.nim}</td>
+            <td className="text-sm px-3 py-2">{user.yearOfEntry}</td>
+            <td className="text-sm px-3 py-2">{user.phone}</td>
+            <td className="text-sm px-3 py-2">
+              <span
+                className={`inline-block rounded-full px-2 py-0.5 text-xs ${
+                  user.role === "admin"
+                    ? "bg-brand-100 text-brand-800"
+                    : "bg-neutral-100 text-neutral-600"
+                }`}
+              >
+                {user.role}
+              </span>
+            </td>
+            <td className="text-sm px-3 py-2">
+              {new Date(user.createdAt).toLocaleDateString()}
+            </td>
+            <td className="text-sm px-3 py-2">
+              <div className="flex gap-1">
+                {user.id !== currentUserId && (
+                  <>
+                    <button
+                      onClick={() => toggleRole(user)}
+                      className="rounded-md bg-brand-50 px-2 py-1 text-xs text-brand-700 hover:bg-brand-100"
                     >
-                      {user.role}
-                    </span>
-                  </td>
-                  <td className="px-3 py-2">
-                    {new Date(user.createdAt).toLocaleDateString()}
-                  </td>
-                  <td className="px-3 py-2">
-                    <div className="flex gap-1">
-                      {user.id !== currentUserId && (
-                        <>
-                          <button
-                            onClick={() => toggleRole(user)}
-                            className="rounded bg-brand-50 px-2 py-0.5 text-xs text-brand-700 hover:bg-brand-100"
-                          >
-                            {user.role === "admin"
-                              ? "Demote"
-                              : "Promote"}
-                          </button>
-                          <button
-                            onClick={() => setDeleteTarget(user)}
-                            className="rounded bg-red-50 px-2 py-0.5 text-xs text-red-700 hover:bg-red-100"
-                          >
-                            Delete
-                          </button>
-                        </>
-                      )}
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
+                      {user.role === "admin" ? "Demote" : "Promote"}
+                    </button>
+                    <button
+                      onClick={() => setDeleteTarget(user)}
+                      className="rounded-md bg-red-50 px-2 py-1 text-xs text-red-700 hover:bg-red-100"
+                    >
+                      Delete
+                    </button>
+                  </>
+                )}
+              </div>
+            </td>
+          </tr>
+        ))}
+      </AdminTable>
 
-      {totalPages > 1 && (
-        <div className="mt-4 flex items-center gap-2 text-sm">
-          <button
-            disabled={page <= 1}
-            onClick={() => setPage((p) => p - 1)}
-            className="rounded border border-neutral-300 px-2 py-1 disabled:opacity-40"
-          >
-            Previous
-          </button>
-          <span className="text-neutral-600">
-            Page {page} of {totalPages}
-          </span>
-          <button
-            disabled={page >= totalPages}
-            onClick={() => setPage((p) => p + 1)}
-            className="rounded border border-neutral-300 px-2 py-1 disabled:opacity-40"
-          >
-            Next
-          </button>
-        </div>
-      )}
+      <AdminPagination
+        page={page}
+        totalPages={Math.max(1, totalPages)}
+        total={total}
+        onPageChange={setPage}
+      />
 
-      {deleteTarget && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
-          <div className="w-full max-w-sm rounded-lg bg-white p-6 shadow-lg">
-            <h2 className="mb-2 text-sm font-semibold text-neutral-900">
-              Confirm Delete
-            </h2>
-            <p className="mb-4 text-sm text-neutral-600">
+      <AdminDeleteModal
+        open={!!deleteTarget}
+        onClose={() => setDeleteTarget(null)}
+        onConfirm={confirmDelete}
+        title="Confirm Delete"
+        message={
+          deleteTarget ? (
+            <>
               Are you sure you want to delete{" "}
               <span className="font-medium">{deleteTarget.name}</span> (
               {deleteTarget.email})? This action cannot be undone.
-            </p>
-            <div className="flex justify-end gap-2">
-              <button
-                onClick={() => setDeleteTarget(null)}
-                className="rounded border border-neutral-300 px-3 py-1 text-sm hover:bg-neutral-50"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={confirmDelete}
-                className="rounded bg-red-600 px-3 py-1 text-sm text-white hover:bg-red-700"
-              >
-                Confirm
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+            </>
+          ) : null
+        }
+      />
     </div>
   );
 }

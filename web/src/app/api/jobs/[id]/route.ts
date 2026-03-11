@@ -77,6 +77,11 @@ export async function PUT(
       }
     }
 
+    // Users cannot self-publish; map "published" to "pending_review"
+    if (updateData.status === "published") {
+      updateData.status = "pending_review";
+    }
+
     const [updated] = await db
       .update(jobs)
       .set(updateData)

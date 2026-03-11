@@ -49,9 +49,16 @@ export function DraftJobCard({ job, onDelete, onEdit, onPost }: DraftJobCardProp
             <h4 className="font-[family-name:var(--font-work-sans)] text-base font-semibold text-brand-600 leading-tight">
               {job.title}
             </h4>
-            <span className="font-[family-name:var(--font-inter)] text-[10px] text-neutral-500 shrink-0 mt-0.5">
-              {job.timeAgo}
-            </span>
+            <div className="flex items-center gap-1.5 shrink-0 mt-0.5">
+              {job.status === "pending_review" && (
+                <span className="font-[family-name:var(--font-inter)] text-[10px] font-medium text-blue-700 bg-blue-100 rounded px-1.5 py-0.5">
+                  Pending Review
+                </span>
+              )}
+              <span className="font-[family-name:var(--font-inter)] text-[10px] text-neutral-500">
+                {job.timeAgo}
+              </span>
+            </div>
           </div>
 
           {/* Badges */}
@@ -101,23 +108,27 @@ export function DraftJobCard({ job, onDelete, onEdit, onPost }: DraftJobCardProp
           <Trash2 size={14} />
           Delete Job
         </button>
-        <button
-          type="button"
-          onClick={() => onEdit(job.id)}
-          className="flex-1 flex items-center justify-center gap-1.5 border border-brand-600 text-brand-600 rounded-lg py-2 font-[family-name:var(--font-work-sans)] text-sm font-medium cursor-pointer"
-        >
-          <Edit size={14} />
-          Continue Edit
-        </button>
+        {job.status !== "pending_review" && (
+          <button
+            type="button"
+            onClick={() => onEdit(job.id)}
+            className="flex-1 flex items-center justify-center gap-1.5 border border-brand-600 text-brand-600 rounded-lg py-2 font-[family-name:var(--font-work-sans)] text-sm font-medium cursor-pointer"
+          >
+            <Edit size={14} />
+            Continue Edit
+          </button>
+        )}
       </div>
 
-      <button
-        type="button"
-        onClick={() => onPost(job.id)}
-        className="w-full bg-brand-600 text-white rounded-lg py-2 font-[family-name:var(--font-work-sans)] text-sm font-medium cursor-pointer"
-      >
-        Post Job
-      </button>
+      {job.status !== "pending_review" && (
+        <button
+          type="button"
+          onClick={() => onPost(job.id)}
+          className="w-full bg-brand-600 text-white rounded-lg py-2 font-[family-name:var(--font-work-sans)] text-sm font-medium cursor-pointer"
+        >
+          Submit for Review
+        </button>
+      )}
     </div>
   );
 }

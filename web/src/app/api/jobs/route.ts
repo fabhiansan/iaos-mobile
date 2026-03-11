@@ -143,6 +143,9 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Invalid status" }, { status: 400 });
     }
 
+    // Users cannot self-publish; map "published" to "pending_review"
+    const effectiveStatus = status === "published" ? "pending_review" : status;
+
     const [created] = await db
       .insert(jobs)
       .values({
@@ -154,7 +157,7 @@ export async function POST(request: NextRequest) {
         workingType: workingType as typeof validWorkingTypes[number],
         contactName,
         contactPhone,
-        status: status as typeof validStatuses[number],
+        status: effectiveStatus as typeof validStatuses[number],
         postedById: session.user.id,
       })
       .returning();

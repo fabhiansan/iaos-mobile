@@ -2,13 +2,14 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { signOut } from "next-auth/react";
-import { DonationHeader } from "@/components/donation/donation-header";
-import { DonationChips } from "@/components/donation/donation-chips";
+import { BarChart3, Search } from "lucide-react";
 import { DonationCard } from "@/components/donation/donation-card";
-import { SideDrawer } from "@/components/news/side-drawer";
-import { LogoutModal } from "@/components/news/logout-modal";
-import { BottomTabBar } from "@/components/ui/bottom-tab-bar";
+import {
+  MobilePageLayout,
+  MobilePageHeader,
+  MobileHeaderAction,
+  MobileFilterChips,
+} from "@/components/ui/mobile-page-layout";
 import type { DonationCampaign } from "@/components/donation/donation-card";
 
 const CATEGORIES = ["All Donations", "Scholarship", "Events"];
@@ -28,8 +29,6 @@ interface CampaignResponse {
 export default function DonationPage() {
   const router = useRouter();
   const [activeCategory, setActiveCategory] = useState("All Donations");
-  const [drawerOpen, setDrawerOpen] = useState(false);
-  const [logoutOpen, setLogoutOpen] = useState(false);
   const [campaigns, setCampaigns] = useState<DonationCampaign[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -62,81 +61,63 @@ export default function DonationPage() {
   }, [activeCategory]);
 
   return (
-    <div className="bg-white min-h-screen max-w-[390px] mx-auto relative overflow-hidden">
-      {/* Gradient blob */}
-      <div
-        className="absolute -top-[142px] left-1/2 -translate-x-1/2 w-[493px] h-[474px] rounded-full pointer-events-none z-0"
-        style={{
-          background:
-            "radial-gradient(circle, rgba(101,119,159,0.4) 0%, transparent 70%)",
-          filter: "blur(50px)",
-        }}
-      />
-
-      <div className="relative z-10">
-        <DonationHeader
-          onMenuOpen={() => setDrawerOpen(true)}
-          onLeaderboardOpen={() => router.push("/donation/leaderboard")}
-        />
-
-        <div className="flex flex-col gap-6 pt-2 pb-24">
-          <DonationChips
-            categories={CATEGORIES}
-            activeCategory={activeCategory}
-            onCategoryChange={setActiveCategory}
-            onSearchOpen={() => {}}
+    <MobilePageLayout activeItem="donation">
+      {({ onMenuOpen }) => (
+        <>
+          <MobilePageHeader
+            title="Jalap Care Donation"
+            onMenuOpen={onMenuOpen}
+            rightActions={
+              <MobileHeaderAction
+                icon={BarChart3}
+                onClick={() => router.push("/donation/leaderboard")}
+              />
+            }
           />
 
-          <div className="flex flex-col gap-3 px-4">
-            {loading ? (
-              <div className="flex items-center justify-center py-12">
-                <span className="font-[family-name:var(--font-inter)] text-sm text-neutral-500">
-                  Loading campaigns...
-                </span>
-              </div>
-            ) : campaigns.length === 0 ? (
-              <div className="flex items-center justify-center py-12">
-                <span className="font-[family-name:var(--font-inter)] text-sm text-neutral-500">
-                  No campaigns found.
-                </span>
-              </div>
-            ) : (
-              campaigns.map((campaign) => (
-                <DonationCard
-                  key={campaign.id}
-                  campaign={campaign}
-                  onClick={(id) => router.push(`/donation/${id}`)}
-                />
-              ))
-            )}
+          <div className="flex flex-col gap-6 pt-2 pb-24">
+            <MobileFilterChips
+              options={CATEGORIES}
+              value={activeCategory}
+              onChange={setActiveCategory}
+              leading={
+                <button
+                  type="button"
+                  onClick={() => {}}
+                  className="shrink-0 flex items-center gap-1 px-2 py-2 rounded-lg text-xs font-medium leading-[18px] border border-neutral-600 text-neutral-800 font-[family-name:var(--font-inter)] cursor-pointer"
+                >
+                  <Search size={14} className="text-neutral-800" />
+                  Search
+                </button>
+              }
+            />
+
+            <div className="flex flex-col gap-3 px-4">
+              {loading ? (
+                <div className="flex items-center justify-center py-12">
+                  <span className="font-[family-name:var(--font-inter)] text-sm text-neutral-500">
+                    Loading campaigns...
+                  </span>
+                </div>
+              ) : campaigns.length === 0 ? (
+                <div className="flex items-center justify-center py-12">
+                  <span className="font-[family-name:var(--font-inter)] text-sm text-neutral-500">
+                    No campaigns found.
+                  </span>
+                </div>
+              ) : (
+                campaigns.map((campaign) => (
+                  <DonationCard
+                    key={campaign.id}
+                    campaign={campaign}
+                    onClick={(id) => router.push(`/donation/${id}`)}
+                  />
+                ))
+              )}
+            </div>
           </div>
-        </div>
-      </div>
-
-      <SideDrawer
-        isOpen={drawerOpen}
-        onClose={() => setDrawerOpen(false)}
-        activeItem="donation"
-        onNavigate={(item) => {
-          setDrawerOpen(false);
-          if (item !== "donation") router.push(`/${item}`);
-        }}
-        onLogout={() => {
-          setDrawerOpen(false);
-          setLogoutOpen(true);
-        }}
-      />
-
-      <LogoutModal
-        isOpen={logoutOpen}
-        onClose={() => setLogoutOpen(false)}
-        onConfirm={async () => {
-          setLogoutOpen(false);
-          await signOut({ callbackUrl: "/login" });
-        }}
-      />
-
-      <BottomTabBar activeTab="donation" />
-    </div>
+        </>
+      )}
+    </MobilePageLayout>
   );
 }

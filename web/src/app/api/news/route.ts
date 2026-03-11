@@ -3,6 +3,7 @@ import { eq, and, or, ilike, desc, sql, count } from "drizzle-orm";
 import { db } from "@/db";
 import { articles, users } from "@/db/schema";
 import { auth } from "@/lib/auth";
+import { getSignedDownloadUrl } from "@/lib/s3";
 
 export async function GET(request: NextRequest) {
   try {
@@ -68,8 +69,15 @@ export async function GET(request: NextRequest) {
         .where(where),
     ]);
 
+    const dataWithSignedUrls = await Promise.all(
+      data.map(async (item) => ({
+        ...item,
+        imageUrl: item.imageUrl ? await getSignedDownloadUrl(item.imageUrl) : null,
+      }))
+    );
+
     return NextResponse.json({
-      data,
+      data: dataWithSignedUrls,
       total: totalResult[0].count,
     });
   } catch (error) {

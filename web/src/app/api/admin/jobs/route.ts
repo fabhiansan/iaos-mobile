@@ -33,7 +33,7 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    if (status === "draft" || status === "published") {
+    if (status === "draft" || status === "published" || status === "pending_review") {
       conditions.push(eq(jobs.status, status));
     }
 

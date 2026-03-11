@@ -1,0 +1,11 @@
+Mar 11 10:33:24 ip-172-31-76-237 docker[1885]: time="2026-03-11T10:33:24.963359080Z" level=info msg="Starting up"
+Mar 11 10:33:25 ip-172-31-76-237 docker[1885]: time="2026-03-11T10:33:25.166617850Z" level=info msg="Loading containers: start."
+Mar 11 10:33:25 ip-172-31-76-237 docker[1885]: time="2026-03-11T10:33:25.924624952Z" level=info msg="Loading containers: done."
+Mar 11 10:33:25 ip-172-31-76-237 docker[1885]: time="2026-03-11T10:33:25.946952155Z" level=info msg="Docker daemon" commit=d334795 containerd-snapshotter=false storage-driver=overlay2 version=25.0.14
+Mar 11 10:33:25 ip-172-31-76-237 docker[1885]: time="2026-03-11T10:33:25.947284545Z" level=info msg="Daemon has completed initialization"
+Mar 11 10:33:26 ip-172-31-76-237 docker[1885]: time="2026-03-11T10:33:26.018480705Z" level=info msg="API listen on /run/docker.sock"
+Mar 11 10:33:54 ip-172-31-76-237 docker[1885]: 2026/03/11 10:33:54 http: superfluous response.WriteHeader call from go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp.(*respWriterWrapper).WriteHeader (wrap.go:98)
+Mar 11 10:36:52 ip-172-31-76-237 docker[1885]: 2026/03/11 10:36:52 http: superfluous response.WriteHeader call from go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp.(*respWriterWrapper).WriteHeader (wrap.go:98)
+Mar 11 10:36:56 ip-172-31-76-237 docker[1885]: 2026/03/11 10:36:56 http: superfluous response.WriteHeader call from go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp.(*respWriterWrapper).WriteHeader (wrap.go:98)
+Mar 11 10:36:56 ip-172-31-76-237 docker[1885]: 2026/03/11 10:36:56 http: superfluous response.WriteHeader call from go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp.(*respWriterWrapper).WriteHeader (wrap.go:98)
+Mar 11 10:36:56 ip-172-31-76-237 docker[1885]: 2026/03/11 10:36:56 http: superfluous response.WriteHeader call from go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp.(*respWriterWrapper).WriteHeader (wrap.go:98)

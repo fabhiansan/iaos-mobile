@@ -28,7 +28,7 @@ export async function POST(
 
     const [updated] = await db
       .update(jobs)
-      .set({ status: "published", updatedAt: new Date() })
+      .set({ status: "pending_review", updatedAt: new Date() })
       .where(eq(jobs.id, id))
       .returning();
 

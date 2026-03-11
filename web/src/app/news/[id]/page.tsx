@@ -5,6 +5,7 @@ import { useRouter, useParams } from "next/navigation";
 import { ChevronLeft, Calendar } from "lucide-react";
 import { Badge } from "@/components/news/badge";
 import { formatTimestamp } from "@/lib/articles";
+import { sanitizeArticleHtml } from "@/lib/sanitize";
 
 interface ArticleDetail {
   id: string;
@@ -116,9 +117,10 @@ export default function NewsDetailPage() {
           </div>
         </div>
 
-        <div className="font-[family-name:var(--font-work-sans)] text-sm text-neutral-600 leading-6 whitespace-pre-line">
-          {article.content}
-        </div>
+        <div
+          className="article-content font-[family-name:var(--font-work-sans)] text-sm text-neutral-600 leading-6"
+          dangerouslySetInnerHTML={{ __html: sanitizeArticleHtml(article.content) }}
+        />
       </div>
     </div>
   );

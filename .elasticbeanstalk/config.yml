@@ -1,6 +1,8 @@
 branch-defaults:
   main:
     environment: Iaos-mobile-env
+deploy:
+  artifact: ./.elasticbeanstalk/my-app.zip
 environment-defaults:
   Iaos-mobile-env:
     branch: null
@@ -17,5 +19,3 @@ global:
   profile: null
   sc: git
   workspace_type: Application
-deploy:
-  artifact: ./.elasticbeanstalk/my-app.zip

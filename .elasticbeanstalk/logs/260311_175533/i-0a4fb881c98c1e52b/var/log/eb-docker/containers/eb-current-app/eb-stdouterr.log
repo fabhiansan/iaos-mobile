@@ -1,0 +1,523 @@
+time="2026-03-11T10:49:14Z" level=warning msg="/var/app/current/docker-compose.yml: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion"
+minio-1  | INFO: Formatting 1st pool, 1 set(s), 1 drives per set.
+minio-1  | INFO: WARNING: Host local has more than 0 drives of set. A host failure will result in data becoming unavailable.
+minio-1  | MinIO Object Storage Server
+minio-1  | Copyright: 2015-2026 MinIO, Inc.
+minio-1  | License: GNU AGPLv3 - https://www.gnu.org/licenses/agpl-3.0.html
+minio-1  | Version: RELEASE.2025-09-07T16-13-09Z (go1.24.6 linux/amd64)
+minio-1  | 
+minio-1  | API: http://172.18.0.2:9000  http://127.0.0.1:9000 
+minio-1  | WebUI: http://172.18.0.2:9001 http://127.0.0.1:9001 
+minio-1  | 
+minio-1  | Docs: https://docs.min.io
+minio-1  | WARN: Detected default credentials 'minioadmin:minioadmin', we recommend that you change these values with 'MINIO_ROOT_USER' and 'MINIO_ROOT_PASSWORD' environment variables
+nginx-1  | /docker-entrypoint.sh: /docker-entrypoint.d/ is not empty, will attempt to perform configuration
+nginx-1  | /docker-entrypoint.sh: Looking for shell scripts in /docker-entrypoint.d/
+nginx-1  | /docker-entrypoint.sh: Launching /docker-entrypoint.d/10-listen-on-ipv6-by-default.sh
+nginx-1  | 10-listen-on-ipv6-by-default.sh: info: Getting the checksum of /etc/nginx/conf.d/default.conf
+nginx-1  | 10-listen-on-ipv6-by-default.sh: info: Enabled listen on IPv6 in /etc/nginx/conf.d/default.conf
+nginx-1  | /docker-entrypoint.sh: Sourcing /docker-entrypoint.d/15-local-resolvers.envsh
+nginx-1  | /docker-entrypoint.sh: Launching /docker-entrypoint.d/20-envsubst-on-templates.sh
+nginx-1  | /docker-entrypoint.sh: Launching /docker-entrypoint.d/30-tune-worker-processes.sh
+nginx-1  | /docker-entrypoint.sh: Configuration complete; ready for start up
+web-1    | 
+web-1    | > iaos-connect@0.1.0 start /app
+web-1    | > next start
+web-1    | 
+web-1    | ▲ Next.js 16.1.6
+web-1    | - Local:         http://localhost:3000
+web-1    | - Network:       http://172.18.0.3:3000
+web-1    | 
+web-1    | ✓ Starting...
+web-1    | ✓ Ready in 1900ms
+web-1    | [31m[auth][error][0m UntrustedHost: Host must be trusted. URL was: http://172.31.85.90/api/auth/session. Read more at https://errors.authjs.dev#untrustedhost
+web-1    |     at /app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:51290
+web-1    |     at aj (/app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:53955)
+web-1    |     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+web-1    | [31m[auth][error][0m UntrustedHost: Host must be trusted. URL was: http://172.31.85.90/api/auth/session. Read more at https://errors.authjs.dev#untrustedhost
+web-1    |     at /app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:51290
+web-1    |     at aj (/app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:53955)
+web-1    |     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+web-1    | [31m[auth][error][0m UntrustedHost: Host must be trusted. URL was: http://172.31.85.90/api/auth/session. Read more at https://errors.authjs.dev#untrustedhost
+web-1    |     at /app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:51290
+web-1    |     at aj (/app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:53955)
+web-1    |     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+nginx-1  | 172.31.0.62 - - [11/Mar/2026:10:49:49 +0000] "GET / HTTP/1.1" 200 3987 "-" "ELB-HealthChecker/2.0"
+nginx-1  | 172.31.27.8 - - [11/Mar/2026:10:49:49 +0000] "GET / HTTP/1.1" 200 3987 "-" "ELB-HealthChecker/2.0"
+nginx-1  | 172.31.35.115 - - [11/Mar/2026:10:49:49 +0000] "GET / HTTP/1.1" 200 3987 "-" "ELB-HealthChecker/2.0"
+web-1    | [31m[auth][error][0m UntrustedHost: Host must be trusted. URL was: http://172.31.85.90/api/auth/session. Read more at https://errors.authjs.dev#untrustedhost
+web-1    |     at /app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:51290
+web-1    |     at aj (/app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:53955)
+web-1    |     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+nginx-1  | 172.31.0.62 - - [11/Mar/2026:10:50:04 +0000] "GET / HTTP/1.1" 200 3987 "-" "ELB-HealthChecker/2.0"
+web-1    | [31m[auth][error][0m UntrustedHost: Host must be trusted. URL was: http://172.31.85.90/api/auth/session. Read more at https://errors.authjs.dev#untrustedhost
+web-1    |     at /app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:51290
+web-1    |     at aj (/app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:53955)
+web-1    |     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+web-1    | [31m[auth][error][0m UntrustedHost: Host must be trusted. URL was: http://172.31.85.90/api/auth/session. Read more at https://errors.authjs.dev#untrustedhost
+web-1    |     at /app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:51290
+web-1    |     at aj (/app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:53955)
+web-1    |     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+nginx-1  | 172.31.27.8 - - [11/Mar/2026:10:50:04 +0000] "GET / HTTP/1.1" 200 3987 "-" "ELB-HealthChecker/2.0"
+nginx-1  | 172.31.35.115 - - [11/Mar/2026:10:50:04 +0000] "GET / HTTP/1.1" 200 3987 "-" "ELB-HealthChecker/2.0"
+web-1    | [31m[auth][error][0m UntrustedHost: Host must be trusted. URL was: http://172.31.85.90/api/auth/session. Read more at https://errors.authjs.dev#untrustedhost
+web-1    |     at /app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:51290
+web-1    |     at aj (/app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:53955)
+web-1    |     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+nginx-1  | 172.31.0.62 - - [11/Mar/2026:10:50:19 +0000] "GET / HTTP/1.1" 200 3987 "-" "ELB-HealthChecker/2.0"
+web-1    | [31m[auth][error][0m UntrustedHost: Host must be trusted. URL was: http://172.31.85.90/api/auth/session. Read more at https://errors.authjs.dev#untrustedhost
+web-1    |     at /app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:51290
+web-1    |     at aj (/app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:53955)
+web-1    |     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+nginx-1  | 172.31.27.8 - - [11/Mar/2026:10:50:19 +0000] "GET / HTTP/1.1" 200 3987 "-" "ELB-HealthChecker/2.0"
+web-1    | [31m[auth][error][0m UntrustedHost: Host must be trusted. URL was: http://172.31.85.90/api/auth/session. Read more at https://errors.authjs.dev#untrustedhost
+web-1    |     at /app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:51290
+web-1    |     at aj (/app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:53955)
+web-1    |     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+nginx-1  | 172.31.35.115 - - [11/Mar/2026:10:50:19 +0000] "GET / HTTP/1.1" 200 3987 "-" "ELB-HealthChecker/2.0"
+web-1    | [31m[auth][error][0m UntrustedHost: Host must be trusted. URL was: http://172.31.85.90/api/auth/session. Read more at https://errors.authjs.dev#untrustedhost
+web-1    |     at /app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:51290
+web-1    |     at aj (/app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:53955)
+web-1    |     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+nginx-1  | 172.31.0.62 - - [11/Mar/2026:10:50:34 +0000] "GET / HTTP/1.1" 200 3987 "-" "ELB-HealthChecker/2.0"
+web-1    | [31m[auth][error][0m UntrustedHost: Host must be trusted. URL was: http://172.31.85.90/api/auth/session. Read more at https://errors.authjs.dev#untrustedhost
+web-1    |     at /app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:51290
+web-1    |     at aj (/app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:53955)
+web-1    |     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+web-1    | [31m[auth][error][0m UntrustedHost: Host must be trusted. URL was: http://172.31.85.90/api/auth/session. Read more at https://errors.authjs.dev#untrustedhost
+web-1    |     at /app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:51290
+web-1    |     at aj (/app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:53955)
+web-1    |     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+nginx-1  | 172.31.27.8 - - [11/Mar/2026:10:50:34 +0000] "GET / HTTP/1.1" 200 3987 "-" "ELB-HealthChecker/2.0"
+nginx-1  | 172.31.35.115 - - [11/Mar/2026:10:50:34 +0000] "GET / HTTP/1.1" 200 3987 "-" "ELB-HealthChecker/2.0"
+web-1    | [31m[auth][error][0m UntrustedHost: Host must be trusted. URL was: http://172.31.85.90/api/auth/session. Read more at https://errors.authjs.dev#untrustedhost
+web-1    |     at /app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:51290
+web-1    |     at aj (/app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:53955)
+web-1    |     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+nginx-1  | 172.31.0.62 - - [11/Mar/2026:10:50:49 +0000] "GET / HTTP/1.1" 200 3987 "-" "ELB-HealthChecker/2.0"
+web-1    | [31m[auth][error][0m UntrustedHost: Host must be trusted. URL was: http://172.31.85.90/api/auth/session. Read more at https://errors.authjs.dev#untrustedhost
+web-1    |     at /app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:51290
+web-1    |     at aj (/app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:53955)
+web-1    |     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+nginx-1  | 172.31.27.8 - - [11/Mar/2026:10:50:49 +0000] "GET / HTTP/1.1" 200 3987 "-" "ELB-HealthChecker/2.0"
+web-1    | [31m[auth][error][0m UntrustedHost: Host must be trusted. URL was: http://172.31.85.90/api/auth/session. Read more at https://errors.authjs.dev#untrustedhost
+web-1    |     at /app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:51290
+web-1    |     at aj (/app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:53955)
+web-1    |     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+nginx-1  | 172.31.35.115 - - [11/Mar/2026:10:50:49 +0000] "GET / HTTP/1.1" 200 3987 "-" "ELB-HealthChecker/2.0"
+web-1    | [31m[auth][error][0m UntrustedHost: Host must be trusted. URL was: http://172.31.85.90/api/auth/session. Read more at https://errors.authjs.dev#untrustedhost
+web-1    |     at /app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:51290
+web-1    |     at aj (/app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:53955)
+web-1    |     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+nginx-1  | 172.31.0.62 - - [11/Mar/2026:10:51:04 +0000] "GET / HTTP/1.1" 200 3987 "-" "ELB-HealthChecker/2.0"
+web-1    | [31m[auth][error][0m UntrustedHost: Host must be trusted. URL was: http://172.31.85.90/api/auth/session. Read more at https://errors.authjs.dev#untrustedhost
+web-1    |     at /app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:51290
+web-1    |     at aj (/app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:53955)
+web-1    |     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+nginx-1  | 172.31.27.8 - - [11/Mar/2026:10:51:04 +0000] "GET / HTTP/1.1" 200 3987 "-" "ELB-HealthChecker/2.0"
+web-1    | [31m[auth][error][0m UntrustedHost: Host must be trusted. URL was: http://172.31.85.90/api/auth/session. Read more at https://errors.authjs.dev#untrustedhost
+web-1    |     at /app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:51290
+web-1    |     at aj (/app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:53955)
+web-1    |     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+nginx-1  | 172.31.35.115 - - [11/Mar/2026:10:51:04 +0000] "GET / HTTP/1.1" 200 3987 "-" "ELB-HealthChecker/2.0"
+web-1    | [31m[auth][error][0m UntrustedHost: Host must be trusted. URL was: http://172.31.85.90/api/auth/session. Read more at https://errors.authjs.dev#untrustedhost
+web-1    |     at /app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:51290
+web-1    |     at aj (/app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:53955)
+web-1    |     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+nginx-1  | 172.31.0.62 - - [11/Mar/2026:10:51:19 +0000] "GET / HTTP/1.1" 200 3987 "-" "ELB-HealthChecker/2.0"
+web-1    | [31m[auth][error][0m UntrustedHost: Host must be trusted. URL was: http://172.31.85.90/api/auth/session. Read more at https://errors.authjs.dev#untrustedhost
+web-1    |     at /app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:51290
+web-1    |     at aj (/app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:53955)
+web-1    |     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+nginx-1  | 172.31.27.8 - - [11/Mar/2026:10:51:19 +0000] "GET / HTTP/1.1" 200 3987 "-" "ELB-HealthChecker/2.0"
+web-1    | [31m[auth][error][0m UntrustedHost: Host must be trusted. URL was: http://172.31.85.90/api/auth/session. Read more at https://errors.authjs.dev#untrustedhost
+web-1    |     at /app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:51290
+web-1    |     at aj (/app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:53955)
+web-1    |     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+nginx-1  | 172.31.35.115 - - [11/Mar/2026:10:51:19 +0000] "GET / HTTP/1.1" 200 3987 "-" "ELB-HealthChecker/2.0"
+web-1    | [31m[auth][error][0m UntrustedHost: Host must be trusted. URL was: http://172.31.85.90/api/auth/session. Read more at https://errors.authjs.dev#untrustedhost
+web-1    |     at /app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:51290
+web-1    |     at aj (/app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:53955)
+web-1    |     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+nginx-1  | 172.31.0.62 - - [11/Mar/2026:10:51:34 +0000] "GET / HTTP/1.1" 200 3987 "-" "ELB-HealthChecker/2.0"
+web-1    | [31m[auth][error][0m UntrustedHost: Host must be trusted. URL was: http://172.31.85.90/api/auth/session. Read more at https://errors.authjs.dev#untrustedhost
+web-1    |     at /app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:51290
+web-1    |     at aj (/app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:53955)
+web-1    |     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+nginx-1  | 172.31.27.8 - - [11/Mar/2026:10:51:34 +0000] "GET / HTTP/1.1" 200 3987 "-" "ELB-HealthChecker/2.0"
+web-1    | [31m[auth][error][0m UntrustedHost: Host must be trusted. URL was: http://172.31.85.90/api/auth/session. Read more at https://errors.authjs.dev#untrustedhost
+web-1    |     at /app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:51290
+web-1    |     at aj (/app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:53955)
+web-1    |     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+nginx-1  | 172.31.35.115 - - [11/Mar/2026:10:51:34 +0000] "GET / HTTP/1.1" 200 3987 "-" "ELB-HealthChecker/2.0"
+web-1    | [31m[auth][error][0m UntrustedHost: Host must be trusted. URL was: http://172.31.85.90/api/auth/session. Read more at https://errors.authjs.dev#untrustedhost
+web-1    |     at /app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:51290
+web-1    |     at aj (/app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:53955)
+web-1    |     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+nginx-1  | 172.31.0.62 - - [11/Mar/2026:10:51:49 +0000] "GET / HTTP/1.1" 200 3987 "-" "ELB-HealthChecker/2.0"
+web-1    | [31m[auth][error][0m UntrustedHost: Host must be trusted. URL was: http://172.31.85.90/api/auth/session. Read more at https://errors.authjs.dev#untrustedhost
+web-1    |     at /app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:51290
+web-1    |     at aj (/app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:53955)
+web-1    |     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+nginx-1  | 172.31.27.8 - - [11/Mar/2026:10:51:49 +0000] "GET / HTTP/1.1" 200 3987 "-" "ELB-HealthChecker/2.0"
+web-1    | [31m[auth][error][0m UntrustedHost: Host must be trusted. URL was: http://172.31.85.90/api/auth/session. Read more at https://errors.authjs.dev#untrustedhost
+web-1    |     at /app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:51290
+web-1    |     at aj (/app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:53955)
+web-1    |     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+nginx-1  | 172.31.35.115 - - [11/Mar/2026:10:51:49 +0000] "GET / HTTP/1.1" 200 3987 "-" "ELB-HealthChecker/2.0"
+nginx-1  | 172.31.35.115 - - [11/Mar/2026:10:52:01 +0000] "GET /logo.png HTTP/1.1" 304 0 "http://iaos.ap-southeast-1.elasticbeanstalk.com/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+web-1    | [31m[auth][error][0m UntrustedHost: Host must be trusted. URL was: http://localhost:3000/api/auth/session. Read more at https://errors.authjs.dev#untrustedhost
+web-1    |     at /app/.next/server/chunks/_75bed62e._.js:404:51290
+web-1    |     at aj (/app/.next/server/chunks/_75bed62e._.js:404:53955)
+web-1    |     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+web-1    |     at async rW.do (/app/node_modules/.pnpm/next@16.1.6_@babel+core@7.29.0_babel-plugin-react-compiler@1.0.0_react-dom@19.2.3_react@19.2.3__react@19.2.3/node_modules/next/dist/compiled/next-server/app-route-turbo.runtime.prod.js:5:20169)
+nginx-1  | 172.31.35.115 - - [11/Mar/2026:10:52:01 +0000] "GET /api/auth/session HTTP/1.1" 500 119 "http://iaos.ap-southeast-1.elasticbeanstalk.com/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+web-1    | [31m[auth][error][0m UntrustedHost: Host must be trusted. URL was: http://iaos.ap-southeast-1.elasticbeanstalk.com/api/auth/session. Read more at https://errors.authjs.dev#untrustedhost
+web-1    |     at /app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:51290
+web-1    |     at aj (/app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:53955)
+web-1    |     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+web-1    | [31m[auth][error][0m UntrustedHost: Host must be trusted. URL was: http://iaos.ap-southeast-1.elasticbeanstalk.com/api/auth/session. Read more at https://errors.authjs.dev#untrustedhost
+web-1    |     at /app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:51290
+web-1    |     at aj (/app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:53955)
+web-1    |     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+web-1    | [31m[auth][error][0m UntrustedHost: Host must be trusted. URL was: http://iaos.ap-southeast-1.elasticbeanstalk.com/api/auth/session. Read more at https://errors.authjs.dev#untrustedhost
+web-1    |     at /app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:51290
+web-1    |     at aj (/app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:53955)
+web-1    |     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+web-1    | [31m[auth][error][0m UntrustedHost: Host must be trusted. URL was: http://iaos.ap-southeast-1.elasticbeanstalk.com/api/auth/session. Read more at https://errors.authjs.dev#untrustedhost
+web-1    |     at /app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:51290
+web-1    |     at aj (/app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:53955)
+web-1    |     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+nginx-1  | 172.31.35.115 - - [11/Mar/2026:10:52:01 +0000] "GET /forgot-password?_rsc=1pn8p HTTP/1.1" 200 562 "http://iaos.ap-southeast-1.elasticbeanstalk.com/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+nginx-1  | 172.31.35.115 - - [11/Mar/2026:10:52:01 +0000] "GET /forgot-password?_rsc=18lc2 HTTP/1.1" 200 279 "http://iaos.ap-southeast-1.elasticbeanstalk.com/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+nginx-1  | 172.31.35.115 - - [11/Mar/2026:10:52:01 +0000] "GET /forgot-password?_rsc=nn07o HTTP/1.1" 200 968 "http://iaos.ap-southeast-1.elasticbeanstalk.com/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+nginx-1  | 172.31.35.115 - - [11/Mar/2026:10:52:01 +0000] "GET /register?_rsc=rjhjl HTTP/1.1" 200 279 "http://iaos.ap-southeast-1.elasticbeanstalk.com/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+web-1    | [31m[auth][error][0m UntrustedHost: Host must be trusted. URL was: http://172.31.85.90/api/auth/session. Read more at https://errors.authjs.dev#untrustedhost
+web-1    |     at /app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:51290
+web-1    |     at aj (/app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:53955)
+web-1    |     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+nginx-1  | 172.31.0.62 - - [11/Mar/2026:10:52:04 +0000] "GET / HTTP/1.1" 200 3987 "-" "ELB-HealthChecker/2.0"
+web-1    | [31m[auth][error][0m UntrustedHost: Host must be trusted. URL was: http://172.31.85.90/api/auth/session. Read more at https://errors.authjs.dev#untrustedhost
+web-1    |     at /app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:51290
+web-1    |     at aj (/app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:53955)
+web-1    |     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+nginx-1  | 172.31.27.8 - - [11/Mar/2026:10:52:04 +0000] "GET / HTTP/1.1" 200 3987 "-" "ELB-HealthChecker/2.0"
+web-1    | [31m[auth][error][0m UntrustedHost: Host must be trusted. URL was: http://172.31.85.90/api/auth/session. Read more at https://errors.authjs.dev#untrustedhost
+web-1    |     at /app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:51290
+web-1    |     at aj (/app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:53955)
+web-1    |     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+nginx-1  | 172.31.35.115 - - [11/Mar/2026:10:52:04 +0000] "GET / HTTP/1.1" 200 3987 "-" "ELB-HealthChecker/2.0"
+web-1    | [31m[auth][error][0m UntrustedHost: Host must be trusted. URL was: http://localhost:3000/api/auth/providers. Read more at https://errors.authjs.dev#untrustedhost
+web-1    |     at /app/.next/server/chunks/_75bed62e._.js:404:51290
+web-1    |     at aj (/app/.next/server/chunks/_75bed62e._.js:404:53955)
+web-1    |     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+web-1    |     at async rW.do (/app/node_modules/.pnpm/next@16.1.6_@babel+core@7.29.0_babel-plugin-react-compiler@1.0.0_react-dom@19.2.3_react@19.2.3__react@19.2.3/node_modules/next/dist/compiled/next-server/app-route-turbo.runtime.prod.js:5:20169)
+nginx-1  | 172.31.35.115 - - [11/Mar/2026:10:52:09 +0000] "GET /api/auth/providers HTTP/1.1" 500 119 "http://iaos.ap-southeast-1.elasticbeanstalk.com/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+web-1    | [31m[auth][error][0m UntrustedHost: Host must be trusted. URL was: http://localhost:3000/api/auth/error. Read more at https://errors.authjs.dev#untrustedhost
+web-1    |     at /app/.next/server/chunks/_75bed62e._.js:404:51290
+web-1    |     at aj (/app/.next/server/chunks/_75bed62e._.js:404:53955)
+web-1    |     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+web-1    |     at async rW.do (/app/node_modules/.pnpm/next@16.1.6_@babel+core@7.29.0_babel-plugin-react-compiler@1.0.0_react-dom@19.2.3_react@19.2.3__react@19.2.3/node_modules/next/dist/compiled/next-server/app-route-turbo.runtime.prod.js:5:20169)
+nginx-1  | 172.31.35.115 - - [11/Mar/2026:10:52:10 +0000] "GET /api/auth/error HTTP/1.1" 500 8562 "http://iaos.ap-southeast-1.elasticbeanstalk.com/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+nginx-1  | 172.31.35.115 - - [11/Mar/2026:10:52:10 +0000] "GET /_next/static/chunks/b733c120aaf5049d.js HTTP/1.1" 200 7884 "http://iaos.ap-southeast-1.elasticbeanstalk.com/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+web-1    | [31m[auth][error][0m UntrustedHost: Host must be trusted. URL was: http://172.31.85.90/api/auth/session. Read more at https://errors.authjs.dev#untrustedhost
+web-1    |     at /app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:51290
+web-1    |     at aj (/app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:53955)
+web-1    |     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+nginx-1  | 172.31.0.62 - - [11/Mar/2026:10:52:19 +0000] "GET / HTTP/1.1" 200 3987 "-" "ELB-HealthChecker/2.0"
+web-1    | [31m[auth][error][0m UntrustedHost: Host must be trusted. URL was: http://172.31.85.90/api/auth/session. Read more at https://errors.authjs.dev#untrustedhost
+web-1    |     at /app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:51290
+web-1    |     at aj (/app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:53955)
+web-1    |     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+nginx-1  | 172.31.27.8 - - [11/Mar/2026:10:52:19 +0000] "GET / HTTP/1.1" 200 3987 "-" "ELB-HealthChecker/2.0"
+web-1    | [31m[auth][error][0m UntrustedHost: Host must be trusted. URL was: http://172.31.85.90/api/auth/session. Read more at https://errors.authjs.dev#untrustedhost
+web-1    |     at /app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:51290
+web-1    |     at aj (/app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:53955)
+web-1    |     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+nginx-1  | 172.31.35.115 - - [11/Mar/2026:10:52:19 +0000] "GET / HTTP/1.1" 200 3987 "-" "ELB-HealthChecker/2.0"
+web-1    | [31m[auth][error][0m UntrustedHost: Host must be trusted. URL was: http://localhost:3000/api/auth/error. Read more at https://errors.authjs.dev#untrustedhost
+web-1    |     at /app/.next/server/chunks/_75bed62e._.js:404:51290
+web-1    |     at aj (/app/.next/server/chunks/_75bed62e._.js:404:53955)
+web-1    |     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+web-1    |     at async rW.do (/app/node_modules/.pnpm/next@16.1.6_@babel+core@7.29.0_babel-plugin-react-compiler@1.0.0_react-dom@19.2.3_react@19.2.3__react@19.2.3/node_modules/next/dist/compiled/next-server/app-route-turbo.runtime.prod.js:5:20169)
+nginx-1  | 172.31.35.115 - - [11/Mar/2026:10:52:20 +0000] "GET /api/auth/error HTTP/1.1" 500 8562 "http://iaos.ap-southeast-1.elasticbeanstalk.com/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+nginx-1  | 172.31.35.115 - - [11/Mar/2026:10:52:20 +0000] "GET /favicon.ico HTTP/1.1" 200 25967 "http://iaos.ap-southeast-1.elasticbeanstalk.com/api/auth/error" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+web-1    | [31m[auth][error][0m UntrustedHost: Host must be trusted. URL was: http://172.31.85.90/api/auth/session. Read more at https://errors.authjs.dev#untrustedhost
+web-1    |     at /app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:51290
+web-1    |     at aj (/app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:53955)
+web-1    |     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+nginx-1  | 172.31.0.62 - - [11/Mar/2026:10:52:34 +0000] "GET / HTTP/1.1" 200 3987 "-" "ELB-HealthChecker/2.0"
+web-1    | [31m[auth][error][0m UntrustedHost: Host must be trusted. URL was: http://172.31.85.90/api/auth/session. Read more at https://errors.authjs.dev#untrustedhost
+web-1    |     at /app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:51290
+web-1    |     at aj (/app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:53955)
+web-1    |     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+nginx-1  | 172.31.27.8 - - [11/Mar/2026:10:52:34 +0000] "GET / HTTP/1.1" 200 3987 "-" "ELB-HealthChecker/2.0"
+web-1    | [31m[auth][error][0m UntrustedHost: Host must be trusted. URL was: http://172.31.85.90/api/auth/session. Read more at https://errors.authjs.dev#untrustedhost
+web-1    |     at /app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:51290
+web-1    |     at aj (/app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:53955)
+web-1    |     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+nginx-1  | 172.31.35.115 - - [11/Mar/2026:10:52:34 +0000] "GET / HTTP/1.1" 200 3987 "-" "ELB-HealthChecker/2.0"
+web-1    | [31m[auth][error][0m UntrustedHost: Host must be trusted. URL was: http://172.31.85.90/api/auth/session. Read more at https://errors.authjs.dev#untrustedhost
+web-1    |     at /app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:51290
+web-1    |     at aj (/app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:53955)
+web-1    |     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+nginx-1  | 172.31.0.62 - - [11/Mar/2026:10:52:49 +0000] "GET / HTTP/1.1" 200 3987 "-" "ELB-HealthChecker/2.0"
+web-1    | [31m[auth][error][0m UntrustedHost: Host must be trusted. URL was: http://172.31.85.90/api/auth/session. Read more at https://errors.authjs.dev#untrustedhost
+web-1    |     at /app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:51290
+web-1    |     at aj (/app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:53955)
+web-1    |     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+nginx-1  | 172.31.27.8 - - [11/Mar/2026:10:52:49 +0000] "GET / HTTP/1.1" 200 3987 "-" "ELB-HealthChecker/2.0"
+web-1    | [31m[auth][error][0m UntrustedHost: Host must be trusted. URL was: http://172.31.85.90/api/auth/session. Read more at https://errors.authjs.dev#untrustedhost
+web-1    |     at /app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:51290
+web-1    |     at aj (/app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:53955)
+web-1    |     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+nginx-1  | 172.31.35.115 - - [11/Mar/2026:10:52:49 +0000] "GET / HTTP/1.1" 200 3987 "-" "ELB-HealthChecker/2.0"
+web-1    | [31m[auth][error][0m UntrustedHost: Host must be trusted. URL was: http://172.31.85.90/api/auth/session. Read more at https://errors.authjs.dev#untrustedhost
+web-1    |     at /app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:51290
+web-1    |     at aj (/app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:53955)
+web-1    |     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+nginx-1  | 172.31.0.62 - - [11/Mar/2026:10:53:04 +0000] "GET / HTTP/1.1" 200 3987 "-" "ELB-HealthChecker/2.0"
+web-1    | [31m[auth][error][0m UntrustedHost: Host must be trusted. URL was: http://172.31.85.90/api/auth/session. Read more at https://errors.authjs.dev#untrustedhost
+web-1    |     at /app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:51290
+web-1    |     at aj (/app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:53955)
+web-1    |     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+nginx-1  | 172.31.27.8 - - [11/Mar/2026:10:53:04 +0000] "GET / HTTP/1.1" 200 3987 "-" "ELB-HealthChecker/2.0"
+web-1    | [31m[auth][error][0m UntrustedHost: Host must be trusted. URL was: http://172.31.85.90/api/auth/session. Read more at https://errors.authjs.dev#untrustedhost
+web-1    |     at /app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:51290
+web-1    |     at aj (/app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:53955)
+web-1    |     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+nginx-1  | 172.31.35.115 - - [11/Mar/2026:10:53:04 +0000] "GET / HTTP/1.1" 200 3987 "-" "ELB-HealthChecker/2.0"
+web-1    | [31m[auth][error][0m UntrustedHost: Host must be trusted. URL was: http://172.31.85.90/api/auth/session. Read more at https://errors.authjs.dev#untrustedhost
+web-1    |     at /app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:51290
+web-1    |     at aj (/app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:53955)
+web-1    |     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+nginx-1  | 172.31.0.62 - - [11/Mar/2026:10:53:19 +0000] "GET / HTTP/1.1" 200 3987 "-" "ELB-HealthChecker/2.0"
+web-1    | [31m[auth][error][0m UntrustedHost: Host must be trusted. URL was: http://172.31.85.90/api/auth/session. Read more at https://errors.authjs.dev#untrustedhost
+web-1    |     at /app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:51290
+web-1    |     at aj (/app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:53955)
+web-1    |     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+nginx-1  | 172.31.27.8 - - [11/Mar/2026:10:53:19 +0000] "GET / HTTP/1.1" 200 3987 "-" "ELB-HealthChecker/2.0"
+web-1    | [31m[auth][error][0m UntrustedHost: Host must be trusted. URL was: http://172.31.85.90/api/auth/session. Read more at https://errors.authjs.dev#untrustedhost
+web-1    |     at /app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:51290
+web-1    |     at aj (/app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:53955)
+web-1    |     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+nginx-1  | 172.31.35.115 - - [11/Mar/2026:10:53:19 +0000] "GET / HTTP/1.1" 200 3987 "-" "ELB-HealthChecker/2.0"
+web-1    | [31m[auth][error][0m UntrustedHost: Host must be trusted. URL was: http://172.31.85.90/api/auth/session. Read more at https://errors.authjs.dev#untrustedhost
+web-1    |     at /app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:51290
+web-1    |     at aj (/app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:53955)
+web-1    |     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+nginx-1  | 172.31.0.62 - - [11/Mar/2026:10:53:34 +0000] "GET / HTTP/1.1" 200 3987 "-" "ELB-HealthChecker/2.0"
+web-1    | [31m[auth][error][0m UntrustedHost: Host must be trusted. URL was: http://172.31.85.90/api/auth/session. Read more at https://errors.authjs.dev#untrustedhost
+web-1    |     at /app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:51290
+web-1    |     at aj (/app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:53955)
+web-1    |     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+nginx-1  | 172.31.27.8 - - [11/Mar/2026:10:53:34 +0000] "GET / HTTP/1.1" 200 3987 "-" "ELB-HealthChecker/2.0"
+web-1    | [31m[auth][error][0m UntrustedHost: Host must be trusted. URL was: http://172.31.85.90/api/auth/session. Read more at https://errors.authjs.dev#untrustedhost
+web-1    |     at /app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:51290
+web-1    |     at aj (/app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:53955)
+web-1    |     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+nginx-1  | 172.31.35.115 - - [11/Mar/2026:10:53:34 +0000] "GET / HTTP/1.1" 200 3987 "-" "ELB-HealthChecker/2.0"
+web-1    | [31m[auth][error][0m UntrustedHost: Host must be trusted. URL was: http://172.31.85.90/api/auth/session. Read more at https://errors.authjs.dev#untrustedhost
+web-1    |     at /app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:51290
+web-1    |     at aj (/app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:53955)
+web-1    |     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+nginx-1  | 172.31.0.62 - - [11/Mar/2026:10:53:49 +0000] "GET / HTTP/1.1" 200 3987 "-" "ELB-HealthChecker/2.0"
+web-1    | [31m[auth][error][0m UntrustedHost: Host must be trusted. URL was: http://172.31.85.90/api/auth/session. Read more at https://errors.authjs.dev#untrustedhost
+web-1    |     at /app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:51290
+web-1    |     at aj (/app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:53955)
+web-1    |     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+nginx-1  | 172.31.27.8 - - [11/Mar/2026:10:53:49 +0000] "GET / HTTP/1.1" 200 3987 "-" "ELB-HealthChecker/2.0"
+web-1    | [31m[auth][error][0m UntrustedHost: Host must be trusted. URL was: http://172.31.85.90/api/auth/session. Read more at https://errors.authjs.dev#untrustedhost
+web-1    |     at /app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:51290
+web-1    |     at aj (/app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:53955)
+web-1    |     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+nginx-1  | 172.31.35.115 - - [11/Mar/2026:10:53:49 +0000] "GET / HTTP/1.1" 200 3987 "-" "ELB-HealthChecker/2.0"
+web-1    | [31m[auth][error][0m UntrustedHost: Host must be trusted. URL was: http://172.31.85.90/api/auth/session. Read more at https://errors.authjs.dev#untrustedhost
+web-1    |     at /app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:51290
+web-1    |     at aj (/app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:53955)
+web-1    |     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+nginx-1  | 172.31.0.62 - - [11/Mar/2026:10:54:04 +0000] "GET / HTTP/1.1" 200 3982 "-" "ELB-HealthChecker/2.0"
+web-1    | [31m[auth][error][0m UntrustedHost: Host must be trusted. URL was: http://172.31.85.90/api/auth/session. Read more at https://errors.authjs.dev#untrustedhost
+web-1    |     at /app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:51290
+web-1    |     at aj (/app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:53955)
+web-1    |     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+nginx-1  | 172.31.27.8 - - [11/Mar/2026:10:54:04 +0000] "GET / HTTP/1.1" 200 3987 "-" "ELB-HealthChecker/2.0"
+web-1    | [31m[auth][error][0m UntrustedHost: Host must be trusted. URL was: http://172.31.85.90/api/auth/session. Read more at https://errors.authjs.dev#untrustedhost
+web-1    |     at /app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:51290
+web-1    |     at aj (/app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:53955)
+web-1    |     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+nginx-1  | 172.31.35.115 - - [11/Mar/2026:10:54:04 +0000] "GET / HTTP/1.1" 200 3987 "-" "ELB-HealthChecker/2.0"
+web-1    | [31m[auth][error][0m UntrustedHost: Host must be trusted. URL was: http://172.31.85.90/api/auth/session. Read more at https://errors.authjs.dev#untrustedhost
+web-1    |     at /app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:51290
+web-1    |     at aj (/app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:53955)
+web-1    |     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+nginx-1  | 172.31.0.62 - - [11/Mar/2026:10:54:19 +0000] "GET / HTTP/1.1" 200 3987 "-" "ELB-HealthChecker/2.0"
+web-1    | [31m[auth][error][0m UntrustedHost: Host must be trusted. URL was: http://172.31.85.90/api/auth/session. Read more at https://errors.authjs.dev#untrustedhost
+web-1    |     at /app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:51290
+web-1    |     at aj (/app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:53955)
+web-1    |     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+nginx-1  | 172.31.27.8 - - [11/Mar/2026:10:54:19 +0000] "GET / HTTP/1.1" 200 3987 "-" "ELB-HealthChecker/2.0"
+web-1    | [31m[auth][error][0m UntrustedHost: Host must be trusted. URL was: http://172.31.85.90/api/auth/session. Read more at https://errors.authjs.dev#untrustedhost
+web-1    |     at /app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:51290
+web-1    |     at aj (/app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:53955)
+web-1    |     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+nginx-1  | 172.31.35.115 - - [11/Mar/2026:10:54:19 +0000] "GET / HTTP/1.1" 200 3987 "-" "ELB-HealthChecker/2.0"
+web-1    | [31m[auth][error][0m UntrustedHost: Host must be trusted. URL was: http://172.31.85.90/api/auth/session. Read more at https://errors.authjs.dev#untrustedhost
+web-1    |     at /app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:51290
+web-1    |     at aj (/app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:53955)
+web-1    |     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+nginx-1  | 172.31.0.62 - - [11/Mar/2026:10:54:34 +0000] "GET / HTTP/1.1" 200 3987 "-" "ELB-HealthChecker/2.0"
+web-1    | [31m[auth][error][0m UntrustedHost: Host must be trusted. URL was: http://172.31.85.90/api/auth/session. Read more at https://errors.authjs.dev#untrustedhost
+web-1    |     at /app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:51290
+web-1    |     at aj (/app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:53955)
+web-1    |     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+nginx-1  | 172.31.27.8 - - [11/Mar/2026:10:54:34 +0000] "GET / HTTP/1.1" 200 3987 "-" "ELB-HealthChecker/2.0"
+web-1    | [31m[auth][error][0m UntrustedHost: Host must be trusted. URL was: http://172.31.85.90/api/auth/session. Read more at https://errors.authjs.dev#untrustedhost
+web-1    |     at /app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:51290
+web-1    |     at aj (/app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:53955)
+web-1    |     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+nginx-1  | 172.31.35.115 - - [11/Mar/2026:10:54:34 +0000] "GET / HTTP/1.1" 200 3987 "-" "ELB-HealthChecker/2.0"
+web-1    | [31m[auth][error][0m UntrustedHost: Host must be trusted. URL was: http://localhost:3000/api/auth/error. Read more at https://errors.authjs.dev#untrustedhost
+web-1    |     at /app/.next/server/chunks/_75bed62e._.js:404:51290
+web-1    |     at aj (/app/.next/server/chunks/_75bed62e._.js:404:53955)
+web-1    |     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+web-1    |     at async rW.do (/app/node_modules/.pnpm/next@16.1.6_@babel+core@7.29.0_babel-plugin-react-compiler@1.0.0_react-dom@19.2.3_react@19.2.3__react@19.2.3/node_modules/next/dist/compiled/next-server/app-route-turbo.runtime.prod.js:5:20169)
+nginx-1  | 172.31.35.115 - - [11/Mar/2026:10:54:42 +0000] "GET /api/auth/error HTTP/1.1" 500 8562 "http://iaos.ap-southeast-1.elasticbeanstalk.com/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+nginx-1  | 172.31.35.115 - - [11/Mar/2026:10:54:42 +0000] "GET /favicon.ico HTTP/1.1" 200 25967 "http://iaos.ap-southeast-1.elasticbeanstalk.com/api/auth/error" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+web-1    | [31m[auth][error][0m UntrustedHost: Host must be trusted. URL was: http://iaos.ap-southeast-1.elasticbeanstalk.com/api/auth/session. Read more at https://errors.authjs.dev#untrustedhost
+web-1    |     at /app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:51290
+web-1    |     at aj (/app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:53955)
+web-1    |     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+nginx-1  | 172.31.35.115 - - [11/Mar/2026:10:54:43 +0000] "GET / HTTP/1.1" 200 3987 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+web-1    | [31m[auth][error][0m UntrustedHost: Host must be trusted. URL was: http://localhost:3000/api/auth/session. Read more at https://errors.authjs.dev#untrustedhost
+web-1    |     at /app/.next/server/chunks/_75bed62e._.js:404:51290
+web-1    |     at aj (/app/.next/server/chunks/_75bed62e._.js:404:53955)
+web-1    |     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+web-1    |     at async rW.do (/app/node_modules/.pnpm/next@16.1.6_@babel+core@7.29.0_babel-plugin-react-compiler@1.0.0_react-dom@19.2.3_react@19.2.3__react@19.2.3/node_modules/next/dist/compiled/next-server/app-route-turbo.runtime.prod.js:5:20169)
+nginx-1  | 172.31.35.115 - - [11/Mar/2026:10:54:43 +0000] "GET /api/auth/session HTTP/1.1" 500 119 "http://iaos.ap-southeast-1.elasticbeanstalk.com/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+web-1    | [31m[auth][error][0m UntrustedHost: Host must be trusted. URL was: http://iaos.ap-southeast-1.elasticbeanstalk.com/api/auth/session. Read more at https://errors.authjs.dev#untrustedhost
+web-1    |     at /app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:51290
+web-1    |     at aj (/app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:53955)
+web-1    |     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+nginx-1  | 172.31.35.115 - - [11/Mar/2026:10:54:47 +0000] "GET / HTTP/1.1" 304 0 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+nginx-1  | 172.31.35.115 - - [11/Mar/2026:10:54:47 +0000] "GET /logo.png HTTP/1.1" 304 0 "http://iaos.ap-southeast-1.elasticbeanstalk.com/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+web-1    | [31m[auth][error][0m UntrustedHost: Host must be trusted. URL was: http://localhost:3000/api/auth/session. Read more at https://errors.authjs.dev#untrustedhost
+web-1    |     at /app/.next/server/chunks/_75bed62e._.js:404:51290
+web-1    |     at aj (/app/.next/server/chunks/_75bed62e._.js:404:53955)
+web-1    |     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+web-1    |     at async rW.do (/app/node_modules/.pnpm/next@16.1.6_@babel+core@7.29.0_babel-plugin-react-compiler@1.0.0_react-dom@19.2.3_react@19.2.3__react@19.2.3/node_modules/next/dist/compiled/next-server/app-route-turbo.runtime.prod.js:5:20169)
+nginx-1  | 172.31.35.115 - - [11/Mar/2026:10:54:47 +0000] "GET /api/auth/session HTTP/1.1" 500 119 "http://iaos.ap-southeast-1.elasticbeanstalk.com/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+nginx-1  | 172.31.35.115 - - [11/Mar/2026:10:54:47 +0000] "GET /favicon.ico?favicon.0b3bf435.ico HTTP/1.1" 200 25967 "http://iaos.ap-southeast-1.elasticbeanstalk.com/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+web-1    | [31m[auth][error][0m UntrustedHost: Host must be trusted. URL was: http://localhost:3000/api/auth/session. Read more at https://errors.authjs.dev#untrustedhost
+web-1    |     at /app/.next/server/chunks/_75bed62e._.js:404:51290
+web-1    |     at aj (/app/.next/server/chunks/_75bed62e._.js:404:53955)
+web-1    |     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+web-1    |     at async rW.do (/app/node_modules/.pnpm/next@16.1.6_@babel+core@7.29.0_babel-plugin-react-compiler@1.0.0_react-dom@19.2.3_react@19.2.3__react@19.2.3/node_modules/next/dist/compiled/next-server/app-route-turbo.runtime.prod.js:5:20169)
+nginx-1  | 172.31.0.62 - - [11/Mar/2026:10:54:47 +0000] "GET /api/auth/session HTTP/1.1" 500 119 "http://iaos.ap-southeast-1.elasticbeanstalk.com/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+web-1    | [31m[auth][error][0m UntrustedHost: Host must be trusted. URL was: http://iaos.ap-southeast-1.elasticbeanstalk.com/api/auth/session. Read more at https://errors.authjs.dev#untrustedhost
+web-1    |     at /app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:51290
+web-1    |     at aj (/app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:53955)
+web-1    |     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+web-1    | [31m[auth][error][0m UntrustedHost: Host must be trusted. URL was: http://iaos.ap-southeast-1.elasticbeanstalk.com/api/auth/session. Read more at https://errors.authjs.dev#untrustedhost
+web-1    |     at /app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:51290
+web-1    |     at aj (/app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:53955)
+web-1    |     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+nginx-1  | 172.31.0.62 - - [11/Mar/2026:10:54:47 +0000] "GET /forgot-password?_rsc=1r34m HTTP/1.1" 200 349 "http://iaos.ap-southeast-1.elasticbeanstalk.com/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+nginx-1  | 172.31.0.62 - - [11/Mar/2026:10:54:47 +0000] "GET /register?_rsc=1r34m HTTP/1.1" 200 343 "http://iaos.ap-southeast-1.elasticbeanstalk.com/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+web-1    | [31m[auth][error][0m UntrustedHost: Host must be trusted. URL was: http://iaos.ap-southeast-1.elasticbeanstalk.com/api/auth/session. Read more at https://errors.authjs.dev#untrustedhost
+web-1    |     at /app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:51290
+web-1    |     at aj (/app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:53955)
+web-1    |     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+web-1    | [31m[auth][error][0m UntrustedHost: Host must be trusted. URL was: http://iaos.ap-southeast-1.elasticbeanstalk.com/api/auth/session. Read more at https://errors.authjs.dev#untrustedhost
+web-1    |     at /app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:51290
+web-1    |     at aj (/app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:53955)
+web-1    |     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+nginx-1  | 172.31.0.62 - - [11/Mar/2026:10:54:47 +0000] "GET /forgot-password?_rsc=nn07o HTTP/1.1" 200 968 "http://iaos.ap-southeast-1.elasticbeanstalk.com/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+web-1    | [31m[auth][error][0m UntrustedHost: Host must be trusted. URL was: http://iaos.ap-southeast-1.elasticbeanstalk.com/api/auth/session. Read more at https://errors.authjs.dev#untrustedhost
+web-1    |     at /app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:51290
+web-1    |     at aj (/app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:53955)
+web-1    |     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+web-1    | [31m[auth][error][0m UntrustedHost: Host must be trusted. URL was: http://iaos.ap-southeast-1.elasticbeanstalk.com/api/auth/session. Read more at https://errors.authjs.dev#untrustedhost
+web-1    |     at /app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:51290
+web-1    |     at aj (/app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:53955)
+web-1    |     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+nginx-1  | 172.31.0.62 - - [11/Mar/2026:10:54:47 +0000] "GET /forgot-password?_rsc=1pn8p HTTP/1.1" 200 562 "http://iaos.ap-southeast-1.elasticbeanstalk.com/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+nginx-1  | 172.31.35.115 - - [11/Mar/2026:10:54:47 +0000] "GET /forgot-password?_rsc=18lc2 HTTP/1.1" 200 279 "http://iaos.ap-southeast-1.elasticbeanstalk.com/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+nginx-1  | 172.31.0.62 - - [11/Mar/2026:10:54:47 +0000] "GET /register?_rsc=1pn8p HTTP/1.1" 200 562 "http://iaos.ap-southeast-1.elasticbeanstalk.com/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+web-1    | [31m[auth][error][0m UntrustedHost: Host must be trusted. URL was: http://iaos.ap-southeast-1.elasticbeanstalk.com/api/auth/session. Read more at https://errors.authjs.dev#untrustedhost
+web-1    |     at /app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:51290
+web-1    |     at aj (/app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:53955)
+web-1    |     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+nginx-1  | 172.31.0.62 - - [11/Mar/2026:10:54:47 +0000] "GET /register?_rsc=rjhjl HTTP/1.1" 200 279 "http://iaos.ap-southeast-1.elasticbeanstalk.com/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+web-1    | [31m[auth][error][0m UntrustedHost: Host must be trusted. URL was: http://iaos.ap-southeast-1.elasticbeanstalk.com/api/auth/session. Read more at https://errors.authjs.dev#untrustedhost
+web-1    |     at /app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:51290
+web-1    |     at aj (/app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:53955)
+web-1    |     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+web-1    | [31m[auth][error][0m UntrustedHost: Host must be trusted. URL was: http://iaos.ap-southeast-1.elasticbeanstalk.com/api/auth/session. Read more at https://errors.authjs.dev#untrustedhost
+web-1    |     at /app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:51290
+web-1    |     at aj (/app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:53955)
+web-1    |     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+nginx-1  | 172.31.0.62 - - [11/Mar/2026:10:54:47 +0000] "GET /register?_rsc=su3ji HTTP/1.1" 200 475 "http://iaos.ap-southeast-1.elasticbeanstalk.com/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+nginx-1  | 172.31.0.62 - - [11/Mar/2026:10:54:47 +0000] "GET /forgot-password?_rsc=1maje HTTP/1.1" 200 475 "http://iaos.ap-southeast-1.elasticbeanstalk.com/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+web-1    | [31m[auth][error][0m UntrustedHost: Host must be trusted. URL was: http://172.31.85.90/api/auth/session. Read more at https://errors.authjs.dev#untrustedhost
+web-1    |     at /app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:51290
+web-1    |     at aj (/app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:53955)
+web-1    |     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+nginx-1  | 172.31.0.62 - - [11/Mar/2026:10:54:49 +0000] "GET / HTTP/1.1" 200 3987 "-" "ELB-HealthChecker/2.0"
+web-1    | [31m[auth][error][0m UntrustedHost: Host must be trusted. URL was: http://172.31.85.90/api/auth/session. Read more at https://errors.authjs.dev#untrustedhost
+web-1    |     at /app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:51290
+web-1    |     at aj (/app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:53955)
+web-1    |     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+nginx-1  | 172.31.27.8 - - [11/Mar/2026:10:54:49 +0000] "GET / HTTP/1.1" 200 3987 "-" "ELB-HealthChecker/2.0"
+web-1    | [31m[auth][error][0m UntrustedHost: Host must be trusted. URL was: http://172.31.85.90/api/auth/session. Read more at https://errors.authjs.dev#untrustedhost
+web-1    |     at /app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:51290
+web-1    |     at aj (/app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:53955)
+web-1    |     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+nginx-1  | 172.31.35.115 - - [11/Mar/2026:10:54:49 +0000] "GET / HTTP/1.1" 200 3987 "-" "ELB-HealthChecker/2.0"
+web-1    | [31m[auth][error][0m UntrustedHost: Host must be trusted. URL was: http://localhost:3000/api/auth/providers. Read more at https://errors.authjs.dev#untrustedhost
+web-1    |     at /app/.next/server/chunks/_75bed62e._.js:404:51290
+web-1    |     at aj (/app/.next/server/chunks/_75bed62e._.js:404:53955)
+web-1    |     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+web-1    |     at async rW.do (/app/node_modules/.pnpm/next@16.1.6_@babel+core@7.29.0_babel-plugin-react-compiler@1.0.0_react-dom@19.2.3_react@19.2.3__react@19.2.3/node_modules/next/dist/compiled/next-server/app-route-turbo.runtime.prod.js:5:20169)
+nginx-1  | 172.31.0.62 - - [11/Mar/2026:10:54:58 +0000] "GET /api/auth/providers HTTP/1.1" 500 119 "http://iaos.ap-southeast-1.elasticbeanstalk.com/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+web-1    | [31m[auth][error][0m UntrustedHost: Host must be trusted. URL was: http://iaos.ap-southeast-1.elasticbeanstalk.com/api/auth/session. Read more at https://errors.authjs.dev#untrustedhost
+web-1    |     at /app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:51290
+web-1    |     at aj (/app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:53955)
+web-1    |     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+web-1    | [31m[auth][error][0m UntrustedHost: Host must be trusted. URL was: http://localhost:3000/api/auth/error. Read more at https://errors.authjs.dev#untrustedhost
+web-1    |     at /app/.next/server/chunks/_75bed62e._.js:404:51290
+web-1    |     at aj (/app/.next/server/chunks/_75bed62e._.js:404:53955)
+web-1    |     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+web-1    |     at async rW.do (/app/node_modules/.pnpm/next@16.1.6_@babel+core@7.29.0_babel-plugin-react-compiler@1.0.0_react-dom@19.2.3_react@19.2.3__react@19.2.3/node_modules/next/dist/compiled/next-server/app-route-turbo.runtime.prod.js:5:20169)
+nginx-1  | 172.31.0.62 - - [11/Mar/2026:10:54:58 +0000] "GET /api/auth/error HTTP/1.1" 500 8562 "http://iaos.ap-southeast-1.elasticbeanstalk.com/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+nginx-1  | 172.31.0.62 - - [11/Mar/2026:10:54:58 +0000] "GET /news?_rsc=vusbg HTTP/1.1" 200 1717 "http://iaos.ap-southeast-1.elasticbeanstalk.com/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+web-1    | [31m[auth][error][0m UntrustedHost: Host must be trusted. URL was: http://172.31.85.90/api/auth/session. Read more at https://errors.authjs.dev#untrustedhost
+web-1    |     at /app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:51290
+web-1    |     at aj (/app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:53955)
+web-1    |     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+nginx-1  | 172.31.0.62 - - [11/Mar/2026:10:55:04 +0000] "GET / HTTP/1.1" 200 3987 "-" "ELB-HealthChecker/2.0"
+web-1    | [31m[auth][error][0m UntrustedHost: Host must be trusted. URL was: http://172.31.85.90/api/auth/session. Read more at https://errors.authjs.dev#untrustedhost
+web-1    |     at /app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:51290
+web-1    |     at aj (/app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:53955)
+web-1    |     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+nginx-1  | 172.31.27.8 - - [11/Mar/2026:10:55:04 +0000] "GET / HTTP/1.1" 200 3987 "-" "ELB-HealthChecker/2.0"
+web-1    | [31m[auth][error][0m UntrustedHost: Host must be trusted. URL was: http://172.31.85.90/api/auth/session. Read more at https://errors.authjs.dev#untrustedhost
+web-1    |     at /app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:51290
+web-1    |     at aj (/app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:53955)
+web-1    |     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+nginx-1  | 172.31.35.115 - - [11/Mar/2026:10:55:04 +0000] "GET / HTTP/1.1" 200 3987 "-" "ELB-HealthChecker/2.0"
+web-1    | [31m[auth][error][0m UntrustedHost: Host must be trusted. URL was: http://172.31.85.90/api/auth/session. Read more at https://errors.authjs.dev#untrustedhost
+web-1    |     at /app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:51290
+web-1    |     at aj (/app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:53955)
+web-1    |     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+nginx-1  | 172.31.0.62 - - [11/Mar/2026:10:55:19 +0000] "GET / HTTP/1.1" 200 3987 "-" "ELB-HealthChecker/2.0"
+web-1    | [31m[auth][error][0m UntrustedHost: Host must be trusted. URL was: http://172.31.85.90/api/auth/session. Read more at https://errors.authjs.dev#untrustedhost
+web-1    |     at /app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:51290
+web-1    |     at aj (/app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:53955)
+web-1    |     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+nginx-1  | 172.31.27.8 - - [11/Mar/2026:10:55:19 +0000] "GET / HTTP/1.1" 200 3987 "-" "ELB-HealthChecker/2.0"
+web-1    | [31m[auth][error][0m UntrustedHost: Host must be trusted. URL was: http://172.31.85.90/api/auth/session. Read more at https://errors.authjs.dev#untrustedhost
+web-1    |     at /app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:51290
+web-1    |     at aj (/app/.next/server/chunks/[root-of-the-server]__1135a182._.js:429:53955)
+web-1    |     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+nginx-1  | 172.31.35.115 - - [11/Mar/2026:10:55:19 +0000] "GET / HTTP/1.1" 200 3987 "-" "ELB-HealthChecker/2.0"

@@ -1,0 +1,815 @@
+2026/03/11 10:33:20.385278 [INFO] Starting...
+2026/03/11 10:33:20.385335 [INFO] Starting EBPlatform-PlatformEngine
+2026/03/11 10:33:20.385468 [INFO] reading event message file
+2026/03/11 10:33:20.386010 [INFO] Engine received EB command userdata-exec
+
+2026/03/11 10:33:20.392322 [INFO] Running command: /opt/aws/bin/cfn-get-metadata -s arn:aws:cloudformation:ap-southeast-1:971470477689:stack/awseb-e-awxrvevwc2-immutable-stack/a76d33e0-1d35-11f1-be45-028113544e35 -r AWSEBAutoScalingGroup --region ap-southeast-1
+2026/03/11 10:33:20.795366 [INFO] Running command: /opt/aws/bin/cfn-get-metadata -s arn:aws:cloudformation:ap-southeast-1:971470477689:stack/awseb-e-awxrvevwc2-immutable-stack/a76d33e0-1d35-11f1-be45-028113544e35 -r AWSEBBeanstalkMetadata --region ap-southeast-1
+2026/03/11 10:33:21.262266 [INFO] This is a workflow controlled instance.
+2026/03/11 10:33:21.262379 [INFO] Engine command: (env-launch)
+
+2026/03/11 10:33:21.262870 [INFO] Executing instruction: SyncClock
+2026/03/11 10:33:21.262878 [INFO] Starting SyncClock
+2026/03/11 10:33:21.262890 [INFO] Running command: /usr/bin/chronyc tracking
+2026/03/11 10:33:21.268137 [INFO] Reference ID    : 00000000 ()
+Stratum         : 0
+Ref time (UTC)  : Thu Jan 01 00:00:00 1970
+System time     : 0.000000000 seconds slow of NTP time
+Last offset     : +0.000000000 seconds
+RMS offset      : 0.000000000 seconds
+Frequency       : 6.156 ppm slow
+Residual freq   : +0.000 ppm
+Skew            : 0.000 ppm
+Root delay      : 1.000000000 seconds
+Root dispersion : 1.000000000 seconds
+Update interval : 0.0 seconds
+Leap status     : Not synchronised
+
+2026/03/11 10:33:21.268156 [INFO] Running command: /usr/bin/chronyc -a makestep
+2026/03/11 10:33:21.272674 [INFO] 200 OK
+
+2026/03/11 10:33:21.272740 [INFO] Skipping Configure OS
+2026/03/11 10:33:21.272749 [INFO] Skipping LockRepo
+2026/03/11 10:33:21.272756 [INFO] Skipping GenerateEBBanner
+2026/03/11 10:33:21.272764 [INFO] Skipping Install Process Manager
+2026/03/11 10:33:21.272771 [INFO] Skipping install syslog
+2026/03/11 10:33:21.272778 [INFO] Skipping install cron
+2026/03/11 10:33:21.272784 [INFO] Skipping install proxy
+2026/03/11 10:33:21.272791 [INFO] Skipping installhealthd
+2026/03/11 10:33:21.272798 [INFO] Skipping Install Log Streaming Manager
+2026/03/11 10:33:21.272805 [INFO] Skipping install X-Ray
+2026/03/11 10:33:21.272811 [INFO] Skipping install Third Party License
+2026/03/11 10:33:21.272818 [INFO] Instance has NOT been bootstrapped
+2026/03/11 10:33:21.272822 [INFO] Executing instruction: installSqsd
+2026/03/11 10:33:21.272827 [INFO] This is a web server environment instance, skip install sqsd daemon ...
+2026/03/11 10:33:21.272833 [INFO] Instance has NOT been bootstrapped
+2026/03/11 10:33:21.272837 [INFO] Executing instruction: bootstraphealthd
+2026/03/11 10:33:21.272841 [INFO] this is an enhanced health env ...
+2026/03/11 10:33:21.272854 [INFO] bootstrap healthd....
+2026/03/11 10:33:21.272867 [INFO] Running command: /usr/bin/id -u healthd || /usr/sbin/useradd --user-group healthd -s /sbin/nologin --create-home
+2026/03/11 10:33:21.443946 [INFO] /usr/bin/id: ‘healthd’: no such user
+
+2026/03/11 10:33:21.444447 [INFO] none proxy, skip creating proxy dir for healthd
+2026/03/11 10:33:21.444469 [INFO] bootstrap healthd....
+2026/03/11 10:33:21.444486 [INFO] Running command: /usr/bin/id -u healthd || /usr/sbin/useradd --user-group healthd -s /sbin/nologin --create-home
+2026/03/11 10:33:21.449560 [INFO] 1001
+
+2026/03/11 10:33:21.450677 [INFO] configure bundle log for healthd...
+2026/03/11 10:33:21.450767 [INFO] Executing instruction: GetSetupAnalyzeLogs
+2026/03/11 10:33:21.450883 [INFO] Executing instruction: SetupAnalyzeLogsDocker
+2026/03/11 10:33:21.450952 [INFO] Skipping Install yum packages
+2026/03/11 10:33:21.450960 [INFO] Skipping install docker plugins
+2026/03/11 10:33:21.450967 [INFO] Skipping Configure Docker Daemon
+2026/03/11 10:33:21.450974 [INFO] Skipping MarkBaked
+2026/03/11 10:33:21.450981 [INFO] Instance has NOT been bootstrapped
+2026/03/11 10:33:21.450985 [INFO] Executing instruction: TuneSystemSettings
+2026/03/11 10:33:21.450989 [INFO] Starting TuneSystemSettings
+2026/03/11 10:33:21.451003 [INFO] Instance has NOT been bootstrapped
+2026/03/11 10:33:21.452679 [INFO] Executing instruction: GetSetupLogRotate
+2026/03/11 10:33:21.452685 [INFO] Initialize LogRotate files and directories
+2026/03/11 10:33:21.471395 [INFO] Instance has NOT been bootstrapped
+2026/03/11 10:33:21.471412 [INFO] Executing instruction: BootstrapCFNHup
+2026/03/11 10:33:21.471417 [INFO] Bootstrap cfn-hup
+2026/03/11 10:33:21.473654 [INFO] Copying file /opt/elasticbeanstalk/config/private/aws-eb-command-handler.conf to /etc/cfn/hooks.d/aws-eb-command-handler.conf
+2026/03/11 10:33:21.475894 [INFO] Executing instruction: StartCFNHup
+2026/03/11 10:33:21.475903 [INFO] Start cfn-hup
+2026/03/11 10:33:21.475922 [INFO] Running command: systemctl show -p PartOf cfn-hup.service
+2026/03/11 10:33:21.496139 [INFO] cfn-hup is not registered with EB yet, registering it now
+2026/03/11 10:33:21.496178 [INFO] Running command: systemctl show -p PartOf cfn-hup.service
+2026/03/11 10:33:21.517784 [INFO] Running command: systemctl daemon-reload
+2026/03/11 10:33:21.840022 [INFO] Running command: systemctl reset-failed
+2026/03/11 10:33:21.853890 [INFO] Running command: systemctl is-enabled aws-eb.target
+2026/03/11 10:33:21.866744 [INFO] Running command: systemctl enable aws-eb.target
+2026/03/11 10:33:22.192441 [INFO] Running command: systemctl start aws-eb.target
+2026/03/11 10:33:22.205542 [INFO] Running command: systemctl enable cfn-hup.service
+2026/03/11 10:33:22.568306 [INFO] Created symlink /etc/systemd/system/multi-user.target.wants/cfn-hup.service → /etc/systemd/system/cfn-hup.service.
+
+2026/03/11 10:33:22.568343 [INFO] Running command: systemctl is-active cfn-hup.service
+2026/03/11 10:33:22.581189 [INFO] cfn-hup process is not running, starting it now
+2026/03/11 10:33:22.581221 [INFO] Running command: systemctl show -p PartOf cfn-hup.service
+2026/03/11 10:33:22.597641 [INFO] Running command: systemctl is-active cfn-hup.service
+2026/03/11 10:33:22.609496 [INFO] Running command: systemctl start cfn-hup.service
+2026/03/11 10:33:22.694871 [INFO] Instance has NOT been bootstrapped
+2026/03/11 10:33:22.694899 [INFO] Executing instruction: SetupPublishLogCronjob
+2026/03/11 10:33:22.694905 [INFO] Setup publish logs cron job...
+2026/03/11 10:33:22.694917 [INFO] Copying file /opt/elasticbeanstalk/config/private/logtasks/cron/publishlogs to /etc/cron.d/publishlogs
+2026/03/11 10:33:22.702419 [INFO] Executing instruction: Start Docker
+2026/03/11 10:33:22.702439 [INFO] Starting Docker...
+2026/03/11 10:33:22.702555 [INFO] Copying file /opt/elasticbeanstalk/config/private/docker-log.conf to /etc/systemd/system/docker.service.d/docker-log.conf
+2026/03/11 10:33:22.704963 [INFO] Copying file /opt/elasticbeanstalk/config/private/docker-rsyslog.conf to /etc/rsyslog.d/docker-log.conf
+2026/03/11 10:33:22.707222 [INFO] Running command: systemctl restart rsyslog.service
+2026/03/11 10:33:23.147608 [INFO] Running command: systemctl show -p PartOf docker.service
+2026/03/11 10:33:23.170861 [INFO] Running command: systemctl daemon-reload
+2026/03/11 10:33:23.610934 [INFO] Running command: systemctl reset-failed
+2026/03/11 10:33:23.624998 [INFO] Running command: systemctl show -p PartOf docker.service
+2026/03/11 10:33:23.643314 [INFO] Running command: systemctl restart docker.service
+2026/03/11 10:33:26.078573 [INFO] Instance has NOT been bootstrapped
+2026/03/11 10:33:26.078605 [INFO] Executing instruction: Setup Docker Options
+2026/03/11 10:33:26.078611 [INFO] Setting up configurations for docker platform
+2026/03/11 10:33:26.093614 [INFO] Running command: systemctl show -p PartOf eb-docker-events.service
+2026/03/11 10:33:26.126559 [INFO] Running command: systemctl daemon-reload
+2026/03/11 10:33:26.504689 [INFO] Running command: systemctl reset-failed
+2026/03/11 10:33:26.518047 [INFO] Running command: systemctl enable eb-docker-events.service
+2026/03/11 10:33:26.884738 [INFO] Created symlink /etc/systemd/system/docker.service.wants/eb-docker-events.service → /etc/systemd/system/eb-docker-events.service.
+
+2026/03/11 10:33:26.884839 [INFO] Running command: systemctl show -p PartOf eb-docker-events.service
+2026/03/11 10:33:26.902576 [INFO] Running command: systemctl is-active eb-docker-events.service
+2026/03/11 10:33:26.915154 [INFO] Running command: systemctl start eb-docker-events.service
+2026/03/11 10:33:27.009309 [INFO] Instance has NOT been bootstrapped
+2026/03/11 10:33:27.009331 [INFO] Executing instruction: MarkBootstrapped
+2026/03/11 10:33:27.009337 [INFO] Starting MarkBootstrapped
+2026/03/11 10:33:27.009365 [INFO] Instance has NOT been bootstrapped
+2026/03/11 10:33:27.009523 [INFO] Marked instance as Bootstrapped
+2026/03/11 10:33:27.009531 [INFO] Executing instruction: Save CFN Stack Info
+2026/03/11 10:33:27.009636 [INFO] Saving CFN stack info
+2026/03/11 10:33:27.009733 [INFO] Executing cleanup logic
+2026/03/11 10:33:27.009750 [INFO] Platform Engine finished execution on command: env-launch
+
+2026/03/11 10:33:52.825164 [INFO] Starting...
+2026/03/11 10:33:52.825220 [INFO] Starting EBPlatform-PlatformEngine
+2026/03/11 10:33:52.825249 [INFO] reading event message file
+2026/03/11 10:33:52.826060 [INFO] Engine received EB command cfn-hup-exec
+
+2026/03/11 10:33:52.909267 [INFO] Running command: /opt/aws/bin/cfn-get-metadata -s arn:aws:cloudformation:ap-southeast-1:971470477689:stack/awseb-e-awxrvevwc2-immutable-stack/a76d33e0-1d35-11f1-be45-028113544e35 -r AWSEBAutoScalingGroup --region ap-southeast-1
+2026/03/11 10:33:53.339727 [INFO] Running command: /opt/aws/bin/cfn-get-metadata -s arn:aws:cloudformation:ap-southeast-1:971470477689:stack/awseb-e-awxrvevwc2-immutable-stack/a76d33e0-1d35-11f1-be45-028113544e35 -r AWSEBBeanstalkMetadata --region ap-southeast-1
+2026/03/11 10:33:53.750591 [INFO] checking whether command app-deploy is applicable to this instance...
+2026/03/11 10:33:53.750615 [INFO] this command is applicable to the instance, thus instance should execute command
+2026/03/11 10:33:53.750622 [INFO] Engine command: (app-deploy)
+
+2026/03/11 10:33:53.750629 [INFO] Downloading EB Application...
+2026/03/11 10:33:53.750634 [INFO] Region: ap-southeast-1
+2026/03/11 10:33:53.750638 [INFO] envID: e-awxrvevwc2
+2026/03/11 10:33:53.750643 [INFO] envBucket: elasticbeanstalk-ap-southeast-1-971470477689
+2026/03/11 10:33:53.750648 [INFO] accountID: 971470477689
+2026/03/11 10:33:53.750653 [INFO] Using manifest file name from command request
+2026/03/11 10:33:53.750664 [INFO] Trying to download manifest using key ManifestFileS3Key...
+2026/03/11 10:33:53.750669 [INFO] ManifestFileS3Key (resources/environments/e-awxrvevwc2/_runtime/immutable_deployment_versions/manifest_1773225169013) from cfn template
+
+2026/03/11 10:33:53.750924 [INFO] Downloading: bucket: elasticbeanstalk-ap-southeast-1-971470477689, object: resources/environments/e-awxrvevwc2/_runtime/immutable_deployment_versions/manifest_1773225169013, expected bucket owner: 971470477689
+2026/03/11 10:33:53.798161 [INFO] Download successful154bytes downloaded
+2026/03/11 10:33:53.798293 [INFO] Trying to read and parse version manifest...
+2026/03/11 10:33:53.798444 [INFO] Downloading: bucket: elasticbeanstalk-ap-southeast-1-971470477689, object: resources/environments/e-awxrvevwc2/_runtime/_versions/Iaos-mobile/app-7a85-260311_103237845641, expected bucket owner: 971470477689
+2026/03/11 10:33:53.980744 [INFO] Download successful6173563bytes downloaded
+2026/03/11 10:33:53.981216 [INFO] Executing instruction: ElectLeader
+2026/03/11 10:33:53.981228 [INFO] Running leader election for instance i-09cda397123511bd4...
+2026/03/11 10:33:53.981234 [INFO] Calling the cfn-elect-cmd-leader to elect the command leader.
+2026/03/11 10:33:53.981252 [INFO] Running command: /opt/aws/bin/cfn-elect-cmd-leader --stack arn:aws:cloudformation:ap-southeast-1:971470477689:stack/awseb-e-awxrvevwc2-immutable-stack/a76d33e0-1d35-11f1-be45-028113544e35 --command-name ElasticBeanstalkCommand-AWSEBAutoScalingGroup --invocation-id e99e088f-34d9-42fb-80f7-2daafc4104c5 --listener-id i-09cda397123511bd4 --region ap-southeast-1
+2026/03/11 10:33:54.427721 [INFO] Instance is Leader.
+2026/03/11 10:33:54.427775 [INFO] Executing instruction: stopSqsd
+2026/03/11 10:33:54.427796 [INFO] This is a web server environment instance, skip stop sqsd daemon ...
+2026/03/11 10:33:54.427801 [INFO] Executing instruction: PreBuildEbExtension
+2026/03/11 10:33:54.427806 [INFO] Starting executing the config set Infra-EmbeddedPreBuild.
+2026/03/11 10:33:54.427821 [INFO] Running command: /opt/aws/bin/cfn-init -s arn:aws:cloudformation:ap-southeast-1:971470477689:stack/awseb-e-awxrvevwc2-immutable-stack/a76d33e0-1d35-11f1-be45-028113544e35 -r AWSEBAutoScalingGroup --region ap-southeast-1 --configsets Infra-EmbeddedPreBuild
+2026/03/11 10:33:54.859694 [INFO] Finished executing the config set Infra-EmbeddedPreBuild.
+
+2026/03/11 10:33:54.859764 [INFO] Executing instruction: StagedockerApplication
+2026/03/11 10:33:54.859780 [INFO] Running command: docker ps -a -q -f status=running
+2026/03/11 10:33:54.884437 [INFO] Pruning containers ...
+2026/03/11 10:33:54.884477 [INFO] Running command: docker ps -a
+2026/03/11 10:33:54.906107 [INFO] CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+
+2026/03/11 10:33:54.906146 [INFO] Running command: docker container prune -f
+2026/03/11 10:33:54.931656 [INFO] Total reclaimed space: 0B
+
+2026/03/11 10:33:54.931694 [INFO] Running command: docker ps -a
+2026/03/11 10:33:54.952086 [INFO] CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+
+2026/03/11 10:33:54.952119 [INFO] Recreating /var/app/staging/
+2026/03/11 10:33:54.952282 [INFO] Recreating /var/log/eb-docker/containers/eb-current-app
+2026/03/11 10:33:54.952535 [INFO] Running command: /bin/file -m /opt/elasticbeanstalk/config/private/beanstalk-magic -b --mime-type /opt/elasticbeanstalk/deployment/app_source_bundle
+2026/03/11 10:33:54.962928 [INFO] application/zip
+
+2026/03/11 10:33:54.962953 [INFO] app source bundle is zip file ...
+2026/03/11 10:33:54.962959 [INFO] extracting /opt/elasticbeanstalk/deployment/app_source_bundle to /var/app/staging/
+2026/03/11 10:33:54.962971 [INFO] Running command: /usr/bin/unzip -q -o /opt/elasticbeanstalk/deployment/app_source_bundle -d /var/app/staging/
+2026/03/11 10:33:55.045517 [INFO] finished extracting /opt/elasticbeanstalk/deployment/app_source_bundle to /var/app/staging/ successfully
+2026/03/11 10:33:55.045540 [INFO] Executing instruction: RunAppDeployPreBuildHooks
+2026/03/11 10:33:55.045633 [INFO] Executing platform hooks in .platform/hooks/prebuild/
+2026/03/11 10:33:55.045715 [INFO] The dir .platform/hooks/prebuild/ does not exist
+2026/03/11 10:33:55.045721 [INFO] Finished running scripts in /var/app/staging/.platform/hooks/prebuild
+2026/03/11 10:33:55.045732 [INFO] Executing instruction: Generate environment file
+2026/03/11 10:33:55.045854 [INFO] Executing instruction: Docker Specific Build Application
+2026/03/11 10:33:55.045861 [INFO] start build docker app
+2026/03/11 10:33:55.045864 [INFO] detected new app as docker compose app
+2026/03/11 10:33:55.045884 [INFO] Running command: docker compose config
+2026/03/11 10:33:55.342499 [INFO] Running command: docker compose config --services
+2026/03/11 10:33:55.439303 [INFO] web
+nginx
+minio
+
+2026/03/11 10:33:55.439332 [INFO] time="2026-03-11T10:33:55Z" level=warning msg="/var/app/staging/docker-compose.yml: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion"
+
+2026/03/11 10:33:55.439520 [INFO] fetching image names from Dockerfile /var/app/staging/web/Dockerfile
+2026/03/11 10:33:55.439610 [INFO] found images [node:20-alpine] in Dockerfile /var/app/staging/web/Dockerfile
+2026/03/11 10:33:55.439626 [INFO] Running command: docker compose pull --ignore-buildable
+2026/03/11 10:34:05.005070 [INFO] time="2026-03-11T10:33:55Z" level=warning msg="/var/app/staging/docker-compose.yml: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion"
+ web Skipped No image to be pulled
+ Image minio/minio Pulling 
+ Image nginx:1-alpine Pulling 
+ 589002ba0eae Pulling fs layer 0B
+ d2a46166eee6 Pulling fs layer 0B
+ 593488f95c35 Pulling fs layer 0B
+ e19aff8f2cce Pulling fs layer 0B
+ 1549d7aec962 Pulling fs layer 0B
+ 1f25242adbdb Pulling fs layer 0B
+ c32126d2b96c Pulling fs layer 0B
+ c24026275c33 Pulling fs layer 0B
+ 1f25242adbdb Waiting 0B
+ c32126d2b96c Waiting 0B
+ e19aff8f2cce Waiting 0B
+ 1549d7aec962 Waiting 0B
+ c24026275c33 Waiting 0B
+ b83ce1c86227 Pulling fs layer 0B
+ f94d28849fa3 Pulling fs layer 0B
+ 81260b173076 Pulling fs layer 0B
+ f9c0805c25ee Pulling fs layer 0B
+ 1008deaf6ec4 Pulling fs layer 0B
+ 71e9fc939447 Pulling fs layer 0B
+ c1bc68842c41 Pulling fs layer 0B
+ 0288b5a0d7e7 Pulling fs layer 0B
+ 34013573f278 Pulling fs layer 0B
+ b83ce1c86227 Waiting 0B
+ f94d28849fa3 Waiting 0B
+ 81260b173076 Waiting 0B
+ f9c0805c25ee Waiting 0B
+ 1008deaf6ec4 Waiting 0B
+ 71e9fc939447 Waiting 0B
+ c1bc68842c41 Waiting 0B
+ 0288b5a0d7e7 Waiting 0B
+ 34013573f278 Waiting 0B
+ 589002ba0eae Downloading 39.7kB
+ d2a46166eee6 Downloading 18.75kB
+ d2a46166eee6 Verifying Checksum 0B
+ d2a46166eee6 Download complete 0B
+ 589002ba0eae Verifying Checksum 0B
+ 589002ba0eae Download complete 0B
+ 589002ba0eae Extracting 65.54kB
+ 593488f95c35 Downloading 626B
+ 593488f95c35 Verifying Checksum 0B
+ 593488f95c35 Download complete 0B
+ 589002ba0eae Extracting 1.376MB
+ 589002ba0eae Extracting 3.862MB
+ 589002ba0eae Pull complete 0B
+ d2a46166eee6 Extracting 32.77kB
+ d2a46166eee6 Extracting 1.87MB
+ d2a46166eee6 Pull complete 0B
+ 593488f95c35 Extracting 626B
+ 593488f95c35 Extracting 626B
+ 593488f95c35 Pull complete 0B
+ 1549d7aec962 Downloading 403B
+ 1549d7aec962 Verifying Checksum 0B
+ 1549d7aec962 Download complete 0B
+ e19aff8f2cce Downloading 952B
+ e19aff8f2cce Verifying Checksum 0B
+ e19aff8f2cce Download complete 0B
+ e19aff8f2cce Extracting 952B
+ e19aff8f2cce Extracting 952B
+ 1f25242adbdb Downloading 953B
+ 1f25242adbdb Downloading 1.208kB
+ 1f25242adbdb Verifying Checksum 0B
+ 1f25242adbdb Download complete 0B
+ e19aff8f2cce Pull complete 0B
+ 1549d7aec962 Extracting 403B
+ 1549d7aec962 Extracting 403B
+ 1549d7aec962 Pull complete 0B
+ 1f25242adbdb Extracting 1.208kB
+ 1f25242adbdb Extracting 1.208kB
+ 1f25242adbdb Pull complete 0B
+ b83ce1c86227 Downloading 76.11kB
+ b83ce1c86227 Verifying Checksum 0B
+ b83ce1c86227 Download complete 0B
+ b83ce1c86227 Extracting 98.3kB
+ b83ce1c86227 Extracting 1.868MB
+ c32126d2b96c Downloading 953B
+ c32126d2b96c Downloading 1.398kB
+ c32126d2b96c Verifying Checksum 0B
+ c32126d2b96c Download complete 0B
+ c32126d2b96c Extracting 1.398kB
+ c32126d2b96c Extracting 1.398kB
+ c32126d2b96c Pull complete 0B
+ c24026275c33 Downloading 205.1kB
+ b83ce1c86227 Extracting 2.163MB
+ c24026275c33 Downloading 12.76MB
+ b83ce1c86227 Extracting 4.03MB
+ c24026275c33 Downloading 18.51MB
+ c24026275c33 Verifying Checksum 0B
+ c24026275c33 Download complete 0B
+ b83ce1c86227 Extracting 5.997MB
+ c24026275c33 Extracting 229.4kB
+ b83ce1c86227 Extracting 6.488MB
+ c24026275c33 Extracting 1.606MB
+ b83ce1c86227 Extracting 7.241MB
+ c24026275c33 Extracting 3.67MB
+ b83ce1c86227 Pull complete 0B
+ f94d28849fa3 Downloading 16.75kB
+ c24026275c33 Extracting 7.799MB
+ f94d28849fa3 Verifying Checksum 0B
+ f94d28849fa3 Extracting 32.77kB
+ f94d28849fa3 Extracting 1.637MB
+ c24026275c33 Extracting 10.32MB
+ f94d28849fa3 Extracting 1.637MB
+ 81260b173076 Downloading 1.774kB
+ 81260b173076 Downloading 122.7kB
+ 81260b173076 Verifying Checksum 0B
+ 81260b173076 Download complete 0B
+ f94d28849fa3 Pull complete 0B
+ 81260b173076 Extracting 32.77kB
+ c24026275c33 Extracting 13.76MB
+ 81260b173076 Extracting 122.7kB
+ 81260b173076 Extracting 122.7kB
+ 81260b173076 Pull complete 0B
+ c24026275c33 Extracting 17.2MB
+ f9c0805c25ee Downloading 396.3kB
+ c24026275c33 Extracting 20.19MB
+ f9c0805c25ee Downloading 15.8MB
+ c24026275c33 Extracting 20.25MB
+ f9c0805c25ee Downloading 21.05MB
+ c24026275c33 Pull complete 0B
+ Image nginx:1-alpine Pulled 
+ f9c0805c25ee Downloading 25.91MB
+ 1008deaf6ec4 Downloading 114.2kB
+ 1008deaf6ec4 Verifying Checksum 0B
+ 1008deaf6ec4 Download complete 0B
+ f9c0805c25ee Downloading 31.18MB
+ 71e9fc939447 Downloading 24.64kB
+ 71e9fc939447 Downloading 2.402MB
+ 71e9fc939447 Verifying Checksum 0B
+ 71e9fc939447 Download complete 0B
+ f9c0805c25ee Downloading 34.84MB
+ f9c0805c25ee Downloading 38.08MB
+ f9c0805c25ee Verifying Checksum 0B
+ f9c0805c25ee Download complete 0B
+ f9c0805c25ee Extracting 426kB
+ f9c0805c25ee Extracting 4.686MB
+ f9c0805c25ee Extracting 8.52MB
+ f9c0805c25ee Extracting 11.08MB
+ f9c0805c25ee Extracting 13.63MB
+ c1bc68842c41 Downloading 3.07kB
+ c1bc68842c41 Downloading 180.3kB
+ c1bc68842c41 Verifying Checksum 0B
+ c1bc68842c41 Download complete 0B
+ f9c0805c25ee Extracting 16.61MB
+ 0288b5a0d7e7 Downloading 407B
+ 0288b5a0d7e7 Downloading 11.88kB
+ 0288b5a0d7e7 Verifying Checksum 0B
+ 0288b5a0d7e7 Download complete 0B
+ f9c0805c25ee Extracting 22.15MB
+ 34013573f278 Downloading 408B
+ 34013573f278 Downloading 496B
+ 34013573f278 Verifying Checksum 0B
+ 34013573f278 Download complete 0B
+ f9c0805c25ee Extracting 25.13MB
+ f9c0805c25ee Extracting 30.24MB
+ f9c0805c25ee Extracting 34.08MB
+ f9c0805c25ee Extracting 38.34MB
+ f9c0805c25ee Extracting 39.45MB
+ f9c0805c25ee Pull complete 0B
+ 1008deaf6ec4 Extracting 131.1kB
+ 1008deaf6ec4 Extracting 4.063MB
+ 1008deaf6ec4 Extracting 7.733MB
+ 1008deaf6ec4 Extracting 11.19MB
+ 1008deaf6ec4 Pull complete 0B
+ 71e9fc939447 Extracting 32.77kB
+ 71e9fc939447 Extracting 2.402MB
+ 71e9fc939447 Pull complete 0B
+ c1bc68842c41 Extracting 32.77kB
+ c1bc68842c41 Extracting 180.3kB
+ c1bc68842c41 Extracting 180.3kB
+ c1bc68842c41 Pull complete 0B
+ 0288b5a0d7e7 Extracting 11.88kB
+ 0288b5a0d7e7 Extracting 11.88kB
+ 0288b5a0d7e7 Pull complete 0B
+ 34013573f278 Extracting 496B
+ 34013573f278 Extracting 496B
+ 34013573f278 Pull complete 0B
+ Image minio/minio Pulled 
+
+2026/03/11 10:34:05.005139 [INFO] successfully execute command: docker compose pull --ignore-buildable
+2026/03/11 10:34:05.005158 [INFO] Running command: docker compose build
+2026/03/11 10:36:47.055176 [INFO] #1 [internal] load local bake definitions
+#1 reading from stdin 480B done
+#1 DONE 0.0s
+
+#2 [internal] load build definition from Dockerfile
+#2 transferring dockerfile: 283B done
+#2 DONE 0.0s
+
+#3 [internal] load metadata for docker.io/library/node:20-alpine
+#3 DONE 2.5s
+
+#4 [internal] load .dockerignore
+#4 transferring context: 110B done
+#4 DONE 0.0s
+
+#5 [1/6] FROM docker.io/library/node:20-alpine@sha256:b88333c42c23fbd91596ebd7fd10de239cedab9617de04142dde7315e3bc0afa
+#5 resolve docker.io/library/node:20-alpine@sha256:b88333c42c23fbd91596ebd7fd10de239cedab9617de04142dde7315e3bc0afa 0.0s done
+#5 sha256:6757e50d3b6babac896b5ba3e7acb5219351e6a111bf4dd19974c7b0bd694c1f 6.52kB / 6.52kB done
+#5 sha256:ed2fdcee5269a06b0b8b77c69867176443364a72a9626e9aa2e66ab1ebda35a7 0B / 43.22MB 0.1s
+#5 sha256:7ad115895a6aadccf7f98a05c33873c04df2933ba557c5bcdbedd3de612803da 0B / 1.26MB 0.1s
+#5 sha256:9d10d4687fae6e13c052431ea3221ccda835c3262df3564310345ffe173146d9 0B / 445B 0.1s
+#5 sha256:b88333c42c23fbd91596ebd7fd10de239cedab9617de04142dde7315e3bc0afa 7.67kB / 7.67kB done
+#5 sha256:5bac2112f1a27db4775ce6ead86db9e0cbc087f0dbddfe3cbc11ecea122d5294 1.72kB / 1.72kB done
+#5 ...
+
+#6 [internal] load build context
+#6 transferring context: 6.76MB 0.1s done
+#6 DONE 0.1s
+
+#5 [1/6] FROM docker.io/library/node:20-alpine@sha256:b88333c42c23fbd91596ebd7fd10de239cedab9617de04142dde7315e3bc0afa
+#5 sha256:ed2fdcee5269a06b0b8b77c69867176443364a72a9626e9aa2e66ab1ebda35a7 17.83MB / 43.22MB 0.8s
+#5 sha256:ed2fdcee5269a06b0b8b77c69867176443364a72a9626e9aa2e66ab1ebda35a7 23.07MB / 43.22MB 0.9s
+#5 sha256:7ad115895a6aadccf7f98a05c33873c04df2933ba557c5bcdbedd3de612803da 1.26MB / 1.26MB 0.8s done
+#5 sha256:ed2fdcee5269a06b0b8b77c69867176443364a72a9626e9aa2e66ab1ebda35a7 43.22MB / 43.22MB 1.1s
+#5 sha256:9d10d4687fae6e13c052431ea3221ccda835c3262df3564310345ffe173146d9 445B / 445B 1.0s done
+#5 sha256:ed2fdcee5269a06b0b8b77c69867176443364a72a9626e9aa2e66ab1ebda35a7 43.22MB / 43.22MB 1.1s done
+#5 extracting sha256:ed2fdcee5269a06b0b8b77c69867176443364a72a9626e9aa2e66ab1ebda35a7 0.1s
+#5 extracting sha256:ed2fdcee5269a06b0b8b77c69867176443364a72a9626e9aa2e66ab1ebda35a7 2.1s done
+#5 extracting sha256:7ad115895a6aadccf7f98a05c33873c04df2933ba557c5bcdbedd3de612803da
+#5 extracting sha256:7ad115895a6aadccf7f98a05c33873c04df2933ba557c5bcdbedd3de612803da 0.1s done
+#5 extracting sha256:9d10d4687fae6e13c052431ea3221ccda835c3262df3564310345ffe173146d9 done
+#5 DONE 3.7s
+
+#7 [2/6] WORKDIR /app
+#7 DONE 0.2s
+
+#8 [3/6] COPY package*.json pnpm-lock.yaml ./
+#8 DONE 0.0s
+
+#9 [4/6] RUN npm install -g pnpm && pnpm install
+#9 2.772 
+#9 2.772 added 1 package in 2s
+#9 2.773 
+#9 2.773 1 package is looking for funding
+#9 2.773   run `npm fund` for details
+#9 2.776 npm notice
+#9 2.776 npm notice New major version of npm available! 10.8.2 -> 11.11.0
+#9 2.776 npm notice Changelog: https://github.com/npm/cli/releases/tag/v11.11.0
+#9 2.776 npm notice To update run: npm install -g npm@11.11.0
+#9 2.776 npm notice
+#9 4.235 Progress: resolved 0, reused 0, downloaded 1, added 0
+#9 4.352  WARN  deprecated @types/bcryptjs@3.0.0: This is a stub types definition. bcryptjs provides its own type definitions, so you do not need this installed.
+#9 5.244 Progress: resolved 11, reused 0, downloaded 8, added 0
+#9 6.245 Progress: resolved 15, reused 0, downloaded 12, added 0
+#9 7.247 Progress: resolved 18, reused 0, downloaded 15, added 0
+#9 8.251 Progress: resolved 22, reused 0, downloaded 19, added 0
+#9 11.10 Progress: resolved 22, reused 0, downloaded 20, added 0
+#9 12.10 Progress: resolved 82, reused 0, downloaded 46, added 0
+#9 13.10 Progress: resolved 121, reused 0, downloaded 87, added 0
+#9 14.10 Progress: resolved 158, reused 0, downloaded 156, added 0
+#9 15.10 Progress: resolved 228, reused 0, downloaded 211, added 0
+#9 16.10 Progress: resolved 267, reused 0, downloaded 258, added 0
+#9 17.11 Progress: resolved 278, reused 0, downloaded 264, added 0
+#9 18.11 Progress: resolved 289, reused 0, downloaded 270, added 0
+#9 19.13 Progress: resolved 314, reused 0, downloaded 271, added 0
+#9 20.19 Progress: resolved 383, reused 0, downloaded 271, added 0
+#9 21.20 Progress: resolved 442, reused 0, downloaded 283, added 0
+#9 22.21 Progress: resolved 444, reused 0, downloaded 329, added 0
+#9 23.22 Progress: resolved 536, reused 0, downloaded 415, added 0
+#9 24.22 Progress: resolved 616, reused 0, downloaded 449, added 0
+#9 25.16  WARN  2 deprecated subdependencies found: @esbuild-kit/core-utils@3.3.2, @esbuild-kit/esm-loader@2.6.5
+#9 25.21 Packages: +521
+#9 25.21 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+#9 25.23 Progress: resolved 690, reused 0, downloaded 526, added 0
+#9 26.23 Progress: resolved 690, reused 0, downloaded 526, added 93
+#9 27.23 Progress: resolved 690, reused 0, downloaded 526, added 196
+#9 28.23 Progress: resolved 690, reused 0, downloaded 526, added 224
+#9 29.23 Progress: resolved 690, reused 0, downloaded 526, added 308
+#9 30.23 Progress: resolved 690, reused 0, downloaded 526, added 434
+#9 31.23 Progress: resolved 690, reused 0, downloaded 526, added 493
+#9 32.24 Progress: resolved 690, reused 0, downloaded 526, added 494
+#9 33.24 Progress: resolved 690, reused 0, downloaded 526, added 495
+#9 33.61 Progress: resolved 690, reused 0, downloaded 526, added 521, done
+#9 34.76 
+#9 34.76 dependencies:
+#9 34.76 + @aws-sdk/client-s3 3.1006.0
+#9 34.76 + @aws-sdk/s3-request-presigner 3.1006.0
+#9 34.76 + bcryptjs 3.0.3
+#9 34.76 + drizzle-orm 0.45.1
+#9 34.76 + lucide-react 0.577.0
+#9 34.76 + next 16.1.6
+#9 34.76 + next-auth 5.0.0-beta.30
+#9 34.76 + pg 8.20.0
+#9 34.76 + react 19.2.3
+#9 34.76 + react-dom 19.2.3
+#9 34.76 
+#9 34.76 devDependencies:
+#9 34.76 + @tailwindcss/postcss 4.2.1
+#9 34.76 + @types/bcryptjs 3.0.0 deprecated
+#9 34.76 + @types/node 20.19.37
+#9 34.76 + @types/pg 8.18.0
+#9 34.76 + @types/react 19.2.14
+#9 34.76 + @types/react-dom 19.2.3
+#9 34.76 + babel-plugin-react-compiler 1.0.0
+#9 34.76 + drizzle-kit 0.31.9
+#9 34.76 + eslint 9.39.4
+#9 34.76 + eslint-config-next 16.1.6
+#9 34.76 + tailwindcss 4.2.1
+#9 34.76 + typescript 5.9.3
+#9 34.76 + vitest 4.0.18
+#9 34.76 
+#9 34.77 ╭ Warning ─────────────────────────────────────────────────────────────────────╮
+#9 34.77 │                                                                              │
+#9 34.77 │   Ignored build scripts: esbuild@0.18.20, esbuild@0.25.12, esbuild@0.27.3,   │
+#9 34.77 │   sharp@0.34.5, unrs-resolver@1.11.1.                                        │
+#9 34.77 │   Run "pnpm approve-builds" to pick which dependencies should be allowed     │
+#9 34.77 │   to run scripts.                                                            │
+#9 34.77 │                                                                              │
+#9 34.77 ╰──────────────────────────────────────────────────────────────────────────────╯
+#9 34.83 Done in 31.9s using pnpm v10.32.1
+#9 DONE 35.4s
+
+#10 [5/6] COPY . .
+#10 DONE 0.2s
+
+#11 [6/6] RUN pnpm build
+#11 1.185 
+#11 1.185 > iaos-connect@0.1.0 build /app
+#11 1.185 > next build
+#11 1.185 
+#11 3.538 ⚠ Found lockfile missing swc dependencies, patching...
+#11 4.814 Attention: Next.js now collects completely anonymous telemetry regarding usage.
+#11 4.815 This information is used to shape Next.js' roadmap and prioritize features.
+#11 4.815 You can learn more, including how to opt-out if you'd not like to participate in this anonymous program, by visiting the following URL:
+#11 4.816 https://nextjs.org/telemetry
+#11 4.816 
+#11 4.838 ▲ Next.js 16.1.6 (Turbopack)
+#11 4.839 
+#11 4.925 ⚠ The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+#11 5.200   Creating an optimized production build ...
+#11 6.655 ⚠ Lockfile was successfully patched, please run "npm install" to ensure @next/swc dependencies are downloaded
+#11 34.77 ✓ Compiled successfully in 27.8s
+#11 34.88   Running TypeScript ...
+#11 55.07   Collecting page data using 1 worker ...
+#11 57.25   Generating static pages using 1 worker (0/35) ...
+#11 57.51   Generating static pages using 1 worker (8/35) 
+#11 57.53   Generating static pages using 1 worker (17/35) 
+#11 58.17   Generating static pages using 1 worker (26/35) 
+#11 58.26 ✓ Generating static pages using 1 worker (35/35) in 1001.5ms
+#11 58.28   Finalizing page optimization ...
+#11 58.29 
+#11 58.29 Route (app)
+#11 58.29 ┌ ○ /
+#11 58.29 ├ ○ /_not-found
+#11 58.29 ├ ƒ /api/auth/[...nextauth]
+#11 58.29 ├ ƒ /api/auth/change-password
+#11 58.29 ├ ƒ /api/auth/forgot-password
+#11 58.29 ├ ƒ /api/auth/register
+#11 58.29 ├ ƒ /api/auth/reset-password
+#11 58.29 ├ ƒ /api/career-history
+#11 58.29 ├ ƒ /api/career-history/[id]
+#11 58.29 ├ ƒ /api/connections
+#11 58.29 ├ ƒ /api/connections/[id]
+#11 58.29 ├ ƒ /api/donations
+#11 58.29 ├ ƒ /api/donations/[id]
+#11 58.29 ├ ƒ /api/donations/[id]/transactions
+#11 58.29 ├ ƒ /api/donations/[id]/upload-proof
+#11 58.29 ├ ƒ /api/donations/leaderboard
+#11 58.29 ├ ƒ /api/jobs
+#11 58.29 ├ ƒ /api/jobs/[id]
+#11 58.29 ├ ƒ /api/jobs/[id]/publish
+#11 58.29 ├ ƒ /api/jobs/drafts
+#11 58.29 ├ ƒ /api/news
+#11 58.29 ├ ƒ /api/news/[id]
+#11 58.29 ├ ƒ /api/notifications
+#11 58.29 ├ ƒ /api/notifications/[id]
+#11 58.29 ├ ƒ /api/notifications/read-all
+#11 58.29 ├ ƒ /api/profile
+#11 58.29 ├ ƒ /api/profile/photo
+#11 58.29 ├ ○ /career
+#11 58.29 ├ ○ /career/add
+#11 58.29 ├ ○ /connection
+#11 58.29 ├ ƒ /connection/[id]
+#11 58.29 ├ ○ /donation
+#11 58.29 ├ ƒ /donation/[id]
+#11 58.29 ├ ○ /donation/leaderboard
+#11 58.29 ├ ○ /forgot-password
+#11 58.29 ├ ○ /login
+#11 58.29 ├ ○ /news
+#11 58.29 ├ ƒ /news/[id]
+#11 58.29 ├ ○ /news/notifications
+#11 58.29 ├ ○ /news/search
+#11 58.29 ├ ○ /profile
+#11 58.29 ├ ○ /profile/career
+#11 58.29 ├ ƒ /profile/career/[id]
+#11 58.29 ├ ○ /profile/change-password
+#11 58.29 ├ ○ /profile/edit
+#11 58.29 ├ ○ /register
+#11 58.29 └ ○ /reset-password
+#11 58.29 
+#11 58.29 
+#11 58.29 ƒ Proxy (Middleware)
+#11 58.29 
+#11 58.30 ○  (Static)   prerendered as static content
+#11 58.30 ƒ  (Dynamic)  server-rendered on demand
+#11 58.30 
+#11 DONE 58.8s
+
+#12 exporting to image
+#12 exporting layers
+#12 exporting layers 59.8s done
+#12 writing image sha256:0a8121a0955317ffcd62ea0cb4a1dfda000f6d442ad5a2d587cd1b880d5dcb86 done
+#12 naming to docker.io/library/staging-web 0.0s done
+#12 DONE 59.9s
+
+#13 resolving provenance for metadata file
+#13 DONE 0.1s
+
+2026/03/11 10:36:47.055796 [INFO] time="2026-03-11T10:34:05Z" level=warning msg="/var/app/staging/docker-compose.yml: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion"
+ Image staging-web Building 
+ Image staging-web Built 
+
+2026/03/11 10:36:47.057341 [INFO] successfully execute command: docker compose build
+2026/03/11 10:36:47.057351 [INFO] successfully build docker images
+2026/03/11 10:36:47.058640 [INFO] Executing instruction: configure X-Ray
+2026/03/11 10:36:47.060623 [INFO] X-Ray is not enabled.
+2026/03/11 10:36:47.060648 [INFO] Executing instruction: configure proxy Nginx
+2026/03/11 10:36:47.062653 [INFO] Recreating /var/proxy/staging/nginx
+2026/03/11 10:36:47.090496 [INFO] Executing instruction: configure healthd specific proxy conf
+2026/03/11 10:36:47.095537 [INFO] Running command: systemctl show -p PartOf healthd.service
+2026/03/11 10:36:47.192757 [INFO] Running command: systemctl daemon-reload
+2026/03/11 10:36:47.751151 [INFO] Running command: systemctl reset-failed
+2026/03/11 10:36:47.777631 [INFO] Running command: systemctl is-enabled aws-eb.target
+2026/03/11 10:36:47.790820 [INFO] Running command: systemctl enable aws-eb.target
+2026/03/11 10:36:48.118743 [INFO] Running command: systemctl start aws-eb.target
+2026/03/11 10:36:48.131897 [INFO] Running command: systemctl enable healthd.service
+2026/03/11 10:36:48.491405 [INFO] Created symlink /etc/systemd/system/multi-user.target.wants/healthd.service → /etc/systemd/system/healthd.service.
+
+2026/03/11 10:36:48.491460 [INFO] Running command: systemctl show -p PartOf healthd.service
+2026/03/11 10:36:48.514276 [INFO] Running command: systemctl is-active healthd.service
+2026/03/11 10:36:48.525552 [INFO] Running command: systemctl start healthd.service
+2026/03/11 10:36:48.609610 [INFO] Executing instruction: configure log streaming
+2026/03/11 10:36:48.609633 [INFO] log streaming is not enabled
+2026/03/11 10:36:48.609639 [INFO] disable log stream
+2026/03/11 10:36:48.609654 [INFO] Running command: systemctl show -p PartOf amazon-cloudwatch-agent.service
+2026/03/11 10:36:48.633115 [INFO] Running command: systemctl stop amazon-cloudwatch-agent.service
+2026/03/11 10:36:48.653935 [INFO] Executing instruction: GetToggleForceRotate
+2026/03/11 10:36:48.653962 [INFO] Checking if logs need forced rotation
+2026/03/11 10:36:48.653983 [INFO] Running command: /opt/aws/bin/cfn-get-metadata -s arn:aws:cloudformation:ap-southeast-1:971470477689:stack/awseb-e-awxrvevwc2-immutable-stack/a76d33e0-1d35-11f1-be45-028113544e35 -r AWSEBAutoScalingGroup --region ap-southeast-1
+2026/03/11 10:36:49.556825 [INFO] Running command: /opt/aws/bin/cfn-get-metadata -s arn:aws:cloudformation:ap-southeast-1:971470477689:stack/awseb-e-awxrvevwc2-immutable-stack/a76d33e0-1d35-11f1-be45-028113544e35 -r AWSEBBeanstalkMetadata --region ap-southeast-1
+2026/03/11 10:36:50.076526 [INFO] Procfile not found. Generating default rsyslog config
+2026/03/11 10:36:50.079500 [INFO] Running command: systemctl restart rsyslog.service
+2026/03/11 10:36:50.497295 [INFO] Executing instruction: Configure Docker Logging
+2026/03/11 10:36:50.545833 [INFO] Executing instruction: PostBuildEbExtension
+2026/03/11 10:36:50.545865 [INFO] Starting executing the config set Infra-EmbeddedPostBuild.
+2026/03/11 10:36:50.545896 [INFO] Running command: /opt/aws/bin/cfn-init -s arn:aws:cloudformation:ap-southeast-1:971470477689:stack/awseb-e-awxrvevwc2-immutable-stack/a76d33e0-1d35-11f1-be45-028113544e35 -r AWSEBAutoScalingGroup --region ap-southeast-1 --configsets Infra-EmbeddedPostBuild
+2026/03/11 10:36:51.000799 [INFO] Finished executing the config set Infra-EmbeddedPostBuild.
+
+2026/03/11 10:36:51.000857 [INFO] Executing instruction: CleanEbExtensions
+2026/03/11 10:36:51.002460 [INFO] Cleaned ebextensions subdirectories from app staging directory.
+2026/03/11 10:36:51.002489 [INFO] Executing instruction: RunAppDeployPreDeployHooks
+2026/03/11 10:36:51.002563 [INFO] Executing platform hooks in .platform/hooks/predeploy/
+2026/03/11 10:36:51.002588 [INFO] The dir .platform/hooks/predeploy/ does not exist
+2026/03/11 10:36:51.002595 [INFO] Finished running scripts in /var/app/staging/.platform/hooks/predeploy
+2026/03/11 10:36:51.002605 [INFO] Executing instruction: stop X-Ray
+2026/03/11 10:36:51.002610 [INFO] stop X-Ray ...
+2026/03/11 10:36:51.002624 [INFO] Running command: systemctl show -p PartOf xray.service
+2026/03/11 10:36:51.024038 [WARN] stopProcess Warning: process xray is not registered 
+2026/03/11 10:36:51.024077 [INFO] Running command: systemctl stop xray.service
+2026/03/11 10:36:51.045981 [INFO] Executing instruction: Run Docker Container
+2026/03/11 10:36:51.046028 [INFO] this is the first time deploying app...
+2026/03/11 10:36:51.046035 [INFO] Removing /var/app/current/ if it exists
+2026/03/11 10:36:51.046050 [INFO] Renaming /var/app/staging/ to /var/app/current/
+2026/03/11 10:36:51.046088 [INFO] detected new app is docker compose app
+2026/03/11 10:36:51.046103 [INFO] Running command: systemctl show -p PartOf eb-docker-compose-events.service
+2026/03/11 10:36:51.069168 [INFO] Running command: systemctl daemon-reload
+2026/03/11 10:36:51.416821 [INFO] Running command: systemctl reset-failed
+2026/03/11 10:36:51.429412 [INFO] Running command: systemctl enable eb-docker-compose-events.service
+2026/03/11 10:36:51.775416 [INFO] Created symlink /etc/systemd/system/docker.service.wants/eb-docker-compose-events.service → /etc/systemd/system/eb-docker-compose-events.service.
+
+2026/03/11 10:36:51.775458 [INFO] Running command: systemctl show -p PartOf eb-docker-compose-events.service
+2026/03/11 10:36:51.792944 [INFO] Running command: systemctl is-active eb-docker-compose-events.service
+2026/03/11 10:36:51.804841 [INFO] Running command: systemctl start eb-docker-compose-events.service
+2026/03/11 10:36:51.867384 [INFO] Running command: docker images | sed 1d
+2026/03/11 10:36:51.963108 [INFO] staging-web   latest     0a8121a09553   About a minute ago   1.33GB
+nginx         1-alpine   d0c780774910   12 hours ago         62.2MB
+minio/minio   latest     69b2ec208575   6 months ago         175MB
+
+2026/03/11 10:36:51.963149 [INFO] tag image with command docker tag 0a8121a09553 current-web:latest
+2026/03/11 10:36:51.963162 [INFO] Running command: docker tag 0a8121a09553 current-web:latest
+2026/03/11 10:36:51.994570 [INFO] Running command: docker rmi staging-web
+2026/03/11 10:36:52.019474 [INFO] Untagged: staging-web:latest
+
+2026/03/11 10:36:52.019530 [INFO] Running command: docker compose up -d
+2026/03/11 10:36:54.502844 [INFO] time="2026-03-11T10:36:52Z" level=warning msg="/var/app/current/docker-compose.yml: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion"
+ Network current_default Creating 
+ Network current_default Created 
+ Volume current_minio_data Creating 
+ Volume current_minio_data Created 
+ Container current-minio-1 Creating 
+ Container current-web-1 Creating 
+ Container current-web-1 Created 
+ Container current-nginx-1 Creating 
+ Container current-minio-1 Created 
+ Container current-nginx-1 Created 
+ Container current-minio-1 Starting 
+ Container current-web-1 Starting 
+ Container current-minio-1 Started 
+ Container current-web-1 Started 
+ Container current-nginx-1 Starting 
+ Container current-nginx-1 Started 
+
+2026/03/11 10:36:54.502897 [INFO] Running command: systemctl show -p PartOf eb-docker-compose-log.service
+2026/03/11 10:36:54.554433 [INFO] Running command: systemctl daemon-reload
+2026/03/11 10:36:55.109430 [INFO] Running command: systemctl reset-failed
+2026/03/11 10:36:55.133151 [INFO] Running command: systemctl enable eb-docker-compose-log.service
+2026/03/11 10:36:55.718574 [INFO] The unit files have no installation config (WantedBy=, RequiredBy=, Also=,
+Alias= settings in the [Install] section, and DefaultInstance= for template
+units). This means they are not meant to be enabled using systemctl.
+ 
+Possible reasons for having this kind of units are:
+• A unit may be statically enabled by being symlinked from another unit's
+  .wants/ or .requires/ directory.
+• A unit's purpose may be to act as a helper for some other unit which has
+  a requirement dependency on it.
+• A unit may be started when needed via activation (socket, path, timer,
+  D-Bus, udev, scripted systemctl call, ...).
+• In case of template units, the unit is meant to be enabled with some
+  instance name specified.
+
+2026/03/11 10:36:55.718630 [INFO] Running command: systemctl show -p PartOf eb-docker-compose-log.service
+2026/03/11 10:36:55.756375 [INFO] Running command: systemctl is-active eb-docker-compose-log.service
+2026/03/11 10:36:55.779608 [INFO] Running command: systemctl start eb-docker-compose-log.service
+2026/03/11 10:36:55.979657 [INFO] Running command: docker compose ps -q
+2026/03/11 10:36:56.178099 [INFO] 75d4fc31b107bcc96ba33803276181b4a4fd2cf88c2dc0fc4e628d53b5b4e566
+3af7c2106853222a291b129710486245d4bc49672aaf8b4ff7e203f4cffb9151
+662781eb4d1c14c5480290d084e7a998fc1c509ea31fdd60431f2a95204025f9
+
+2026/03/11 10:36:56.178128 [INFO] time="2026-03-11T10:36:56Z" level=warning msg="/var/app/current/docker-compose.yml: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion"
+
+2026/03/11 10:36:56.178402 [INFO] Cleanup images ...
+2026/03/11 10:36:56.178419 [INFO] Running command: docker images -a
+2026/03/11 10:36:56.208103 [INFO] REPOSITORY    TAG        IMAGE ID       CREATED              SIZE
+current-web   latest     0a8121a09553   About a minute ago   1.33GB
+nginx         1-alpine   d0c780774910   12 hours ago         62.2MB
+minio/minio   latest     69b2ec208575   6 months ago         175MB
+
+2026/03/11 10:36:56.208143 [INFO] Running command: docker rmi `docker images -aq`
+2026/03/11 10:36:56.262238 [INFO] Error response from daemon: conflict: unable to delete 0a8121a09553 (cannot be forced) - image is being used by running container 662781eb4d1c
+Error response from daemon: conflict: unable to delete d0c780774910 (cannot be forced) - image is being used by running container 3af7c2106853
+Error response from daemon: conflict: unable to delete 69b2ec208575 (cannot be forced) - image is being used by running container 75d4fc31b107
+
+2026/03/11 10:36:56.262270 [INFO] Running command: docker images -a
+2026/03/11 10:36:56.289389 [INFO] REPOSITORY    TAG        IMAGE ID       CREATED              SIZE
+current-web   latest     0a8121a09553   About a minute ago   1.33GB
+nginx         1-alpine   d0c780774910   12 hours ago         62.2MB
+minio/minio   latest     69b2ec208575   6 months ago         175MB
+
+2026/03/11 10:36:56.289419 [INFO] Pruning build cache ...
+2026/03/11 10:36:56.289437 [INFO] Running command: docker builder prune -f
+2026/03/11 10:36:57.122536 [INFO] ID						RECLAIMABLE	SIZE		LAST ACCESSED
+n4bywvs3o5y76bt0ha7xwdyf4*              	true 		195B      	10 seconds ago
+k44a1l7mml23uz6a4r23qcuak*              	true 	6.741MB   	10 seconds ago
+y4o9df8ad52h6us1660acda5y*              	true 	21B       	10 seconds ago
+Total:	6.741MB
+
+2026/03/11 10:36:57.122577 [INFO] Executing instruction: start X-Ray
+2026/03/11 10:36:57.122587 [INFO] X-Ray is not enabled.
+2026/03/11 10:36:57.122592 [INFO] Executing instruction: configureSqsd
+2026/03/11 10:36:57.122599 [INFO] This is a web server environment instance, skip configure sqsd daemon ...
+2026/03/11 10:36:57.122604 [INFO] Executing instruction: startSqsd
+2026/03/11 10:36:57.122609 [INFO] This is a web server environment instance, skip start sqsd daemon ...
+2026/03/11 10:36:57.122615 [INFO] Executing instruction: Track pids in healthd
+2026/03/11 10:36:57.122622 [INFO] This is an enhanced health env...
+2026/03/11 10:36:57.122637 [INFO] Running command: systemctl show -p ConsistsOf aws-eb.target | cut -d= -f2
+2026/03/11 10:36:57.152552 [INFO] healthd.service eb-docker-compose-log.service docker.service cfn-hup.service eb-docker-compose-events.service eb-docker-events.service
+
+2026/03/11 10:36:57.152591 [INFO] Running command: systemctl show -p ConsistsOf eb-app.target | cut -d= -f2
+2026/03/11 10:36:57.169416 [INFO] 
+
+2026/03/11 10:36:57.171931 [INFO] Executing instruction: RunAppDeployPostDeployHooks
+2026/03/11 10:36:57.172059 [INFO] Executing platform hooks in .platform/hooks/postdeploy/
+2026/03/11 10:36:57.172085 [INFO] The dir .platform/hooks/postdeploy/ does not exist
+2026/03/11 10:36:57.172091 [INFO] Finished running scripts in /var/app/current/.platform/hooks/postdeploy
+2026/03/11 10:36:57.172101 [INFO] Executing cleanup logic
+2026/03/11 10:36:57.174345 [INFO] CommandService Response: {"status":"SUCCESS","api_version":"1.0","results":[{"status":"SUCCESS","msg":"Engine execution has succeeded.","returncode":0,"events":[{"msg":"Instance deployment completed successfully.","timestamp":1773225417172,"severity":"INFO"}]}]}
+
+2026/03/11 10:36:57.174599 [INFO] Platform Engine finished execution on command: app-deploy
+
+2026/03/11 10:37:20.081119 [INFO] Starting...
+2026/03/11 10:37:20.081237 [INFO] Starting EBPlatform-PlatformEngine
+2026/03/11 10:37:20.081336 [INFO] reading event message file
+2026/03/11 10:37:20.091641 [INFO] Engine received EB command cfn-hup-exec
+
+2026/03/11 10:37:20.274767 [INFO] Skipping populate manifest for light execution
+2026/03/11 10:37:20.274799 [INFO] Engine command: (switch-cfn-stack)
+
+2026/03/11 10:37:20.276206 [INFO] Executing instruction: Switch CFN Stack
+2026/03/11 10:37:20.276214 [INFO] Starting SwitchCFNStack
+2026/03/11 10:37:30.357613 [INFO] Executing cleanup logic
+2026/03/11 10:37:30.357805 [INFO] CommandService Response: {"status":"SUCCESS","api_version":"1.0","results":[{"status":"SUCCESS","msg":"Engine execution has succeeded.","returncode":0,"events":[{"msg":"Instance deployment completed successfully.","timestamp":1773225450357,"severity":"INFO"}]}]}
+
+2026/03/11 10:37:30.357831 [INFO] Platform Engine finished execution on command: switch-cfn-stack
+
+2026/03/11 10:42:18.543217 [INFO] Starting...
+2026/03/11 10:42:18.543279 [INFO] Starting EBPlatform-PlatformEngine
+2026/03/11 10:42:18.543311 [INFO] reading event message file
+2026/03/11 10:42:18.543873 [INFO] Engine received EB command cfn-hup-exec
+
+2026/03/11 10:42:18.632568 [INFO] Running command: /opt/aws/bin/cfn-get-metadata -s arn:aws:cloudformation:ap-southeast-1:971470477689:stack/awseb-e-awxrvevwc2-stack/1a17a4d0-1d12-11f1-a7fb-0a87c15f4199 -r AWSEBAutoScalingGroup --region ap-southeast-1
+2026/03/11 10:42:19.063050 [INFO] Running command: /opt/aws/bin/cfn-get-metadata -s arn:aws:cloudformation:ap-southeast-1:971470477689:stack/awseb-e-awxrvevwc2-stack/1a17a4d0-1d12-11f1-a7fb-0a87c15f4199 -r AWSEBBeanstalkMetadata --region ap-southeast-1
+2026/03/11 10:42:19.514711 [INFO] checking whether command bundle-log is applicable to this instance...
+2026/03/11 10:42:19.514731 [INFO] this command is applicable to the instance, thus instance should execute command
+2026/03/11 10:42:19.514736 [INFO] Engine command: (bundle-log)
+
+2026/03/11 10:42:19.514829 [INFO] Executing instruction: GetBundleLogs
+2026/03/11 10:42:19.514839 [INFO] Bundle Logs...

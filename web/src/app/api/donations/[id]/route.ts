@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
-import { eq, sql, desc } from "drizzle-orm";
+import { eq, sql, desc, asc } from "drizzle-orm";
 import { auth } from "@/lib/auth";
 import { db } from "@/db";
-import { donationCampaigns, donationTransactions, users } from "@/db/schema";
+import { donationCampaigns, donationTransactions, donationReportImages, donationReportTestimonies, users } from "@/db/schema";
+import { getSignedDownloadUrl, deleteFromS3 } from "@/lib/s3";
 
 type RouteContext = { params: Promise<{ id: string }> };
 
@@ -60,7 +61,43 @@ export async function GET(
       .orderBy(desc(donationTransactions.createdAt))
       .limit(20);
 
-    return NextResponse.json({ data: { ...campaign, recentTransactions } });
+    // Fetch report images and testimonies
+    const reportImagesRaw = await db
+      .select({
+        id: donationReportImages.id,
+        imageKey: donationReportImages.imageKey,
+      })
+      .from(donationReportImages)
+      .where(eq(donationReportImages.campaignId, id))
+      .orderBy(asc(donationReportImages.sortOrder), asc(donationReportImages.createdAt));
+
+    const reportImages = await Promise.all(
+      reportImagesRaw.map(async (img) => ({
+        id: img.id,
+        url: await getSignedDownloadUrl(img.imageKey),
+      }))
+    );
+
+    const reportTestimonies = await db
+      .select({
+        id: donationReportTestimonies.id,
+        quote: donationReportTestimonies.quote,
+        name: donationReportTestimonies.name,
+        year: donationReportTestimonies.year,
+      })
+      .from(donationReportTestimonies)
+      .where(eq(donationReportTestimonies.campaignId, id))
+      .orderBy(asc(donationReportTestimonies.sortOrder), asc(donationReportTestimonies.createdAt));
+
+    return NextResponse.json({
+      data: {
+        ...campaign,
+        imageUrl: campaign.imageUrl ? await getSignedDownloadUrl(campaign.imageUrl) : null,
+        recentTransactions,
+        reportImages,
+        reportTestimonies,
+      },
+    });
   } catch (error) {
     console.error("GET /api/donations/[id] error:", error);
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
@@ -95,6 +132,7 @@ export async function PUT(
         ...(body.accountName !== undefined && { accountName: body.accountName }),
         ...(body.donationInstructions !== undefined && { donationInstructions: body.donationInstructions }),
         ...(body.beneficiaryCount !== undefined && { beneficiaryCount: body.beneficiaryCount }),
+        ...(body.imageUrl !== undefined && { imageUrl: body.imageUrl }),
         updatedAt: new Date(),
       })
       .where(eq(donationCampaigns.id, id))
@@ -126,10 +164,20 @@ export async function DELETE(
 
     const { id } = await params;
 
-    // Delete associated transactions first
-    await db
-      .delete(donationTransactions)
-      .where(eq(donationTransactions.campaignId, id));
+    // Delete report images from S3
+    const images = await db
+      .select({ imageKey: donationReportImages.imageKey })
+      .from(donationReportImages)
+      .where(eq(donationReportImages.campaignId, id));
+
+    await Promise.all(images.map((img) => deleteFromS3(img.imageKey)));
+
+    // Delete associated records first
+    await Promise.all([
+      db.delete(donationTransactions).where(eq(donationTransactions.campaignId, id)),
+      db.delete(donationReportImages).where(eq(donationReportImages.campaignId, id)),
+      db.delete(donationReportTestimonies).where(eq(donationReportTestimonies.campaignId, id)),
+    ]);
 
     const [deleted] = await db
       .delete(donationCampaigns)

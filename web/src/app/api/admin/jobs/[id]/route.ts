@@ -52,9 +52,9 @@ export async function PATCH(
     const body = await request.json();
     const { status } = body;
 
-    if (status !== "published" && status !== "draft") {
+    if (!["published", "draft", "pending_review"].includes(status)) {
       return NextResponse.json(
-        { error: "Invalid status. Must be 'published' or 'draft'." },
+        { error: "Invalid status. Must be 'published', 'draft', or 'pending_review'." },
         { status: 400 }
       );
     }

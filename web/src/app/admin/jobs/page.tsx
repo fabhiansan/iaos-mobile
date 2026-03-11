@@ -1,7 +1,16 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import Link from "next/link";
+import { CheckCircle, XCircle, ToggleLeft } from "lucide-react";
+import {
+  AdminSearchInput,
+  AdminFilterSelect,
+  AdminTable,
+  AdminPagination,
+  AdminDeleteModal,
+  AdminActionButton,
+  useDebounce,
+} from "@/components/admin/admin-table";
 
 interface Job {
   id: string;
@@ -10,19 +19,47 @@ interface Job {
   location: string;
   contractType: string;
   workingType: string;
-  status: "draft" | "published";
+  status: "draft" | "pending_review" | "published";
   posterName: string | null;
   createdAt: string;
 }
+
+const STATUS_OPTIONS = [
+  { label: "All", value: "all" },
+  { label: "Draft", value: "draft" },
+  { label: "Pending Review", value: "pending_review" },
+  { label: "Published", value: "published" },
+];
+
+const COLUMNS = [
+  { key: "title", label: "Title" },
+  { key: "company", label: "Company" },
+  { key: "postedBy", label: "Posted By" },
+  { key: "status", label: "Status" },
+  { key: "contract", label: "Contract" },
+  { key: "location", label: "Location" },
+  { key: "date", label: "Date" },
+  { key: "actions", label: "Actions", align: "right" as const },
+];
 
 export default function AdminJobsPage() {
   const [jobs, setJobs] = useState<Job[]>([]);
   const [total, setTotal] = useState(0);
   const [search, setSearch] = useState("");
+  const debouncedSearch = useDebounce(search);
   const [statusFilter, setStatusFilter] = useState("all");
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
+  const [deleteId, setDeleteId] = useState<string | null>(null);
+  const [deleting, setDeleting] = useState(false);
+
   const limit = 20;
+  const totalPages = Math.max(1, Math.ceil(total / limit));
+
+  // Reset to page 1 when debounced search changes
+  useEffect(() => {
+    setPage(1);
+  }, [debouncedSearch]);
 
   const fetchJobs = useCallback(async () => {
     setLoading(true);
@@ -32,7 +69,7 @@ export default function AdminJobsPage() {
         limit: String(limit),
         status: statusFilter,
       });
-      if (search) params.set("search", search);
+      if (debouncedSearch) params.set("search", debouncedSearch);
 
       const res = await fetch(`/api/admin/jobs?${params}`);
       if (res.ok) {
@@ -43,14 +80,13 @@ export default function AdminJobsPage() {
     } finally {
       setLoading(false);
     }
-  }, [page, statusFilter, search]);
+  }, [page, statusFilter, debouncedSearch]);
 
   useEffect(() => {
     fetchJobs();
   }, [fetchJobs]);
 
-  async function toggleStatus(id: string, current: string) {
-    const newStatus = current === "published" ? "draft" : "published";
+  async function updateStatus(id: string, newStatus: string) {
     const res = await fetch(`/api/admin/jobs/${id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
@@ -59,136 +95,120 @@ export default function AdminJobsPage() {
     if (res.ok) fetchJobs();
   }
 
-  async function deleteJob(id: string) {
-    if (!confirm("Are you sure you want to delete this job?")) return;
-    const res = await fetch(`/api/admin/jobs/${id}`, { method: "DELETE" });
-    if (res.ok) fetchJobs();
-  }
-
-  const totalPages = Math.ceil(total / limit);
+  const handleDelete = async () => {
+    if (!deleteId) return;
+    setDeleting(true);
+    try {
+      const res = await fetch(`/api/admin/jobs/${deleteId}`, { method: "DELETE" });
+      if (res.ok) {
+        await fetchJobs();
+      }
+    } finally {
+      setDeleting(false);
+      setDeleteId(null);
+    }
+  };
 
   return (
     <div>
-      <h1 className="text-lg font-semibold mb-4">Job Postings</h1>
-
-      <div className="flex gap-2 mb-4">
-        <input
-          type="text"
-          placeholder="Search title or company..."
+      {/* Filters */}
+      <div className="flex flex-col sm:flex-row gap-3 mb-4">
+        <AdminSearchInput
           value={search}
-          onChange={(e) => {
-            setSearch(e.target.value);
-            setPage(1);
-          }}
-          className="border rounded px-2 py-1 text-sm flex-1 max-w-xs"
+          onChange={setSearch}
+          placeholder="Search title or company..."
         />
-        <select
+        <AdminFilterSelect
+          options={STATUS_OPTIONS}
           value={statusFilter}
-          onChange={(e) => {
-            setStatusFilter(e.target.value);
-            setPage(1);
-          }}
-          className="border rounded px-2 py-1 text-sm"
-        >
-          <option value="all">All</option>
-          <option value="draft">Draft</option>
-          <option value="published">Published</option>
-        </select>
+          onChange={(v) => { setStatusFilter(v); setPage(1); }}
+        />
       </div>
 
-      {loading ? (
-        <p className="text-sm text-neutral-500">Loading...</p>
-      ) : jobs.length === 0 ? (
-        <p className="text-sm text-neutral-500">No jobs found.</p>
-      ) : (
-        <>
-          <div className="overflow-x-auto">
-            <table className="table-auto w-full text-sm">
-              <thead>
-                <tr className="border-b text-left text-neutral-600">
-                  <th className="py-1 px-2">Title</th>
-                  <th className="py-1 px-2">Company</th>
-                  <th className="py-1 px-2">Posted By</th>
-                  <th className="py-1 px-2">Status</th>
-                  <th className="py-1 px-2">Contract</th>
-                  <th className="py-1 px-2">Location</th>
-                  <th className="py-1 px-2">Date</th>
-                  <th className="py-1 px-2">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {jobs.map((job) => (
-                  <tr key={job.id} className="border-b hover:bg-neutral-100">
-                    <td className="py-1 px-2 font-medium">{job.title}</td>
-                    <td className="py-1 px-2">{job.company}</td>
-                    <td className="py-1 px-2">{job.posterName || "-"}</td>
-                    <td className="py-1 px-2">
-                      <span
-                        className={`text-xs px-2 py-0.5 rounded-full ${
-                          job.status === "published"
-                            ? "bg-green-100 text-green-800"
-                            : "bg-yellow-100 text-yellow-800"
-                        }`}
-                      >
-                        {job.status}
-                      </span>
-                    </td>
-                    <td className="py-1 px-2">{job.contractType}</td>
-                    <td className="py-1 px-2">{job.location}</td>
-                    <td className="py-1 px-2 whitespace-nowrap">
-                      {new Date(job.createdAt).toLocaleDateString()}
-                    </td>
-                    <td className="py-1 px-2">
-                      <div className="flex gap-1">
-                        <Link
-                          href={`/admin/jobs/${job.id}`}
-                          className="text-xs text-blue-600 hover:underline"
-                        >
-                          View
-                        </Link>
-                        <button
-                          onClick={() => toggleStatus(job.id, job.status)}
-                          className="text-xs text-indigo-600 hover:underline"
-                        >
-                          {job.status === "published" ? "Unpublish" : "Publish"}
-                        </button>
-                        <button
-                          onClick={() => deleteJob(job.id)}
-                          className="text-xs text-red-600 hover:underline"
-                        >
-                          Delete
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-
-          {totalPages > 1 && (
-            <div className="flex items-center gap-2 mt-4 text-sm">
-              <button
-                onClick={() => setPage((p) => Math.max(1, p - 1))}
-                disabled={page === 1}
-                className="px-2 py-1 border rounded disabled:opacity-50"
+      {/* Table */}
+      <AdminTable
+        columns={COLUMNS}
+        loading={loading}
+        empty={jobs.length === 0}
+        emptyMessage="No jobs found."
+      >
+        {jobs.map((job) => (
+          <tr key={job.id} className="border-b border-neutral-100 hover:bg-neutral-50">
+            <td className="text-sm px-3 py-2 font-medium">{job.title}</td>
+            <td className="text-sm px-3 py-2">{job.company}</td>
+            <td className="text-sm px-3 py-2">{job.posterName || "-"}</td>
+            <td className="text-sm px-3 py-2">
+              <span
+                className={`text-xs px-2 py-0.5 rounded-full ${
+                  job.status === "published"
+                    ? "bg-green-100 text-green-800"
+                    : job.status === "pending_review"
+                    ? "bg-blue-100 text-blue-800"
+                    : "bg-yellow-100 text-yellow-800"
+                }`}
               >
-                Prev
-              </button>
-              <span>
-                Page {page} of {totalPages}
+                {job.status === "pending_review" ? "pending review" : job.status}
               </span>
-              <button
-                onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-                disabled={page === totalPages}
-                className="px-2 py-1 border rounded disabled:opacity-50"
-              >
-                Next
-              </button>
-            </div>
-          )}
-        </>
-      )}
+            </td>
+            <td className="text-sm px-3 py-2">{job.contractType}</td>
+            <td className="text-sm px-3 py-2">{job.location}</td>
+            <td className="text-sm px-3 py-2 whitespace-nowrap">
+              {new Date(job.createdAt).toLocaleDateString()}
+            </td>
+            <td className="text-sm px-3 py-2 text-right">
+              <div className="inline-flex gap-1">
+                <AdminActionButton
+                  variant="view"
+                  href={`/admin/jobs/${job.id}`}
+                />
+                {job.status === "pending_review" && (
+                  <>
+                    <AdminActionButton
+                      variant="edit"
+                      icon={CheckCircle}
+                      onClick={() => updateStatus(job.id, "published")}
+                    />
+                    <AdminActionButton
+                      variant="edit"
+                      icon={XCircle}
+                      onClick={() => updateStatus(job.id, "draft")}
+                    />
+                  </>
+                )}
+                {job.status === "published" && (
+                  <AdminActionButton
+                    variant="edit"
+                    icon={ToggleLeft}
+                    onClick={() => updateStatus(job.id, "draft")}
+                  />
+                )}
+                <AdminActionButton
+                  variant="delete"
+                  onClick={() => setDeleteId(job.id)}
+                />
+              </div>
+            </td>
+          </tr>
+        ))}
+      </AdminTable>
+
+      {/* Pagination */}
+      <AdminPagination
+        page={page}
+        totalPages={totalPages}
+        total={total}
+        onPageChange={setPage}
+      />
+
+      {/* Delete Confirm Modal */}
+      <AdminDeleteModal
+        open={deleteId !== null}
+        onClose={() => setDeleteId(null)}
+        onConfirm={handleDelete}
+        title="Delete Job"
+        message="Are you sure you want to delete this job posting? This action cannot be undone."
+        loading={deleting}
+      />
     </div>
   );
 }

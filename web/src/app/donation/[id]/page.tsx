@@ -5,6 +5,7 @@ import { useRouter, useParams } from "next/navigation";
 import { Upload, Copy, X } from "lucide-react";
 import { AuthHeader } from "@/components/ui/auth-header";
 import { CollapsibleSection } from "@/components/donation/collapsible-section";
+import { sanitizeArticleHtml } from "@/lib/sanitize";
 
 interface CampaignDetail {
   id: string;
@@ -29,6 +30,8 @@ interface CampaignDetail {
     donorName: string;
     donorYearOfEntry: number;
   }[];
+  reportImages: { id: string; url: string }[];
+  reportTestimonies: { id: string; quote: string; name: string; year: string | null }[];
 }
 
 function formatRupiah(amount: number): string {
@@ -227,9 +230,10 @@ export default function DonationDetailPage() {
             {activeTab === "detail" && (
               <div className="flex flex-col divide-y divide-neutral-100">
                 <CollapsibleSection title="Description" defaultOpen>
-                  <p className="font-[family-name:var(--font-work-sans)] text-sm text-neutral-800 leading-5 whitespace-pre-line">
-                    {campaign.description}
-                  </p>
+                  <div
+                    className="article-content font-[family-name:var(--font-work-sans)] text-sm text-neutral-800 leading-5"
+                    dangerouslySetInnerHTML={{ __html: sanitizeArticleHtml(campaign.description) }}
+                  />
                 </CollapsibleSection>
 
                 <CollapsibleSection title="Donation Detail">
@@ -291,69 +295,74 @@ export default function DonationDetailPage() {
             )}
 
             {activeTab === "report" && (
-              <div className="flex flex-col divide-y divide-neutral-100">
-                <CollapsibleSection title="Donation Statistic" defaultOpen>
-                  <div className="flex flex-col gap-2">
-                    <div className="flex items-center justify-between">
-                      <span className="font-[family-name:var(--font-inter)] text-xs text-neutral-600">
-                        Donation Beneficiaries
-                      </span>
-                      <span className="font-[family-name:var(--font-inter)] text-xs font-semibold text-neutral-800">
-                        {campaign.beneficiaryCount ?? 0} Students
-                      </span>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span className="font-[family-name:var(--font-inter)] text-xs text-neutral-600">
-                        Number of Donors
-                      </span>
-                      <span className="font-[family-name:var(--font-inter)] text-xs font-semibold text-neutral-800">
-                        {Number(campaign.donorCount)} Donors
-                      </span>
-                    </div>
-                  </div>
-                </CollapsibleSection>
-
-                <CollapsibleSection title="Recent Transactions">
-                  {campaign.recentTransactions.length === 0 ? (
-                    <p className="font-[family-name:var(--font-inter)] text-xs text-neutral-500">
-                      No transactions yet.
-                    </p>
-                  ) : (
+              <div className="border border-neutral-100 rounded-lg p-2">
+                <div className="flex flex-col gap-2">
+                  <CollapsibleSection title="Donation Statistic" defaultOpen>
                     <div className="flex flex-col gap-2">
-                      {campaign.recentTransactions.map((tx) => (
-                        <div
-                          key={tx.id}
-                          className="flex items-center justify-between bg-neutral-50 rounded-lg p-2"
-                        >
-                          <div>
-                            <span className="font-[family-name:var(--font-work-sans)] text-xs font-medium text-neutral-800 block">
-                              {tx.donorName}
-                            </span>
-                            <span className="font-[family-name:var(--font-inter)] text-[10px] text-neutral-500">
-                              Class of {tx.donorYearOfEntry}
-                            </span>
-                          </div>
-                          <div className="text-right">
-                            <span className="font-[family-name:var(--font-work-sans)] text-xs font-semibold text-brand-600 block">
-                              {formatRupiah(tx.amount)}
-                            </span>
-                            <span
-                              className={`font-[family-name:var(--font-inter)] text-[10px] ${
-                                tx.status === "verified"
-                                  ? "text-green-600"
-                                  : tx.status === "rejected"
-                                    ? "text-red-500"
-                                    : "text-amber-500"
-                              }`}
-                            >
-                              {tx.status}
-                            </span>
-                          </div>
-                        </div>
-                      ))}
+                      <div className="flex flex-col gap-0.5">
+                        <span className="font-[family-name:var(--font-work-sans)] text-xs text-neutral-500 leading-[18px]">
+                          Donation Beneficiaries
+                        </span>
+                        <span className="font-[family-name:var(--font-work-sans)] text-sm font-medium text-neutral-800 leading-5">
+                          {campaign.beneficiaryCount ?? 0} Students
+                        </span>
+                      </div>
+                      <div className="flex flex-col gap-0.5">
+                        <span className="font-[family-name:var(--font-work-sans)] text-xs text-neutral-500 leading-[18px]">
+                          Number of Donors
+                        </span>
+                        <span className="font-[family-name:var(--font-work-sans)] text-sm font-medium text-neutral-800 leading-5">
+                          {Number(campaign.donorCount)} Donors
+                        </span>
+                      </div>
                     </div>
+                  </CollapsibleSection>
+
+                  {campaign.reportImages && campaign.reportImages.length > 0 && (
+                    <>
+                      <div className="h-px bg-neutral-100" />
+                      <CollapsibleSection title="Documentation" defaultOpen>
+                        <div className="flex gap-2 overflow-x-auto pb-1">
+                          {campaign.reportImages.map((img) => (
+                            <img
+                              key={img.id}
+                              src={img.url}
+                              alt="Documentation"
+                              className="w-[128px] h-[86px] rounded-lg object-cover shrink-0"
+                            />
+                          ))}
+                        </div>
+                      </CollapsibleSection>
+                    </>
                   )}
-                </CollapsibleSection>
+
+                  {campaign.reportTestimonies && campaign.reportTestimonies.length > 0 && (
+                    <>
+                      <div className="h-px bg-neutral-100" />
+                      <CollapsibleSection title="Beneficiaries Testimonies" defaultOpen>
+                        <div className="flex flex-col gap-2">
+                          {campaign.reportTestimonies.map((t) => (
+                            <div key={t.id} className="bg-neutral-100 rounded-lg p-2 flex flex-col gap-2">
+                              <p className="font-[family-name:var(--font-work-sans)] text-xs text-neutral-700 leading-[18px]">
+                                {t.quote}
+                              </p>
+                              <div className="flex flex-col">
+                                <span className="font-[family-name:var(--font-work-sans)] text-xs font-medium text-neutral-800 leading-[18px]">
+                                  {t.name}
+                                </span>
+                                {t.year && (
+                                  <span className="font-[family-name:var(--font-work-sans)] text-xs text-neutral-500 leading-[18px]">
+                                    {t.year}
+                                  </span>
+                                )}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </CollapsibleSection>
+                    </>
+                  )}
+                </div>
               </div>
             )}
           </div>

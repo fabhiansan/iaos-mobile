@@ -14,6 +14,7 @@ export interface Job {
   workingType: string;
   timeAgo: string;
   whatsappLink?: string;
+  status?: string;
 }
 
 interface JobCardProps {

@@ -33,3 +33,21 @@ export const donationTransactions = pgTable("donation_transactions", {
   verifiedAt: timestamp("verified_at"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
+
+export const donationReportImages = pgTable("donation_report_images", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  campaignId: uuid("campaign_id").notNull().references(() => donationCampaigns.id),
+  imageKey: text("image_key").notNull(),
+  sortOrder: integer("sort_order").default(0).notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const donationReportTestimonies = pgTable("donation_report_testimonies", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  campaignId: uuid("campaign_id").notNull().references(() => donationCampaigns.id),
+  quote: text("quote").notNull(),
+  name: varchar("name", { length: 255 }).notNull(),
+  year: varchar("year", { length: 50 }),
+  sortOrder: integer("sort_order").default(0).notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});

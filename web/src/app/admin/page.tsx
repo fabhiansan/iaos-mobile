@@ -17,12 +17,14 @@ interface Stats {
   campaigns: number;
   pendingTransactions: number;
   totalDonated: number;
+  pendingJobs: number;
 }
 
 const statCards = [
   { key: "users" as const, label: "Users", icon: Users },
   { key: "articles" as const, label: "Articles", icon: Newspaper },
   { key: "jobs" as const, label: "Published Jobs", icon: Briefcase },
+  { key: "pendingJobs" as const, label: "Pending Job Reviews", icon: Clock },
   { key: "campaigns" as const, label: "Campaigns", icon: Heart },
   { key: "pendingTransactions" as const, label: "Pending Verifications", icon: Clock },
   { key: "totalDonated" as const, label: "Total Donated", icon: DollarSign, isCurrency: true },
@@ -57,7 +59,7 @@ export default function AdminDashboardPage() {
   if (loading) {
     return (
       <div className="grid grid-cols-3 gap-4">
-        {Array.from({ length: 6 }).map((_, i) => (
+        {Array.from({ length: 7 }).map((_, i) => (
           <div
             key={i}
             className="h-24 animate-pulse rounded-lg bg-white shadow-sm"

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
-import { uploadToS3, getS3Key } from "@/lib/s3";
+import { uploadToS3, getS3Key, getSignedDownloadUrl } from "@/lib/s3";
 
 export async function POST(request: NextRequest) {
   try {
@@ -24,7 +24,8 @@ export async function POST(request: NextRequest) {
     const key = getS3Key(folder, file.name);
     await uploadToS3(key, buffer, file.type);
 
-    return NextResponse.json({ data: { key } });
+    const url = await getSignedDownloadUrl(key);
+    return NextResponse.json({ data: { key, url } });
   } catch (error) {
     console.error("POST /api/admin/upload error:", error);
     return NextResponse.json(

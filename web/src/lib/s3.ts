@@ -7,13 +7,11 @@ import {
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
 const s3Client = new S3Client({
-  endpoint: process.env.STORAGE_S3_ENDPOINT,
   region: process.env.STORAGE_S3_REGION || "us-east-1",
   credentials: {
     accessKeyId: process.env.STORAGE_S3_KEY || "",
     secretAccessKey: process.env.STORAGE_S3_SECRET || "",
   },
-  forcePathStyle: true,
 });
 
 const bucket = process.env.STORAGE_S3_BUCKET || "iaos-connect";

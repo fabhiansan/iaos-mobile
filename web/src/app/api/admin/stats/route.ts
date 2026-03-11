@@ -27,6 +27,7 @@ export async function GET() {
       [{ value: totalCampaigns }],
       [{ value: totalPending }],
       [{ value: totalDonated }],
+      [{ value: totalPendingJobs }],
     ] = await Promise.all([
       db.select({ value: count() }).from(users),
       db.select({ value: count() }).from(articles),
@@ -40,6 +41,7 @@ export async function GET() {
         .select({ value: sum(donationTransactions.amount) })
         .from(donationTransactions)
         .where(eq(donationTransactions.status, "verified")),
+      db.select({ value: count() }).from(jobs).where(eq(jobs.status, "pending_review")),
     ]);
 
     return NextResponse.json({
@@ -50,6 +52,7 @@ export async function GET() {
         campaigns: totalCampaigns,
         pendingTransactions: totalPending,
         totalDonated: Number(totalDonated) || 0,
+        pendingJobs: totalPendingJobs,
       },
     });
   } catch (error) {

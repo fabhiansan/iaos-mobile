@@ -3,6 +3,7 @@
 import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { RichTextEditor } from "@/components/ui/rich-text-editor";
 
 const CATEGORIES = ["Announcement", "Agenda", "News"] as const;
 
@@ -93,13 +94,7 @@ export default function AdminNewsCreatePage() {
 
           <div>
             <label className="block text-sm font-medium text-neutral-700 mb-1">Content</label>
-            <textarea
-              required
-              rows={8}
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
-              className="w-full border border-neutral-200 rounded-md px-3 py-2 text-sm outline-none focus:border-brand-600 resize-y"
-            />
+            <RichTextEditor content={content} onChange={setContent} />
           </div>
 
           <div>

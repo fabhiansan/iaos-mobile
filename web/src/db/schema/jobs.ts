@@ -15,7 +15,7 @@ export const workingTypeEnum = pgEnum("working_type", [
   "Hybrid",
 ]);
 
-export const jobStatusEnum = pgEnum("job_status", ["draft", "published"]);
+export const jobStatusEnum = pgEnum("job_status", ["draft", "pending_review", "published"]);
 
 export const jobs = pgTable("jobs", {
   id: uuid("id").defaultRandom().primaryKey(),

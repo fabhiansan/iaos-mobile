@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { eq, and, sql } from "drizzle-orm";
+import { eq, and, sql, inArray } from "drizzle-orm";
 import { auth } from "@/lib/auth";
 import { jobs } from "@/db/schema";
 import { jobsWithPosterQuery } from "@/lib/job-queries";
@@ -15,7 +15,7 @@ export async function GET() {
       .where(
         and(
           eq(jobs.postedById, session.user.id),
-          eq(jobs.status, "draft")
+          inArray(jobs.status, ["draft", "pending_review"])
         )
       )
       .orderBy(sql`${jobs.updatedAt} DESC`);

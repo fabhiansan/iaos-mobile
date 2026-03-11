@@ -1,0 +1,23 @@
+2026-03-11 10:46:03,462 [DEBUG] CloudFormation client initialized with endpoint https://cloudformation.ap-southeast-1.amazonaws.com
+2026-03-11 10:46:03,463 [DEBUG] SQS client initialized with endpoint https://sqs.ap-southeast-1.amazonaws.com
+2026-03-11 10:46:03,463 [DEBUG] CloudFormation client initialized with endpoint https://cloudformation.ap-southeast-1.amazonaws.com
+2026-03-11 10:46:03,463 [DEBUG] Enabled single threading mode.
+2026-03-11 10:46:03,463 [DEBUG] Creating /var/lib/cfn-hup/data
+2026-03-11 10:46:03,474 [INFO] No umask value specified in config file. Using the default one: 0o22
+2026-03-11 10:46:03,520 [INFO] Pid: 1809
+2026-03-11 10:46:03,881 [INFO] Refreshing listener credentials
+2026-03-11 10:46:03,993 [INFO] Scheduling next credential refresh in 1800.0 seconds
+2026-03-11 10:50:25,429 [INFO] Received command ElasticBeanstalkCommand-AWSEBAutoScalingGroup (invocation id: b673b4fe-49a8-4a65-8d65-041209a8a5c6)
+2026-03-11 10:50:25,430 [INFO] Running action for aws-eb-command-handler
+2026-03-11 10:50:35,815 [INFO] Action for aws-eb-command-handler succeeded, returning SUCCESS
+2026-03-11 10:50:45,821 [INFO] Shutting down cfn-hup with signal: 15
+2026-03-11 10:50:56,465 [DEBUG] CloudFormation client initialized with endpoint https://cloudformation.ap-southeast-1.amazonaws.com
+2026-03-11 10:50:56,465 [DEBUG] SQS client initialized with endpoint https://sqs.ap-southeast-1.amazonaws.com
+2026-03-11 10:50:56,465 [DEBUG] CloudFormation client initialized with endpoint https://cloudformation.ap-southeast-1.amazonaws.com
+2026-03-11 10:50:56,466 [DEBUG] Enabled single threading mode.
+2026-03-11 10:50:56,475 [INFO] No umask value specified in config file. Using the default one: 0o22
+2026-03-11 10:50:56,521 [INFO] Pid: 3792
+2026-03-11 10:50:56,776 [INFO] Refreshing listener credentials
+2026-03-11 10:50:56,876 [INFO] Scheduling next credential refresh in 1799.0 seconds
+2026-03-11 10:55:28,579 [INFO] Received command ElasticBeanstalkCommand-AWSEBAutoScalingGroup (invocation id: e8769906-59b0-4c79-93a1-95e026137643)
+2026-03-11 10:55:28,580 [INFO] Running action for aws-eb-command-handler

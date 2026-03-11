@@ -60,8 +60,8 @@ export default function AddJobPage() {
     }
   }, [activeTab, fetchDrafts]);
 
-  const handleSubmit = async (status: "published" | "draft") => {
-    if (!isFormComplete && status === "published") return;
+  const handleSubmit = async (status: "pending_review" | "draft") => {
+    if (!isFormComplete && status === "pending_review") return;
     setSubmitting(true);
     try {
       const formData = new FormData();
@@ -174,7 +174,7 @@ export default function AddJobPage() {
                 : "bg-white border border-brand-800 text-brand-800"
             }`}
           >
-            Draft ({drafts.length})
+            My Jobs ({drafts.length})
           </button>
         </div>
 
@@ -292,15 +292,15 @@ export default function AddJobPage() {
               <Button
                 variant={isFormComplete && !submitting ? "primary" : "disabled"}
                 disabled={!isFormComplete || submitting}
-                onClick={() => handleSubmit("published")}
+                onClick={() => handleSubmit("pending_review")}
               >
                 {submitting ? (
                   <span className="flex items-center justify-center gap-2">
                     <Loader2 size={16} className="animate-spin" />
-                    Posting...
+                    Submitting...
                   </span>
                 ) : (
-                  "Post Job"
+                  "Submit for Review"
                 )}
               </Button>
               <Button

@@ -3,6 +3,7 @@ import { eq, sql, desc } from "drizzle-orm";
 import { auth } from "@/lib/auth";
 import { db } from "@/db";
 import { donationCampaigns, donationTransactions } from "@/db/schema";
+import { getSignedDownloadUrl } from "@/lib/s3";
 
 export async function GET(request: NextRequest) {
   try {
@@ -37,7 +38,14 @@ export async function GET(request: NextRequest) {
       .groupBy(donationCampaigns.id)
       .orderBy(desc(donationCampaigns.createdAt));
 
-    return NextResponse.json({ data: campaigns });
+    const campaignsWithSignedUrls = await Promise.all(
+      campaigns.map(async (item) => ({
+        ...item,
+        imageUrl: item.imageUrl ? await getSignedDownloadUrl(item.imageUrl) : null,
+      }))
+    );
+
+    return NextResponse.json({ data: campaignsWithSignedUrls });
   } catch (error) {
     console.error("GET /api/donations error:", error);
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });

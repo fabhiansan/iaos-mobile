@@ -1,0 +1,151 @@
+[2026-03-11T10:45:57Z] Started EB User Data
++ SLEEP_TIME=2
++ SLEEP_TIME_MAX=3600
++ true
++ curl https://elasticbeanstalk-platform-assets-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/stalks/eb_docker_amazon_linux_2023_1.0.2070.0_20260225182952/lib/UserDataScript.sh
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0   0     0   0     0     0     0  --:--:-- --:--:-- --:--:--     0100  4838 100  4838   0     0 94256     0  --:--:-- --:--:-- --:--:-- 96760
++ RESULT=0
++ [[ 0 -ne 0 ]]
++ /bin/bash /tmp/ebbootstrap.sh 'https://cloudformation-waitcondition-ap-southeast-1.s3-ap-southeast-1.amazonaws.com/arn%3Aaws%3Acloudformation%3Aap-southeast-1%3A971470477689%3Astack/awseb-e-awxrvevwc2-immutable-stack/6c302f60-1d37-11f1-986d-06e088491451/6c30cba0-1d37-11f1-986d-06e088491451/AWSEBInstanceLaunchWaitHandle?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20260311T104533Z&X-Amz-SignedHeaders=host&X-Amz-Expires=43199&X-Amz-Credential=AKIAXKFFXMS337UUQZVD%2F20260311%2Fap-southeast-1%2Fs3%2Faws4_request&X-Amz-Signature=8f170d1edc20c01b7e2b8ee5eab518fbe4b8a673c77b940c89009f92c3bb02de' arn:aws:cloudformation:ap-southeast-1:971470477689:stack/awseb-e-awxrvevwc2-immutable-stack/6c302f60-1d37-11f1-986d-06e088491451 15168095-aa0c-49ed-8606-50f904be0b27 https://elasticbeanstalk-health.ap-southeast-1.amazonaws.com '' https://elasticbeanstalk-platform-assets-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/stalks/eb_docker_amazon_linux_2023_1.0.2070.0_20260225182952 ap-southeast-1
+[2026-03-11T10:45:57.893Z] Started EB Bootstrapping Script.
+[2026-03-11T10:45:57.905Z] Received parameters:
+ TARBALLS = 
+ EB_GEMS = 
+ SIGNAL_URL = https://cloudformation-waitcondition-ap-southeast-1.s3-ap-southeast-1.amazonaws.com/arn%3Aaws%3Acloudformation%3Aap-southeast-1%3A971470477689%3Astack/awseb-e-awxrvevwc2-immutable-stack/6c302f60-1d37-11f1-986d-06e088491451/6c30cba0-1d37-11f1-986d-06e088491451/AWSEBInstanceLaunchWaitHandle?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20260311T104533Z&X-Amz-SignedHeaders=host&X-Amz-Expires=43199&X-Amz-Credential=AKIAXKFFXMS337UUQZVD%2F20260311%2Fap-southeast-1%2Fs3%2Faws4_request&X-Amz-Signature=8f170d1edc20c01b7e2b8ee5eab518fbe4b8a673c77b940c89009f92c3bb02de
+ STACK_ID = arn:aws:cloudformation:ap-southeast-1:971470477689:stack/awseb-e-awxrvevwc2-immutable-stack/6c302f60-1d37-11f1-986d-06e088491451
+ REGION = ap-southeast-1
+ GUID = 
+ HEALTHD_GROUP_ID = 15168095-aa0c-49ed-8606-50f904be0b27
+ HEALTHD_ENDPOINT = https://elasticbeanstalk-health.ap-southeast-1.amazonaws.com
+ PROXY_SERVER = 
+ HEALTHD_PROXY_LOG_LOCATION = 
+ PLATFORM_ASSETS_URL = https://elasticbeanstalk-platform-assets-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/stalks/eb_docker_amazon_linux_2023_1.0.2070.0_20260225182952
+[2026-03-11T10:45:57.942Z] engine url is set to https://elasticbeanstalk-platform-assets-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/stalks/eb_docker_amazon_linux_2023_1.0.2070.0_20260225182952/lib/platform-engine.zip
+[2026-03-11T10:45:57.946Z] first init of instance.
+[2026-03-11T10:45:57.951Z] Started executing cfn_init _OnInstanceBoot.
+[2026-03-11T10:45:57.954Z] Running cfn-init ConfigSet: _OnInstanceBoot.
+[2026-03-11T10:45:57.959Z] Using stack-id from userdata
+[2026-03-11T10:45:58.881Z] Command Returned: 
+[2026-03-11T10:45:58.885Z] Completed executing cfn_init.
+[2026-03-11T10:45:58.889Z] finished _OnInstanceBoot
+[2026-03-11T10:45:58.893Z] installing platform engine
+2026-03-11 10:45:59 URL:https://elasticbeanstalk-platform-assets-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/stalks/eb_docker_amazon_linux_2023_1.0.2070.0_20260225182952/lib/platform-engine.zip [44125061/44125061] -> "/tmp/platform-engine.zip" [1]
+[2026-03-11T10:46:00.515Z] executing platform engine. see /var/log/eb-engine.log.
+[2026-03-11T10:49:15.599Z] Successfully bootstrapped instance.
+[2026-03-11T10:49:15.611Z] Sending signal 0 to CFN wait condition https://cloudformation-waitcondition-ap-southeast-1.s3-ap-southeast-1.amazonaws.com/arn%3Aaws%3Acloudformation%3Aap-southeast-1%3A971470477689%3Astack/awseb-e-awxrvevwc2-immutable-stack/6c302f60-1d37-11f1-986d-06e088491451/6c30cba0-1d37-11f1-986d-06e088491451/AWSEBInstanceLaunchWaitHandle?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20260311T104533Z&X-Amz-SignedHeaders=host&X-Amz-Expires=43199&X-Amz-Credential=AKIAXKFFXMS337UUQZVD%2F20260311%2Fap-southeast-1%2Fs3%2Faws4_request&X-Amz-Signature=8f170d1edc20c01b7e2b8ee5eab518fbe4b8a673c77b940c89009f92c3bb02de
+CloudFormation signaled successfully with status SUCCESS
+[2026-03-11T10:49:16.124Z] Tailing /var/log/eb-engine.log
+
+******************* eb-engine taillog *******************
+
+2026/03/11 10:49:14.568374 [INFO] time="2026-03-11T10:49:14Z" level=warning msg="/var/app/current/docker-compose.yml: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion"
+
+2026/03/11 10:49:14.568666 [INFO] Cleanup images ...
+2026/03/11 10:49:14.568683 [INFO] Running command: docker images -a
+2026/03/11 10:49:14.607499 [INFO] REPOSITORY    TAG        IMAGE ID       CREATED              SIZE
+current-web   latest     e4cc01c4dfd6   About a minute ago   1.33GB
+nginx         1-alpine   d0c780774910   12 hours ago         62.2MB
+minio/minio   latest     69b2ec208575   6 months ago         175MB
+
+2026/03/11 10:49:14.607544 [INFO] Running command: docker rmi `docker images -aq`
+2026/03/11 10:49:14.668753 [INFO] Error response from daemon: conflict: unable to delete e4cc01c4dfd6 (cannot be forced) - image is being used by running container dbddbb7f134c
+Error response from daemon: conflict: unable to delete d0c780774910 (cannot be forced) - image is being used by running container 79a72d523c81
+Error response from daemon: conflict: unable to delete 69b2ec208575 (cannot be forced) - image is being used by running container eeaf8b89f806
+
+2026/03/11 10:49:14.668796 [INFO] Running command: docker images -a
+2026/03/11 10:49:14.696822 [INFO] REPOSITORY    TAG        IMAGE ID       CREATED              SIZE
+current-web   latest     e4cc01c4dfd6   About a minute ago   1.33GB
+nginx         1-alpine   d0c780774910   12 hours ago         62.2MB
+minio/minio   latest     69b2ec208575   6 months ago         175MB
+
+2026/03/11 10:49:14.696851 [INFO] Pruning build cache ...
+2026/03/11 10:49:14.696864 [INFO] Running command: docker builder prune -f
+2026/03/11 10:49:15.535056 [INFO] ID						RECLAIMABLE	SIZE		LAST ACCESSED
+xc9k1i698lkbgtz744l2cgc2x*              	true 		6.741MB   	10 seconds ago
+gyqd52i6r4j92oku1d2vxbha5*              	true 	195B      	10 seconds ago
+6zyyws0qq31buyjci9rv1fgiq*              	true 	21B       	10 seconds ago
+Total:	6.741MB
+
+2026/03/11 10:49:15.535094 [INFO] Executing instruction: start X-Ray
+2026/03/11 10:49:15.535103 [INFO] X-Ray is not enabled.
+2026/03/11 10:49:15.535109 [INFO] Executing instruction: configureSqsd
+2026/03/11 10:49:15.535116 [INFO] This is a web server environment instance, skip configure sqsd daemon ...
+2026/03/11 10:49:15.535121 [INFO] Executing instruction: startSqsd
+2026/03/11 10:49:15.535126 [INFO] This is a web server environment instance, skip start sqsd daemon ...
+2026/03/11 10:49:15.535131 [INFO] Executing instruction: Track pids in healthd
+2026/03/11 10:49:15.535137 [INFO] This is an enhanced health env...
+2026/03/11 10:49:15.535153 [INFO] Running command: systemctl show -p ConsistsOf aws-eb.target | cut -d= -f2
+2026/03/11 10:49:15.567415 [INFO] healthd.service eb-docker-compose-log.service eb-docker-events.service cfn-hup.service eb-docker-compose-events.service docker.service
+
+2026/03/11 10:49:15.567460 [INFO] Running command: systemctl show -p ConsistsOf eb-app.target | cut -d= -f2
+2026/03/11 10:49:15.587415 [INFO] 
+
+2026/03/11 10:49:15.590126 [INFO] Executing instruction: RunAppDeployPostDeployHooks
+2026/03/11 10:49:15.590326 [INFO] Executing platform hooks in .platform/hooks/postdeploy/
+2026/03/11 10:49:15.590365 [INFO] The dir .platform/hooks/postdeploy/ does not exist
+2026/03/11 10:49:15.590371 [INFO] Finished running scripts in /var/app/current/.platform/hooks/postdeploy
+2026/03/11 10:49:15.590383 [INFO] Executing cleanup logic
+2026/03/11 10:49:15.591725 [INFO] Platform Engine finished execution on command: self-startup
+******************* End of taillog *******************
+
+
+[2026-03-11T10:49:16.142Z] Tailing /var/log/eb-tools.log
+
+******************* eb-tools taillog *******************
+***eb-tools is not available yet.***
+******************* End of taillog *******************
+
+
+[2026-03-11T10:49:16.240Z] Tailing /var/log/eb-hooks.log
+
+******************* eb-hooks taillog *******************
+
+******************* End of taillog *******************
+
+
+[2026-03-11T10:49:16.253Z] Tailing /var/log/cfn-init.log
+
+******************* cfn-init taillog *******************
+2026-03-11 10:45:58,546 [INFO] -----------------------Starting build-----------------------
+2026-03-11 10:45:58,553 [INFO] Running configSets: _OnInstanceBoot
+2026-03-11 10:45:58,556 [INFO] Running configSet _OnInstanceBoot
+2026-03-11 10:45:58,559 [INFO] Running config AWSEBBaseConfig
+2026-03-11 10:45:58,828 [INFO] Command clearbackupfiles succeeded
+2026-03-11 10:45:58,832 [INFO] Running config AWSEBCfnHupEndpointOverride
+2026-03-11 10:45:58,839 [INFO] Command clearbackupfiles succeeded
+2026-03-11 10:45:58,840 [INFO] ConfigSets completed
+2026-03-11 10:45:58,841 [INFO] -----------------------Build complete-----------------------
+2026-03-11 10:46:08,082 [INFO] -----------------------Starting build-----------------------
+2026-03-11 10:46:08,089 [INFO] Running configSets: Infra-EmbeddedPreBuild
+2026-03-11 10:46:08,092 [INFO] Running configSet Infra-EmbeddedPreBuild
+2026-03-11 10:46:08,092 [INFO] ConfigSets completed
+2026-03-11 10:46:08,092 [INFO] -----------------------Build complete-----------------------
+2026-03-11 10:49:09,168 [INFO] -----------------------Starting build-----------------------
+2026-03-11 10:49:09,176 [INFO] Running configSets: Infra-EmbeddedPostBuild
+2026-03-11 10:49:09,178 [INFO] Running configSet Infra-EmbeddedPostBuild
+2026-03-11 10:49:09,179 [INFO] ConfigSets completed
+2026-03-11 10:49:09,179 [INFO] -----------------------Build complete-----------------------
+******************* End of taillog *******************
+
+
+[2026-03-11T10:49:16.269Z] Tailing /var/log/cfn-hup.log
+
+******************* cfn-hup taillog *******************
+2026-03-11 10:46:03,462 [DEBUG] CloudFormation client initialized with endpoint https://cloudformation.ap-southeast-1.amazonaws.com
+2026-03-11 10:46:03,463 [DEBUG] SQS client initialized with endpoint https://sqs.ap-southeast-1.amazonaws.com
+2026-03-11 10:46:03,463 [DEBUG] CloudFormation client initialized with endpoint https://cloudformation.ap-southeast-1.amazonaws.com
+2026-03-11 10:46:03,463 [DEBUG] Enabled single threading mode.
+2026-03-11 10:46:03,463 [DEBUG] Creating /var/lib/cfn-hup/data
+2026-03-11 10:46:03,474 [INFO] No umask value specified in config file. Using the default one: 0o22
+2026-03-11 10:46:03,520 [INFO] Pid: 1809
+2026-03-11 10:46:03,881 [INFO] Refreshing listener credentials
+2026-03-11 10:46:03,993 [INFO] Scheduling next credential refresh in 1800.0 seconds
+******************* End of taillog *******************
+
+
+[2026-03-11T10:49:16.282Z] Completed EB Bootstrapping Script.
++ RESULT=0
++ [[ 0 -ne 0 ]]
++ exit 0

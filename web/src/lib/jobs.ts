@@ -65,5 +65,6 @@ export function mapDraftToJob(d: ApiJob): Job {
     contractType: d.contractType,
     workingType: d.workingType,
     timeAgo: timeAgo(d.updatedAt),
+    status: d.status,
   };
 }

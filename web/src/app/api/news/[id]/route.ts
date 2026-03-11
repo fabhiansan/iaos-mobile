@@ -3,6 +3,7 @@ import { eq } from "drizzle-orm";
 import { db } from "@/db";
 import { articles, users } from "@/db/schema";
 import { auth } from "@/lib/auth";
+import { getSignedDownloadUrl } from "@/lib/s3";
 
 export async function GET(
   request: NextRequest,
@@ -40,7 +41,12 @@ export async function GET(
       return NextResponse.json({ error: "Article not found" }, { status: 404 });
     }
 
-    return NextResponse.json({ data: article });
+    return NextResponse.json({
+      data: {
+        ...article,
+        imageUrl: article.imageUrl ? await getSignedDownloadUrl(article.imageUrl) : null,
+      },
+    });
   } catch (error) {
     console.error("GET /api/news/[id] error:", error);
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });

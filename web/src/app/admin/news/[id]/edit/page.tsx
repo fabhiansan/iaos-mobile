@@ -3,6 +3,7 @@
 import { FormEvent, useEffect, useState, use } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { RichTextEditor } from "@/components/ui/rich-text-editor";
 
 const CATEGORIES = ["Announcement", "Agenda", "News"] as const;
 
@@ -133,13 +134,7 @@ export default function AdminNewsEditPage({ params }: { params: Promise<{ id: st
 
           <div>
             <label className="block text-sm font-medium text-neutral-700 mb-1">Content</label>
-            <textarea
-              required
-              rows={8}
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
-              className="w-full border border-neutral-200 rounded-md px-3 py-2 text-sm outline-none focus:border-brand-600 resize-y"
-            />
+            <RichTextEditor content={content} onChange={setContent} />
           </div>
 
           <div>
@@ -158,7 +153,11 @@ export default function AdminNewsEditPage({ params }: { params: Promise<{ id: st
           <div>
             <label className="block text-sm font-medium text-neutral-700 mb-1">Image</label>
             {existingImageUrl && !imageFile && (
-              <p className="text-xs text-neutral-500 mb-1">Current: {existingImageUrl}</p>
+              <img
+                src={existingImageUrl}
+                alt="Current thumbnail"
+                className="w-32 h-20 object-cover rounded-md mb-2 border border-neutral-200"
+              />
             )}
             <input
               type="file"
