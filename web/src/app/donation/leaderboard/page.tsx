@@ -1,40 +1,56 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { ChevronLeft, Settings } from "lucide-react";
 import { LeaderboardPodium } from "@/components/donation/leaderboard-podium";
 import { LeaderboardRow } from "@/components/donation/leaderboard-row";
 import { ActivateLeaderboardSheet } from "@/components/donation/activate-leaderboard-sheet";
 
-const YEAR_OF_ENTRY_DATA = [
-  { rank: 1, name: "2008", amount: 150000000 },
-  { rank: 2, name: "2010", amount: 125000000 },
-  { rank: 3, name: "2005", amount: 98000000 },
-  { rank: 4, name: "Year of Entry 2009", amount: 69000000 },
-  { rank: 5, name: "Year of Entry 2012", amount: 40500000 },
-  { rank: 6, name: "Year of Entry 2011", amount: 32100000 },
-  { rank: 7, name: "Year of Entry 2013", amount: 15500000 },
-  { rank: 8, name: "Year of Entry 2003", amount: 13500000 },
-];
+interface YearEntry {
+  rank: number;
+  name: string;
+  amount: number;
+  donorCount: number;
+}
 
-const INDIVIDUAL_DATA = [
-  { rank: 1, name: "Yuniarti R...", year: "2012", amount: 6000000, initials: "" },
-  { rank: 2, name: "Dinda Kira...", year: "2012", amount: 5000000, initials: "DK" },
-  { rank: 3, name: "Reza Pahle...", year: "2012", amount: 2000000, initials: "" },
-  { rank: 4, name: "Michelle Anagata", year: "2014", amount: 1200000, initials: "MI" },
-  { rank: 5, name: "Brama Nafarofi Adzkiya", year: "2012", amount: 1100000, initials: "" },
-  { rank: 6, name: "Dinni Kamadipa Minarti", year: "2004", amount: 952000, initials: "DK" },
-  { rank: 7, name: "Jelita Mawar Purnama", year: "2016", amount: 900000, initials: "" },
-];
+interface IndividualEntry {
+  rank: number;
+  name: string;
+  year: string;
+  amount: number;
+  initials: string;
+}
 
 export default function LeaderboardPage() {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<"yearOfEntry" | "individual">("yearOfEntry");
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [leaderboardActive, setLeaderboardActive] = useState(false);
+  const [yearData, setYearData] = useState<YearEntry[]>([]);
+  const [individualData, setIndividualData] = useState<IndividualEntry[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const data = activeTab === "yearOfEntry" ? YEAR_OF_ENTRY_DATA : INDIVIDUAL_DATA;
+  useEffect(() => {
+    async function fetchLeaderboard() {
+      setLoading(true);
+      try {
+        const res = await fetch("/api/donations/leaderboard");
+        if (res.ok) {
+          const json = await res.json();
+          setYearData(json.data.byYearOfEntry);
+          setIndividualData(json.data.byIndividual);
+        }
+      } catch {
+        // silently fail
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchLeaderboard();
+  }, []);
+
+  const data = activeTab === "yearOfEntry" ? yearData : individualData;
   const topThree = data.filter((e) => e.rank <= 3);
   const rest = data.filter((e) => e.rank > 3);
 
@@ -102,7 +118,13 @@ export default function LeaderboardPage() {
           </div>
         </div>
 
-        {showIndividualEmpty ? (
+        {loading ? (
+          <div className="flex items-center justify-center py-20">
+            <span className="font-[family-name:var(--font-inter)] text-sm text-neutral-500">
+              Loading leaderboard...
+            </span>
+          </div>
+        ) : showIndividualEmpty ? (
           <div className="flex flex-col items-center justify-center px-8 pt-20 gap-3">
             <h3 className="font-[family-name:var(--font-work-sans)] text-base font-semibold text-neutral-800 text-center">
               No Leaderboard showed
@@ -119,8 +141,8 @@ export default function LeaderboardPage() {
             <LeaderboardPodium
               entries={topThree.map((e) => ({
                 ...e,
-                initials: "initials" in e ? (e as typeof INDIVIDUAL_DATA[number]).initials : undefined,
-                year: "year" in e ? (e as typeof INDIVIDUAL_DATA[number]).year : undefined,
+                initials: "initials" in e ? (e as IndividualEntry).initials : undefined,
+                year: "year" in e ? (e as IndividualEntry).year : undefined,
               }))}
               mode={activeTab}
             />
@@ -138,8 +160,8 @@ export default function LeaderboardPage() {
                       rank={entry.rank}
                       name={entry.name}
                       amount={entry.amount}
-                      initials={"initials" in entry ? (entry as typeof INDIVIDUAL_DATA[number]).initials : undefined}
-                      year={"year" in entry ? (entry as typeof INDIVIDUAL_DATA[number]).year : undefined}
+                      initials={"initials" in entry ? (entry as IndividualEntry).initials : undefined}
+                      year={"year" in entry ? (entry as IndividualEntry).year : undefined}
                       mode={activeTab}
                     />
                   ))}

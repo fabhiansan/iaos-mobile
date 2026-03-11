@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { signOut } from "next-auth/react";
 import { DonationHeader } from "@/components/donation/donation-header";
@@ -13,49 +13,53 @@ import type { DonationCampaign } from "@/components/donation/donation-card";
 
 const CATEGORIES = ["All Donations", "Scholarship", "Events"];
 
-const CAMPAIGNS: DonationCampaign[] = [
-  {
-    id: "1",
-    title: "Educational Support Program for the Children of Alumni",
-    description:
-      "Educational financial assistance for the children of alumni as a commitment to supporting educational c...",
-    category: "Scholarship",
-    imageUrl: "/images/donation-placeholder-1.jpg",
-    currentAmount: 45000000,
-    targetAmount: 60000000,
-  },
-  {
-    id: "2",
-    title: "Annual Gathering Reunion 2026",
-    description:
-      "Financial support for the Grand Alumni Reunion of Oseanografi ITB, a vibrant gathering designed to reco...",
-    category: "Events",
-    imageUrl: "/images/donation-placeholder-2.jpg",
-    currentAmount: 12500000,
-    targetAmount: 80000000,
-  },
-  {
-    id: "3",
-    title: "Marine Research Equipment Fund",
-    description:
-      "Funding for advanced marine research equipment to support oceanographic studies and field expeditions...",
-    category: "Scholarship",
-    imageUrl: "/images/donation-placeholder-3.jpg",
-    currentAmount: 8000000,
-    targetAmount: 50000000,
-  },
-];
+interface CampaignResponse {
+  id: string;
+  title: string;
+  description: string;
+  category: string;
+  imageUrl: string | null;
+  targetAmount: number;
+  currentAmount: number;
+  totalRaised: number;
+  donorCount: number;
+}
 
 export default function DonationPage() {
   const router = useRouter();
   const [activeCategory, setActiveCategory] = useState("All Donations");
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [logoutOpen, setLogoutOpen] = useState(false);
+  const [campaigns, setCampaigns] = useState<DonationCampaign[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const filteredCampaigns =
-    activeCategory === "All Donations"
-      ? CAMPAIGNS
-      : CAMPAIGNS.filter((c) => c.category === activeCategory);
+  useEffect(() => {
+    async function fetchCampaigns() {
+      setLoading(true);
+      try {
+        const query = activeCategory !== "All Donations" ? `?category=${activeCategory}` : "";
+        const res = await fetch(`/api/donations${query}`);
+        if (res.ok) {
+          const json = await res.json();
+          const mapped: DonationCampaign[] = (json.data as CampaignResponse[]).map((c) => ({
+            id: c.id,
+            title: c.title,
+            description: c.description,
+            category: c.category,
+            imageUrl: c.imageUrl || "/images/donation-placeholder-1.jpg",
+            currentAmount: Number(c.totalRaised) || c.currentAmount,
+            targetAmount: c.targetAmount,
+          }));
+          setCampaigns(mapped);
+        }
+      } catch {
+        // silently fail
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchCampaigns();
+  }, [activeCategory]);
 
   return (
     <div className="bg-white min-h-screen max-w-[390px] mx-auto relative overflow-hidden">
@@ -84,13 +88,27 @@ export default function DonationPage() {
           />
 
           <div className="flex flex-col gap-3 px-4">
-            {filteredCampaigns.map((campaign) => (
-              <DonationCard
-                key={campaign.id}
-                campaign={campaign}
-                onClick={(id) => router.push(`/donation/${id}`)}
-              />
-            ))}
+            {loading ? (
+              <div className="flex items-center justify-center py-12">
+                <span className="font-[family-name:var(--font-inter)] text-sm text-neutral-500">
+                  Loading campaigns...
+                </span>
+              </div>
+            ) : campaigns.length === 0 ? (
+              <div className="flex items-center justify-center py-12">
+                <span className="font-[family-name:var(--font-inter)] text-sm text-neutral-500">
+                  No campaigns found.
+                </span>
+              </div>
+            ) : (
+              campaigns.map((campaign) => (
+                <DonationCard
+                  key={campaign.id}
+                  campaign={campaign}
+                  onClick={(id) => router.push(`/donation/${id}`)}
+                />
+              ))
+            )}
           </div>
         </div>
       </div>
