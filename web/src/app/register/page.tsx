@@ -2,6 +2,8 @@
 
 import { useState, useMemo } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
 import {
   ChevronLeft,
   ChevronDown,
@@ -17,6 +19,9 @@ const YEAR_OPTIONS = Array.from({ length: 30 }, (_, i) => {
 });
 
 export default function RegisterPage() {
+  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
   const [fullName, setFullName] = useState("");
   const [studentId, setStudentId] = useState("");
   const [yearOfEntry, setYearOfEntry] = useState("");
@@ -57,6 +62,56 @@ export default function RegisterPage() {
     isPasswordValid &&
     passwordsMatch &&
     termsAccepted;
+
+  const handleRegister = async () => {
+    setIsLoading(true);
+    setError("");
+
+    if (password !== passwordConfirmation) {
+      setError("Passwords do not match");
+      setIsLoading(false);
+      return;
+    }
+
+    try {
+      const res = await fetch("/api/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: fullName,
+          email,
+          password,
+          nim: studentId,
+          yearOfEntry: parseInt(yearOfEntry),
+          phone: phoneNumber,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setError(data.error || "Registration failed");
+        return;
+      }
+
+      // Auto-login after successful registration
+      const signInResult = await signIn("credentials", {
+        email,
+        password,
+        redirect: false,
+      });
+
+      if (signInResult?.error) {
+        router.push("/login");
+      } else {
+        router.push("/news");
+      }
+    } catch {
+      setError("Something went wrong");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <div className="auth-gradient relative min-h-dvh bg-white font-[family-name:var(--font-work-sans)]">
@@ -259,17 +314,23 @@ export default function RegisterPage() {
           </div>
         </div>
 
+        {/* Error Message */}
+        {error && (
+          <p className="text-sm text-red-500">{error}</p>
+        )}
+
         {/* Submit Button */}
         <button
           type="button"
-          disabled={!isFormValid}
+          disabled={!isFormValid || isLoading}
+          onClick={handleRegister}
           className={`w-full py-3.5 rounded-xl text-[16px] font-semibold text-white transition-colors ${
-            isFormValid
+            isFormValid && !isLoading
               ? "bg-brand-600 active:bg-brand-700"
               : "bg-neutral-400 cursor-not-allowed"
           }`}
         >
-          Create Account
+          {isLoading ? "Creating Account..." : "Create Account"}
         </button>
       </div>
     </div>
