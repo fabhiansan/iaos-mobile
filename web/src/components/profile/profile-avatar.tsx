@@ -4,10 +4,11 @@ import { Pencil } from "lucide-react";
 
 interface ProfileAvatarProps {
   name: string;
+  imageUrl?: string | null;
   onEditPhoto?: () => void;
 }
 
-export function ProfileAvatar({ name, onEditPhoto }: ProfileAvatarProps) {
+export function ProfileAvatar({ name, imageUrl, onEditPhoto }: ProfileAvatarProps) {
   const initials = name
     .split(" ")
     .map((n) => n[0])
@@ -17,10 +18,18 @@ export function ProfileAvatar({ name, onEditPhoto }: ProfileAvatarProps) {
 
   return (
     <div className="relative inline-block">
-      <div className="w-[120px] h-[120px] rounded-full bg-brand-800 flex items-center justify-center border-4 border-white shadow-lg">
-        <span className="font-[family-name:var(--font-work-sans)] text-4xl font-bold text-white">
-          {initials}
-        </span>
+      <div className="w-[120px] h-[120px] rounded-full bg-brand-800 flex items-center justify-center border-4 border-white shadow-lg overflow-hidden">
+        {imageUrl ? (
+          <img
+            src={imageUrl}
+            alt={name}
+            className="w-full h-full object-cover"
+          />
+        ) : (
+          <span className="font-[family-name:var(--font-work-sans)] text-4xl font-bold text-white">
+            {initials}
+          </span>
+        )}
       </div>
       {onEditPhoto && (
         <button
