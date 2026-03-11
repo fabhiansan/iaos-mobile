@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { signOut } from "next-auth/react";
-import { Menu } from "lucide-react";
+import { Menu, Loader2 } from "lucide-react";
 import { AlumniCard } from "@/components/connection/alumni-card";
 import { AlumniSearch } from "@/components/connection/alumni-search";
 import { FilterModal } from "@/components/connection/filter-modal";
@@ -14,55 +14,12 @@ import { BottomTabBar } from "@/components/ui/bottom-tab-bar";
 interface Alumni {
   id: string;
   name: string;
-  role: string;
-  company: string;
+  currentPosition: string | null;
+  currentCompany: string | null;
   yearOfEntry: number;
-  imageUrl?: string;
+  profileImageUrl?: string | null;
   isVerified?: boolean;
 }
-
-const ALUMNI_DATA: Alumni[] = [
-  {
-    id: "1",
-    name: "Budi Santoso",
-    role: "Senior Oceanographer",
-    company: "PT. Pertamina Mining",
-    yearOfEntry: 2008,
-    imageUrl: "/images/alumni-1.jpg",
-    isVerified: true,
-  },
-  {
-    id: "2",
-    name: "Siti Rahma",
-    role: "Marine Researcher",
-    company: "Badan Riset Inovasi Nasional",
-    yearOfEntry: 2012,
-    imageUrl: "/images/alumni-2.jpg",
-  },
-  {
-    id: "3",
-    name: "Dewi Kartika",
-    role: "GIS Specialist",
-    company: "ESRI Indonesia",
-    yearOfEntry: 2015,
-  },
-  {
-    id: "4",
-    name: "Andi Pratama",
-    role: "Offshore Engineer",
-    company: "Petronas Energy, ltd.",
-    yearOfEntry: 2010,
-    imageUrl: "/images/alumni-4.jpg",
-  },
-  {
-    id: "5",
-    name: "Maulana Ibrahim",
-    role: "Junior Marine Spatial Planning Analyst",
-    company: "Dinas Kelautan dan Perikanan Provinsi Jawa Barat",
-    yearOfEntry: 2014,
-    isVerified: true,
-  },
-];
 
 const YEAR_OPTIONS = ["2026", "2025", "2024", "2023", "2022", "2021", "2020"];
 const COMPANY_OPTIONS = [
@@ -94,17 +51,35 @@ export default function ConnectionPage() {
   const [selectedCompanies, setSelectedCompanies] = useState<string[]>([]);
   const [selectedExpertise, setSelectedExpertise] = useState<string[]>([]);
 
-  const filteredAlumni = ALUMNI_DATA.filter((alumni) => {
-    if (searchQuery) {
-      const q = searchQuery.toLowerCase();
-      const matchesSearch =
-        alumni.name.toLowerCase().includes(q) ||
-        alumni.role.toLowerCase().includes(q) ||
-        alumni.company.toLowerCase().includes(q);
-      if (!matchesSearch) return false;
+  const [alumni, setAlumni] = useState<Alumni[]>([]);
+  const [total, setTotal] = useState(0);
+  const [loading, setLoading] = useState(true);
+
+  const fetchAlumni = useCallback(async () => {
+    setLoading(true);
+    try {
+      const params = new URLSearchParams();
+      if (searchQuery) params.set("search", searchQuery);
+      if (selectedYears.length === 1) params.set("yearOfEntry", selectedYears[0]);
+      const res = await fetch(`/api/connections?${params.toString()}`);
+      if (res.ok) {
+        const json = await res.json();
+        setAlumni(json.data ?? []);
+        setTotal(json.total ?? 0);
+      }
+    } catch (err) {
+      console.error("Failed to fetch alumni:", err);
+    } finally {
+      setLoading(false);
     }
-    return true;
-  });
+  }, [searchQuery, selectedYears]);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      fetchAlumni();
+    }, 300);
+    return () => clearTimeout(timeout);
+  }, [fetchAlumni]);
 
   function getFilterProps(filter: FilterType) {
     switch (filter) {
@@ -179,19 +154,36 @@ export default function ConnectionPage() {
 
           <div className="px-4">
             <p className="font-[family-name:var(--font-work-sans)] text-sm text-neutral-800">
-              Found {filteredAlumni.length} Alumni
+              {loading ? "Searching..." : `Found ${total} Alumni`}
             </p>
           </div>
 
-          <div className="flex flex-col gap-3 px-4">
-            {filteredAlumni.map((alumni) => (
-              <AlumniCard
-                key={alumni.id}
-                {...alumni}
-                onViewProfile={() => router.push(`/connection/${alumni.id}`)}
-              />
-            ))}
-          </div>
+          {loading ? (
+            <div className="flex justify-center py-12">
+              <Loader2 size={32} className="text-brand-600 animate-spin" />
+            </div>
+          ) : (
+            <div className="flex flex-col gap-3 px-4">
+              {alumni.map((a) => (
+                <AlumniCard
+                  key={a.id}
+                  id={a.id}
+                  name={a.name}
+                  role={a.currentPosition ?? "Alumni"}
+                  company={a.currentCompany ?? "-"}
+                  yearOfEntry={a.yearOfEntry}
+                  imageUrl={a.profileImageUrl ?? undefined}
+                  isVerified={a.isVerified}
+                  onViewProfile={() => router.push(`/connection/${a.id}`)}
+                />
+              ))}
+              {alumni.length === 0 && (
+                <p className="text-center text-sm text-neutral-500 py-8">
+                  No alumni found.
+                </p>
+              )}
+            </div>
+          )}
         </div>
       </div>
 
