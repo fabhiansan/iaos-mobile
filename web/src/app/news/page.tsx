@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { signOut } from "next-auth/react";
 import { NewsHeader } from "@/components/news/news-header";
@@ -11,87 +11,11 @@ import { SortSheet } from "@/components/news/sort-sheet";
 import { SideDrawer } from "@/components/news/side-drawer";
 import { LogoutModal } from "@/components/news/logout-modal";
 import { BottomTabBar } from "@/components/ui/bottom-tab-bar";
+import { toArticle } from "@/lib/articles";
+import type { ApiArticle } from "@/lib/articles";
 import type { Article } from "@/components/news/featured-carousel";
 
 const CATEGORIES = ["All News", "Announcement", "Agenda"];
-
-const FEATURED_ARTICLES: Article[] = [
-  {
-    id: "1",
-    title: "Hasil Rapat Tahunan Ikatan Alumni 2025",
-    summary:
-      "Rangkuman keputusan strategis mengenai beasiswa baru, restrukturisasi organisasi, dan rangkaian agenda kegiatan ikatan alumni",
-    timestamp: "20 January 2025 - 09:00",
-    category: "Announcement",
-    imageUrl: "/images/news-placeholder-1.jpg",
-  },
-  {
-    id: "2",
-    title: "Webinar dan Sharing Alumni–Mahasiswa Oseanografi ITB",
-    summary:
-      "Pengumuman kegiatan kolaboratif antara alumni dan mahasiswa Oseanografi ITB dalam bentuk webinar dan sesi berbagi pengalaman di dunia riset dan industri kelautan.",
-    timestamp: "20 January 2025 - 09:00",
-    category: "Agenda",
-    imageUrl: "/images/news-placeholder-2.jpg",
-  },
-  {
-    id: "3",
-    title: "Kuliah Tamu, Praktikum Lapangan, dan Forum Diskusi",
-    summary:
-      "Rangkaian agenda mahasiswa Oseanografi ITB yang mencakup kegiatan akademik, organisasi kemahasiswaan, praktikum lapangan, serta aktivitas pengembangan diri.",
-    timestamp: "20 January 2025 - 09:00",
-    category: "Agenda",
-    imageUrl: "/images/news-placeholder-3.jpg",
-  },
-  {
-    id: "4",
-    title: "Reuni Akbar Semua Angkatan Alumni Oseanografi ITB",
-    summary:
-      "Agenda pertemuan alumni Oseanografi ITB yang dikemas dalam kegiatan silaturahmi, refleksi perjalanan institusi, serta kontribusi alumni bagi mahasiswa.",
-    timestamp: "20 January 2025 - 09:00",
-    category: "Announcement",
-    imageUrl: "/images/news-placeholder-4.jpg",
-  },
-];
-
-const LIST_ARTICLES: Article[] = [
-  {
-    id: "5",
-    title: "Seminar Oseanografi: Tantangan Iklim Global",
-    summary:
-      "Mengundang alumni sebagai narasumber tamu untuk berbagi…",
-    timestamp: "20 January 2025 - 09:00",
-    category: "Agenda",
-    imageUrl: "/images/news-placeholder-5.jpg",
-  },
-  {
-    id: "6",
-    title: "Rapat Koordinasi Alumni Oseanografi ITB",
-    summary:
-      "Agenda rapat alumni yang membahas program kerja, penguatan jaringan alumni, serta rencana kegiatan kolaboratif ke depan.",
-    timestamp: "20 January 2025 - 09:00",
-    category: "Announcement",
-    imageUrl: "/images/news-placeholder-6.jpg",
-  },
-  {
-    id: "7",
-    title: "Temu Alumni Oseanografi ITB",
-    summary:
-      "Kegiatan silaturahmi alumni lintas angkatan untuk mempererat hubungan dan membuka ruang kolaborasi dengan civitas akademika.",
-    timestamp: "20 January 2025 - 09:00",
-    category: "Announcement",
-    imageUrl: "/images/news-placeholder-7.jpg",
-  },
-  {
-    id: "8",
-    title: "Diskusi Ilmiah Oseanografi ITB",
-    summary:
-      "Kegiatan diskusi ilmiah yang membahas topik khusus oseanografi, metodologi penelitian, dan isu strategis kelautan.",
-    timestamp: "20 January 2025 - 09:00",
-    category: "Agenda",
-    imageUrl: "/images/news-placeholder-8.jpg",
-  },
-];
 
 export default function NewsPage() {
   const router = useRouter();
@@ -101,10 +25,52 @@ export default function NewsPage() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [logoutOpen, setLogoutOpen] = useState(false);
 
-  const filteredArticles =
-    activeCategory === "All News"
-      ? LIST_ARTICLES
-      : LIST_ARTICLES.filter((a) => a.category === activeCategory);
+  const [featuredArticles, setFeaturedArticles] = useState<Article[]>([]);
+  const [listArticles, setListArticles] = useState<Article[]>([]);
+  const [hasUnread, setHasUnread] = useState(false);
+
+  // Fetch featured articles once on mount (independent of category)
+  useEffect(() => {
+    fetch("/api/news?featured=true&limit=10")
+      .then((res) => (res.ok ? res.json() : null))
+      .then((json) => {
+        if (json?.data) {
+          setFeaturedArticles((json.data as ApiArticle[]).map(toArticle));
+        }
+      })
+      .catch(() => {});
+  }, []);
+
+  // Fetch list articles when category changes
+  const fetchListArticles = useCallback(async () => {
+    try {
+      const categoryParam =
+        activeCategory !== "All News" ? `&category=${activeCategory}` : "";
+      const res = await fetch(`/api/news?limit=20${categoryParam}`);
+      if (res.ok) {
+        const { data } = await res.json();
+        setListArticles((data as ApiArticle[]).map(toArticle));
+      }
+    } catch {
+      // silently fail
+    }
+  }, [activeCategory]);
+
+  useEffect(() => {
+    fetchListArticles();
+  }, [fetchListArticles]);
+
+  // Check for unread notifications once on mount
+  useEffect(() => {
+    fetch("/api/notifications")
+      .then((res) => (res.ok ? res.json() : null))
+      .then((json) => {
+        if (json?.data) {
+          setHasUnread(json.data.some((n: { isRead: boolean }) => !n.isRead));
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   return (
     <div className="bg-white min-h-screen max-w-[390px] mx-auto relative overflow-hidden">
@@ -123,12 +89,12 @@ export default function NewsPage() {
           onMenuOpen={() => setDrawerOpen(true)}
           onSearchOpen={() => router.push("/news/search")}
           onNotificationsOpen={() => router.push("/news/notifications")}
-          hasUnread
+          hasUnread={hasUnread}
         />
 
         <div className="flex flex-col gap-6 pt-2 pb-24">
           <FeaturedCarousel
-            articles={FEATURED_ARTICLES}
+            articles={featuredArticles}
             onReadMore={(id) => router.push(`/news/${id}`)}
           />
 
@@ -140,7 +106,7 @@ export default function NewsPage() {
           />
 
           <div className="flex flex-col gap-3 px-4">
-            {filteredArticles.map((article) => (
+            {listArticles.map((article) => (
               <ArticleCard
                 key={article.id}
                 article={article}

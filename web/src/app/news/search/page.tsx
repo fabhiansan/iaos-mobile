@@ -1,57 +1,58 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { ChevronLeft, Search, X } from "lucide-react";
 import { ArticleCard } from "@/components/news/article-card";
+import { toArticle } from "@/lib/articles";
+import type { ApiArticle } from "@/lib/articles";
 import type { Article } from "@/components/news/featured-carousel";
-
-const ALL_ARTICLES: Article[] = [
-  {
-    id: "1",
-    title: "Hasil Rapat Tahunan Ikatan Alumni 2025",
-    summary:
-      "Rangkuman keputusan strategis mengenai beasiswa baru, restrukturisasi organisasi, dan rangkaian agenda kegiatan ikatan alumni",
-    timestamp: "20 January 2025 - 09:00",
-    category: "Announcement",
-    imageUrl: "/images/news-placeholder-1.jpg",
-  },
-  {
-    id: "5",
-    title: "Seminar Oseanografi: Tantangan Iklim Global",
-    summary:
-      "Mengundang alumni sebagai narasumber tamu untuk berbagi…",
-    timestamp: "20 January 2025 - 09:00",
-    category: "Agenda",
-    imageUrl: "/images/news-placeholder-5.jpg",
-  },
-  {
-    id: "6",
-    title: "Rapat Koordinasi Alumni Oseanografi ITB",
-    summary:
-      "Agenda rapat alumni yang membahas program kerja, penguatan jaringan alumni.",
-    timestamp: "20 January 2025 - 09:00",
-    category: "Announcement",
-    imageUrl: "/images/news-placeholder-6.jpg",
-  },
-];
 
 export default function SearchNewsPage() {
   const router = useRouter();
   const [query, setQuery] = useState("");
+  const [results, setResults] = useState<Article[]>([]);
   const [hasSearched, setHasSearched] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const results = hasSearched
-    ? ALL_ARTICLES.filter(
-        (a) =>
-          a.title.toLowerCase().includes(query.toLowerCase()) ||
-          a.summary.toLowerCase().includes(query.toLowerCase())
-      )
-    : [];
+  const doSearch = useCallback(async (searchQuery: string) => {
+    if (!searchQuery.trim()) {
+      setResults([]);
+      setHasSearched(false);
+      return;
+    }
+    setLoading(true);
+    try {
+      const res = await fetch(
+        `/api/news?search=${encodeURIComponent(searchQuery)}&limit=20`
+      );
+      if (res.ok) {
+        const { data } = await res.json();
+        setResults((data as ApiArticle[]).map(toArticle));
+      }
+      setHasSearched(true);
+    } catch {
+      // silently fail
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
-  const handleSearch = () => {
-    if (query.trim()) setHasSearched(true);
-  };
+  useEffect(() => {
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    if (!query.trim()) {
+      setResults([]);
+      setHasSearched(false);
+      return;
+    }
+    debounceRef.current = setTimeout(() => {
+      doSearch(query);
+    }, 400);
+    return () => {
+      if (debounceRef.current) clearTimeout(debounceRef.current);
+    };
+  }, [query, doSearch]);
 
   return (
     <div className="bg-white min-h-screen max-w-[390px] mx-auto relative">
@@ -72,11 +73,7 @@ export default function SearchNewsPage() {
           <input
             type="text"
             value={query}
-            onChange={(e) => {
-              setQuery(e.target.value);
-              if (!e.target.value.trim()) setHasSearched(false);
-            }}
-            onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+            onChange={(e) => setQuery(e.target.value)}
             placeholder="Search News"
             className="flex-1 bg-transparent font-[family-name:var(--font-work-sans)] text-sm text-neutral-800 outline-none placeholder:text-neutral-400"
           />
@@ -85,6 +82,7 @@ export default function SearchNewsPage() {
               type="button"
               onClick={() => {
                 setQuery("");
+                setResults([]);
                 setHasSearched(false);
               }}
               className="cursor-pointer"
@@ -97,7 +95,13 @@ export default function SearchNewsPage() {
 
       {/* Results */}
       <div className="px-4 pt-4">
-        {hasSearched && results.length > 0 && (
+        {loading && (
+          <p className="font-[family-name:var(--font-work-sans)] text-xs text-neutral-500">
+            Searching...
+          </p>
+        )}
+
+        {!loading && hasSearched && results.length > 0 && (
           <div className="flex flex-col gap-3">
             <p className="font-[family-name:var(--font-work-sans)] text-xs text-neutral-500">
               {results.length} Search Results found
@@ -112,7 +116,7 @@ export default function SearchNewsPage() {
           </div>
         )}
 
-        {hasSearched && results.length === 0 && (
+        {!loading && hasSearched && results.length === 0 && (
           <div className="flex flex-col items-center justify-center pt-20 gap-2">
             <Search size={40} className="text-neutral-300" />
             <p className="font-[family-name:var(--font-work-sans)] text-sm font-medium text-neutral-800">
@@ -121,7 +125,7 @@ export default function SearchNewsPage() {
           </div>
         )}
 
-        {!hasSearched && !query && (
+        {!loading && !hasSearched && !query && (
           <div className="flex flex-col items-center justify-center pt-20 gap-2">
             <Search size={40} className="text-neutral-300" />
             <p className="font-[family-name:var(--font-work-sans)] text-sm font-medium text-neutral-800">
