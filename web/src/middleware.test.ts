@@ -67,14 +67,44 @@ describe("middleware", () => {
   describe("authenticated users", () => {
     it("allows authenticated user to access /dashboard", () => {
       const res = middlewareCallback(
-        createRequest("/dashboard", { user: { id: "1" } })
+        createRequest("/dashboard", { user: { id: "1", profileComplete: true } })
       );
       expect(res?.headers.get("location")).toBeNull();
     });
 
     it("allows authenticated user to access /profile", () => {
       const res = middlewareCallback(
-        createRequest("/profile", { user: { id: "1" } })
+        createRequest("/profile", { user: { id: "1", profileComplete: true } })
+      );
+      expect(res?.headers.get("location")).toBeNull();
+    });
+  });
+
+  describe("profile completion gate", () => {
+    it("redirects authenticated user with incomplete profile to /complete-profile", () => {
+      const res = middlewareCallback(
+        createRequest("/news", { user: { id: "1", profileComplete: false } })
+      );
+      expect(res?.status).toBe(307);
+      expect(res?.headers.get("location")).toBe(
+        "http://localhost:3000/complete-profile"
+      );
+    });
+
+    it("allows authenticated user with incomplete profile to access /complete-profile", () => {
+      const res = middlewareCallback(
+        createRequest("/complete-profile", {
+          user: { id: "1", profileComplete: false },
+        })
+      );
+      expect(res?.headers.get("location")).toBeNull();
+    });
+
+    it("allows authenticated user with complete profile to access /news", () => {
+      const res = middlewareCallback(
+        createRequest("/news", {
+          user: { id: "1", profileComplete: true },
+        })
       );
       expect(res?.headers.get("location")).toBeNull();
     });
