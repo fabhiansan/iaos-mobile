@@ -32,6 +32,8 @@ Standard NextAuth adapter table for tracking OAuth provider links.
 
 Unique constraint on `(provider, providerAccountId)`.
 
+**Intentionally omitted adapter tables:** The `sessions` and `verification_tokens` tables are NOT needed because we use the JWT session strategy exclusively (no database sessions). The adapter only requires `users` and `accounts` for our use case.
+
 ### Modify `users` table
 
 Make these columns **nullable** to support Google-only sign-ups who haven't completed their profile:
@@ -40,6 +42,7 @@ Make these columns **nullable** to support Google-only sign-ups who haven't comp
 - `nim` → nullable (keep unique constraint)
 - `yearOfEntry` → nullable
 - `phone` → nullable
+- `emailVerified` → change from `boolean` to `timestamp` (nullable). The `@auth/drizzle-adapter` expects `emailVerified` to be a nullable timestamp, not a boolean. Migrate existing `true` values to `now()` and `false` to `null`.
 
 **Add column:**
 
@@ -58,13 +61,15 @@ Make these columns **nullable** to support Google-only sign-ups who haven't comp
 **Changes:**
 - Add Drizzle adapter to NextAuth config
 - Add Google provider with `allowDangerousEmailAccountLinking: true`
-- Keep existing Credentials provider unchanged
+- Keep existing Credentials provider, but add a null-check for `passwordHash` in the `authorize` function — return `null` early if `passwordHash` is absent (Google-only users attempting credential login)
 
 **Callback changes:**
 
 - `signIn` callback: For new Google users (auto-created by adapter), the user record will have `profileComplete: false` by default.
 - `jwt` callback: Embed `profileComplete` into the JWT token (query from DB on first sign-in).
 - `session` callback: Expose `profileComplete` on the session object.
+
+**TypeScript type augmentation:** Extend the existing `declare module "next-auth"` block to add `profileComplete: boolean` to both the `User` and `Session["user"]` interfaces so that middleware can access `req.auth.user.profileComplete` without type errors.
 
 ### Environment variables
 
@@ -101,11 +106,11 @@ This blocks all app routes until the profile is complete. Existing credential-re
 - Form with fields: NIM, Year of Entry, Phone
 - Same validation rules as the registration form
 - No navigation to other routes (mandatory, blocking)
-- On success, redirects to `/news`
+- On success, triggers a session refresh (via `update()` from `next-auth/react`) so the JWT picks up `profileComplete: true`, then redirects to `/news`
 
 ### New API route: `POST /api/auth/complete-profile`
 
-- Requires authenticated session
+- Manually calls `auth()` and checks `session?.user?.id` (returns 401 if missing) — API routes are excluded from the middleware matcher, so session must be verified inline
 - Validates NIM (alphanumeric), yearOfEntry (1950–current year), phone (digits only)
 - Checks NIM uniqueness
 - Updates user record: sets `nim`, `yearOfEntry`, `phone`, `profileComplete: true`
@@ -132,6 +137,8 @@ This blocks all app routes until the profile is complete. Existing credential-re
 | Existing user (email+password) signs in with Google | Account linked automatically via `allowDangerousEmailAccountLinking`. User logs in, `profileComplete` is already `true`. |
 | New user signs in with Google (no existing account) | New user created by adapter with `profileComplete: false`. Redirected to `/complete-profile`. |
 | Google-linked user signs in with password | Works as before — Credentials provider matches by email. |
+| Google-only user attempts credential login | `authorize` returns `null` early (no `passwordHash`), login fails gracefully. |
+| Google-only user attempts to change password | `change-password` API returns error — no current password to verify. Must add null-check for `passwordHash`. |
 
 ## 7. Google Cloud Console Setup
 
@@ -169,5 +176,6 @@ No other new dependencies needed — `next-auth/providers/google` is already inc
 | `web/src/app/api/auth/complete-profile/route.ts` | **New** — complete profile API |
 | `web/src/app/login/page.tsx` | Enable Google, remove Apple |
 | `web/src/app/page.tsx` | Enable Google, remove Apple |
+| `web/src/app/api/auth/change-password/route.ts` | Add null-check for `passwordHash` |
 | `web/.env.local.example` | Add Google OAuth env vars |
 | `web/drizzle/` | New migration files |
