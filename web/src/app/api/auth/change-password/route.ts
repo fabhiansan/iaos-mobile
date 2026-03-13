@@ -47,6 +47,13 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    if (!user.passwordHash) {
+      return NextResponse.json(
+        { error: "Password change is not available for accounts using social login" },
+        { status: 400 }
+      );
+    }
+
     const passwordMatch = await bcrypt.compare(currentPassword, user.passwordHash);
     if (!passwordMatch) {
       return NextResponse.json(
