@@ -18,6 +18,7 @@ dist/
 
 # elastic beanstalk
 .elasticbeanstalk/my-app.zip
+.elasticbeanstalk/logs/
 
 # misc
 .DS_Store

@@ -1,6 +1,0 @@
-Mar 11 10:45:56 ip-172-31-1-110 crond[1620]: (CRON) STARTUP (1.5.7)
-Mar 11 10:45:56 ip-172-31-1-110 crond[1620]: (CRON) INFO (Syslog will be used instead of sendmail.)
-Mar 11 10:45:56 ip-172-31-1-110 crond[1620]: (CRON) INFO (RANDOM_DELAY will be scaled with factor 96% if used.)
-Mar 11 10:45:56 ip-172-31-1-110 crond[1620]: (CRON) INFO (running with inotify support)
-Mar 11 10:50:01 ip-172-31-85-90 CROND[3713]: (root) CMD (/opt/elasticbeanstalk/bin/publishlogs -type publish)
-Mar 11 10:50:01 ip-172-31-85-90 CROND[3712]: (root) CMDEND (/opt/elasticbeanstalk/bin/publishlogs -type publish)
