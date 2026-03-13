@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 
 function GoogleIcon() {
   return (
-    <svg width="20" height="20" viewBox="0 0 48 48">
+    <svg width="20" height="20" viewBox="0 0 48 48" aria-hidden="true">
       <path
         fill="#FFC107"
         d="M43.611 20.083H42V20H24v8h11.303c-1.649 4.657-6.08 8-11.303 8-6.627 0-12-5.373-12-12s5.373-12 12-12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4 12.955 4 4 12.955 4 24s8.955 20 20 20 20-8.955 20-20c0-1.341-.138-2.65-.389-3.917z"
@@ -27,14 +27,6 @@ function GoogleIcon() {
         fill="#1976D2"
         d="M43.611 20.083H42V20H24v8h11.303a12.04 12.04 0 0 1-4.087 5.571l.003-.002 6.19 5.238C36.971 39.205 44 34 44 24c0-1.341-.138-2.65-.389-3.917z"
       />
-    </svg>
-  );
-}
-
-function AppleIcon() {
-  return (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-      <path d="M17.05 20.28c-.98.95-2.05.88-3.08.4-1.09-.5-2.08-.48-3.24 0-1.44.62-2.2.44-3.06-.4C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z" />
     </svg>
   );
 }
@@ -99,7 +91,13 @@ export default function LoginPage() {
         </div>
 
         {/* Form */}
-        <div className="mt-8 flex w-full flex-col gap-4">
+        <form
+          className="mt-8 flex w-full flex-col gap-4"
+          onSubmit={(e) => {
+            e.preventDefault();
+            if (isFormValid && !isLoading) handleLogin();
+          }}
+        >
           <TextInput
             label="Email"
             type="email"
@@ -126,7 +124,7 @@ export default function LoginPage() {
           </Link>
 
           {error && (
-            <p className="text-sm text-red-500">{error}</p>
+            <p role="alert" className="text-sm text-red-500">{error}</p>
           )}
 
           <Button
@@ -146,14 +144,12 @@ export default function LoginPage() {
             <div className="h-px flex-1 bg-neutral-400" />
           </div>
 
-          {/* TODO: Add Google OAuth provider to NextAuth config */}
-          <Button variant="secondary" icon={<GoogleIcon />} disabled>
+          <Button
+            variant="secondary"
+            icon={<GoogleIcon />}
+            onClick={() => signIn("google")}
+          >
             Continue with Google
-          </Button>
-
-          {/* TODO: Add Apple OAuth provider to NextAuth config */}
-          <Button variant="secondary" icon={<AppleIcon />} disabled>
-            Continue with Apple
           </Button>
 
           {/* Sign up link */}
@@ -166,7 +162,7 @@ export default function LoginPage() {
               Create an Account
             </Link>
           </p>
-        </div>
+        </form>
       </div>
     </div>
   );
