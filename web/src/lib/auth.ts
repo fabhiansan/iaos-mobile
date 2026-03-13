@@ -1,12 +1,18 @@
 import NextAuth from "next-auth";
 import type { DefaultSession } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
+import Google from "next-auth/providers/google";
+import { DrizzleAdapter } from "@auth/drizzle-adapter";
 import bcrypt from "bcryptjs";
 import { eq } from "drizzle-orm";
 import { db } from "@/db";
-import { users } from "@/db/schema";
+import { users, accounts } from "@/db/schema";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
+  adapter: DrizzleAdapter(db, {
+    usersTable: users,
+    accountsTable: accounts,
+  }),
   session: {
     strategy: "jwt",
     maxAge: 30 * 24 * 60 * 60, // 30 days
@@ -14,8 +20,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   pages: {
     signIn: "/login",
   },
-  // TODO: Add Google and Apple OAuth providers
   providers: [
+    Google({
+      allowDangerousEmailAccountLinking: true,
+    }),
     Credentials({
       credentials: {
         email: {},
@@ -35,6 +43,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
         if (!user) return null;
 
+        // Google-only users have no password
+        if (!user.passwordHash) return null;
+
         const passwordMatch = await bcrypt.compare(password, user.passwordHash);
         if (!passwordMatch) return null;
 
@@ -43,22 +54,39 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           email: user.email,
           name: user.name,
           role: user.role,
+          profileComplete: user.profileComplete,
         };
       },
     }),
   ],
   callbacks: {
-    jwt({ token, user }) {
+    async jwt({ token, user, trigger }) {
       if (user) {
         token.id = user.id;
         token.role = user.role;
+        token.profileComplete = user.profileComplete;
       }
+
+      // Refresh profileComplete from DB when session is updated
+      if (trigger === "update" && token.id) {
+        const [dbUser] = await db
+          .select({ profileComplete: users.profileComplete, role: users.role })
+          .from(users)
+          .where(eq(users.id, token.id as string))
+          .limit(1);
+        if (dbUser) {
+          token.profileComplete = dbUser.profileComplete;
+          token.role = dbUser.role;
+        }
+      }
+
       return token;
     },
     session({ session, token }) {
       if (session.user) {
         session.user.id = token.id as string;
         session.user.role = token.role as string;
+        session.user.profileComplete = token.profileComplete as boolean;
       }
       return session;
     },
@@ -68,11 +96,13 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 declare module "next-auth" {
   interface User {
     role?: string;
+    profileComplete?: boolean;
   }
   interface Session {
     user: {
       id: string;
       role: string;
+      profileComplete: boolean;
     } & DefaultSession["user"];
   }
 }
