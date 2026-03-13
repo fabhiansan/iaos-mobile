@@ -24,6 +24,12 @@ export default auth((req) => {
     return NextResponse.redirect(loginUrl);
   }
 
+  // Profile completion gate — redirect incomplete profiles
+  if (req.auth.user?.profileComplete === false && pathname !== "/complete-profile") {
+    const completeProfileUrl = new URL("/complete-profile", req.nextUrl.origin);
+    return NextResponse.redirect(completeProfileUrl);
+  }
+
   // Admin route protection
   if (pathname.startsWith("/admin")) {
     if (req.auth.user?.role !== "admin") {
