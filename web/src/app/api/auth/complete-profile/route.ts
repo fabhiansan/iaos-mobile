@@ -2,7 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { eq } from "drizzle-orm";
 import { db } from "@/db";
 import { users } from "@/db/schema";
-import { auth } from "@/lib/auth";
+import { auth, unstable_update } from "@/lib/auth";
+import { completeProfileSchema } from "@/lib/validations";
 
 export async function POST(request: NextRequest) {
   try {
@@ -15,40 +16,18 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const { nim, yearOfEntry, phone } = await request.json();
+    const body = await request.json();
+    const result = completeProfileSchema.safeParse(body);
 
-    // Validate required fields
-    if (!nim || !yearOfEntry || !phone) {
+    if (!result.success) {
+      const firstError = result.error.issues[0]?.message ?? "Invalid input";
       return NextResponse.json(
-        { error: "All fields are required" },
+        { error: firstError },
         { status: 400 }
       );
     }
 
-    // Validate NIM (alphanumeric)
-    if (!/^[a-zA-Z0-9]+$/.test(nim)) {
-      return NextResponse.json(
-        { error: "Student ID must be alphanumeric" },
-        { status: 400 }
-      );
-    }
-
-    // Validate phone (digits only)
-    if (!/^\d+$/.test(phone)) {
-      return NextResponse.json(
-        { error: "Phone number must contain only digits" },
-        { status: 400 }
-      );
-    }
-
-    // Validate year of entry
-    const currentYear = new Date().getFullYear();
-    if (yearOfEntry < 1950 || yearOfEntry > currentYear) {
-      return NextResponse.json(
-        { error: "Invalid year of entry" },
-        { status: 400 }
-      );
-    }
+    const { nim, yearOfEntry, phone } = result.data;
 
     // Check NIM uniqueness
     const [existingNim] = await db
@@ -75,6 +54,14 @@ export async function POST(request: NextRequest) {
         updatedAt: new Date(),
       })
       .where(eq(users.id, session.user.id));
+
+    await unstable_update({
+      ...session,
+      user: {
+        ...session.user,
+        profileComplete: true,
+      },
+    });
 
     return NextResponse.json({ success: true });
   } catch (error) {

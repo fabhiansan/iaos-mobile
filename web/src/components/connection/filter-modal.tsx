@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Check } from "lucide-react";
 
 interface FilterModalProps {
@@ -20,37 +20,44 @@ export function FilterModal({
   options,
   selected,
 }: FilterModalProps) {
-  const [localSelected, setLocalSelected] = useState<string[]>(selected);
-
-  useEffect(() => {
-    setLocalSelected(selected);
-  }, [selected, isOpen]);
+  const [draftSelected, setDraftSelected] = useState<string[] | null>(null);
 
   if (!isOpen) return null;
 
+  const localSelected = draftSelected ?? selected;
   const allSelected = localSelected.length === options.length;
+
+  function handleClose() {
+    setDraftSelected(null);
+    onClose();
+  }
 
   function toggleAll() {
     if (allSelected) {
-      setLocalSelected([]);
+      setDraftSelected([]);
     } else {
-      setLocalSelected([...options]);
+      setDraftSelected([...options]);
     }
   }
 
   function toggleOption(option: string) {
-    setLocalSelected((prev) =>
-      prev.includes(option)
-        ? prev.filter((o) => o !== option)
-        : [...prev, option]
-    );
+    setDraftSelected((prev) => {
+      const current = prev ?? selected;
+      return (
+        current.includes(option)
+          ? current.filter((o) => o !== option)
+          : [...current, option]
+      );
+    });
   }
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
-      <div
+      <button
+        type="button"
         className="absolute inset-0 bg-black/40 backdrop-blur-sm"
-        onClick={onClose}
+        onClick={handleClose}
+        aria-label="Close"
       />
       <div className="relative w-[340px] h-[248px] bg-brand-50 rounded-lg p-3 flex flex-col">
         <h3 className="font-[family-name:var(--font-work-sans)] text-base font-semibold text-neutral-800 mb-2">
@@ -58,7 +65,11 @@ export function FilterModal({
         </h3>
 
         {/* All checkbox */}
-        <label className="flex items-center gap-2 cursor-pointer mb-2">
+        <button
+          type="button"
+          className="flex items-center gap-2 cursor-pointer mb-2 text-left"
+          onClick={toggleAll}
+        >
           <div
             className={`w-5 h-5 rounded border flex items-center justify-center shrink-0 ${
               allSelected
@@ -71,7 +82,7 @@ export function FilterModal({
           <span className="font-[family-name:var(--font-work-sans)] text-sm text-neutral-800">
             All {title}
           </span>
-        </label>
+        </button>
 
         <div className="h-px bg-neutral-300 mb-2" />
 
@@ -80,9 +91,11 @@ export function FilterModal({
           {options.map((option) => {
             const isChecked = localSelected.includes(option);
             return (
-              <label
+              <button
+                type="button"
                 key={option}
-                className="flex items-center gap-2 cursor-pointer"
+                className="flex items-center gap-2 cursor-pointer text-left"
+                onClick={() => toggleOption(option)}
               >
                 <div
                   className={`w-5 h-5 rounded border flex items-center justify-center shrink-0 ${
@@ -100,7 +113,7 @@ export function FilterModal({
                 >
                   {option}
                 </span>
-              </label>
+              </button>
             );
           })}
         </div>
@@ -111,14 +124,17 @@ export function FilterModal({
         <div className="flex gap-2">
           <button
             type="button"
-            onClick={onClose}
+            onClick={handleClose}
             className="flex-1 border border-brand-600 text-brand-600 rounded-lg py-2 font-[family-name:var(--font-work-sans)] text-sm font-medium cursor-pointer"
           >
             Cancel
           </button>
           <button
             type="button"
-            onClick={() => onApply(localSelected)}
+            onClick={() => {
+              onApply(localSelected);
+              setDraftSelected(null);
+            }}
             className="flex-1 bg-brand-600 text-white rounded-lg py-2 font-[family-name:var(--font-work-sans)] text-sm font-medium cursor-pointer"
           >
             Apply

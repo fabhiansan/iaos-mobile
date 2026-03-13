@@ -1,141 +1,96 @@
-"use client";
-
-import { useState, useEffect, useCallback } from "react";
-import { useRouter } from "next/navigation";
-import { Search, Bell, ListFilter } from "lucide-react";
-import { FeaturedCarousel } from "@/components/news/featured-carousel";
-import { ArticleCard } from "@/components/news/article-card";
-import { SortSheet } from "@/components/news/sort-sheet";
-import {
-  MobilePageLayout,
-  MobilePageHeader,
-  MobileHeaderAction,
-  MobileFilterChips,
-} from "@/components/ui/mobile-page-layout";
+import type { Metadata } from "next";
+import { eq, desc } from "drizzle-orm";
+import { db } from "@/db";
+import { articles, notifications, users } from "@/db/schema";
+import { auth } from "@/lib/auth";
+import { getSignedDownloadUrl } from "@/lib/s3";
 import { toArticle } from "@/lib/articles";
 import type { ApiArticle } from "@/lib/articles";
-import type { Article } from "@/components/news/featured-carousel";
+import { NewsContent } from "./news-content";
 
-const CATEGORIES = ["All News", "Announcement", "Agenda"];
+export const metadata: Metadata = {
+  title: "News — IAOS Connect",
+  description: "Stay up to date with the latest news, announcements, and events from the IAOS alumni network.",
+};
 
-export default function NewsPage() {
-  const router = useRouter();
-  const [activeCategory, setActiveCategory] = useState("All News");
-  const [sortOpen, setSortOpen] = useState(false);
-  const [activeSort, setActiveSort] = useState<"date-ascending" | "date-descending" | "a-z" | "importance-high">("date-descending");
+export default async function NewsPage() {
+  const session = await auth();
+  const userId = session?.user?.id;
 
-  const [featuredArticles, setFeaturedArticles] = useState<Article[]>([]);
-  const [listArticles, setListArticles] = useState<Article[]>([]);
-  const [hasUnread, setHasUnread] = useState(false);
-
-  // Fetch featured articles once on mount (independent of category)
-  useEffect(() => {
-    fetch("/api/news?featured=true&limit=10")
-      .then((res) => (res.ok ? res.json() : null))
-      .then((json) => {
-        if (json?.data) {
-          setFeaturedArticles((json.data as ApiArticle[]).map(toArticle));
-        }
+  // Fetch featured articles, list articles, and unread status in parallel
+  const [featuredRows, listRows, notificationRows] = await Promise.all([
+    db
+      .select({
+        id: articles.id,
+        title: articles.title,
+        summary: articles.summary,
+        content: articles.content,
+        category: articles.category,
+        imageUrl: articles.imageUrl,
+        isFeatured: articles.isFeatured,
+        authorId: articles.authorId,
+        authorName: users.name,
+        publishedAt: articles.publishedAt,
+        createdAt: articles.createdAt,
+        updatedAt: articles.updatedAt,
       })
-      .catch(() => {});
-  }, []);
-
-  // Fetch list articles when category changes
-  const fetchListArticles = useCallback(async () => {
-    try {
-      const categoryParam =
-        activeCategory !== "All News" ? `&category=${activeCategory}` : "";
-      const res = await fetch(`/api/news?limit=20${categoryParam}`);
-      if (res.ok) {
-        const { data } = await res.json();
-        setListArticles((data as ApiArticle[]).map(toArticle));
-      }
-    } catch {
-      // silently fail
-    }
-  }, [activeCategory]);
-
-  useEffect(() => {
-    fetchListArticles();
-  }, [fetchListArticles]);
-
-  // Check for unread notifications once on mount
-  useEffect(() => {
-    fetch("/api/notifications")
-      .then((res) => (res.ok ? res.json() : null))
-      .then((json) => {
-        if (json?.data) {
-          setHasUnread(json.data.some((n: { isRead: boolean }) => !n.isRead));
-        }
+      .from(articles)
+      .leftJoin(users, eq(articles.authorId, users.id))
+      .where(eq(articles.isFeatured, true))
+      .orderBy(desc(articles.publishedAt))
+      .limit(10),
+    db
+      .select({
+        id: articles.id,
+        title: articles.title,
+        summary: articles.summary,
+        content: articles.content,
+        category: articles.category,
+        imageUrl: articles.imageUrl,
+        isFeatured: articles.isFeatured,
+        authorId: articles.authorId,
+        authorName: users.name,
+        publishedAt: articles.publishedAt,
+        createdAt: articles.createdAt,
+        updatedAt: articles.updatedAt,
       })
-      .catch(() => {});
-  }, []);
+      .from(articles)
+      .leftJoin(users, eq(articles.authorId, users.id))
+      .orderBy(desc(articles.publishedAt))
+      .limit(20),
+    userId
+      ? db
+          .select()
+          .from(notifications)
+          .where(eq(notifications.userId, userId))
+      : Promise.resolve([]),
+  ]);
+
+  // Sign image URLs
+  const [featuredWithUrls, listWithUrls] = await Promise.all([
+    Promise.all(
+      featuredRows.map(async (item) => ({
+        ...item,
+        imageUrl: item.imageUrl ? await getSignedDownloadUrl(item.imageUrl) : null,
+      }))
+    ),
+    Promise.all(
+      listRows.map(async (item) => ({
+        ...item,
+        imageUrl: item.imageUrl ? await getSignedDownloadUrl(item.imageUrl) : null,
+      }))
+    ),
+  ]);
+
+  const featuredArticles = (featuredWithUrls as unknown as ApiArticle[]).map(toArticle);
+  const initialArticles = (listWithUrls as unknown as ApiArticle[]).map(toArticle);
+  const hasUnread = notificationRows.some((n) => !n.isRead);
 
   return (
-    <MobilePageLayout activeItem="news">
-      {({ onMenuOpen }) => (
-        <>
-          <MobilePageHeader
-            title="Tidal News"
-            onMenuOpen={onMenuOpen}
-            rightActions={
-              <>
-                <MobileHeaderAction
-                  icon={Search}
-                  onClick={() => router.push("/news/search")}
-                />
-                <MobileHeaderAction
-                  icon={Bell}
-                  onClick={() => router.push("/news/notifications")}
-                  badge={hasUnread}
-                />
-              </>
-            }
-          />
-
-          <div className="flex flex-col gap-6 pt-2 pb-24">
-            <FeaturedCarousel
-              articles={featuredArticles}
-              onReadMore={(id) => router.push(`/news/${id}`)}
-            />
-
-            <MobileFilterChips
-              options={CATEGORIES}
-              value={activeCategory}
-              onChange={setActiveCategory}
-              leading={
-                <button
-                  type="button"
-                  onClick={() => setSortOpen(true)}
-                  className="shrink-0 flex items-center gap-2 px-1 cursor-pointer"
-                >
-                  <ListFilter size={16} className="text-brand-600" />
-                  <span className="font-[family-name:var(--font-work-sans)] text-xs font-medium text-brand-600 leading-[18px]">
-                    Sort
-                  </span>
-                </button>
-              }
-            />
-
-            <div className="flex flex-col gap-3 px-4">
-              {listArticles.map((article) => (
-                <ArticleCard
-                  key={article.id}
-                  article={article}
-                  onClick={(id) => router.push(`/news/${id}`)}
-                />
-              ))}
-            </div>
-          </div>
-
-          <SortSheet
-            isOpen={sortOpen}
-            onClose={() => setSortOpen(false)}
-            activeSort={activeSort}
-            onSortChange={setActiveSort}
-          />
-        </>
-      )}
-    </MobilePageLayout>
+    <NewsContent
+      featuredArticles={featuredArticles}
+      initialArticles={initialArticles}
+      hasUnread={hasUnread}
+    />
   );
 }

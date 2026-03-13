@@ -8,7 +8,7 @@ import { eq } from "drizzle-orm";
 import { db } from "@/db";
 import { users, accounts } from "@/db/schema";
 
-export const { handlers, signIn, signOut, auth } = NextAuth({
+export const { handlers, signIn, signOut, auth, unstable_update } = NextAuth({
   adapter: DrizzleAdapter(db, {
     usersTable: users,
     accountsTable: accounts,
@@ -67,8 +67,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         token.profileComplete = user.profileComplete;
       }
 
-      // Refresh profileComplete from DB when session is updated
-      if (trigger === "update" && token.id) {
+      // Auto-refresh from DB while profile is incomplete (fixes stale JWT)
+      if (token.id && !token.profileComplete) {
         const [dbUser] = await db
           .select({ profileComplete: users.profileComplete, role: users.role })
           .from(users)

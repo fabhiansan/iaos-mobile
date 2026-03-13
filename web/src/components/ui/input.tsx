@@ -15,6 +15,7 @@ interface TextInputProps {
   name?: string;
   children?: React.ReactNode;
   disabled?: boolean;
+  maxLength?: number;
 }
 
 export function TextInput({
@@ -29,6 +30,7 @@ export function TextInput({
   name,
   children,
   disabled,
+  maxLength,
 }: TextInputProps) {
   const [showPassword, setShowPassword] = useState(false);
 
@@ -75,6 +77,7 @@ export function TextInput({
               onChange={onChange}
               placeholder={placeholder}
               disabled={disabled}
+              maxLength={maxLength}
               className={`w-full bg-transparent font-[family-name:var(--font-work-sans)] text-sm text-neutral-800 outline-none placeholder:text-neutral-500 ${disabled ? "opacity-50 cursor-not-allowed" : ""}`}
             />
           )}

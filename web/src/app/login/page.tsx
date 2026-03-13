@@ -43,22 +43,24 @@ export default function LoginPage() {
   const handleLogin = async () => {
     setIsLoading(true);
     setError("");
+    let result: Awaited<ReturnType<typeof signIn>> | undefined;
     try {
-      const result = await signIn("credentials", {
+      result = await signIn("credentials", {
         email,
         password,
         redirect: false,
       });
-      if (result?.error) {
-        setError("Invalid email or password");
-      } else {
-        router.push("/news");
-      }
     } catch {
       setError("Something went wrong");
-    } finally {
       setIsLoading(false);
+      return;
     }
+    if (result && result.error) {
+      setError("Invalid email or password");
+    } else {
+      router.push("/news");
+    }
+    setIsLoading(false);
   };
 
   return (
@@ -93,8 +95,7 @@ export default function LoginPage() {
         {/* Form */}
         <form
           className="mt-8 flex w-full flex-col gap-4"
-          onSubmit={(e) => {
-            e.preventDefault();
+          action={() => {
             if (isFormValid && !isLoading) handleLogin();
           }}
         >
@@ -145,6 +146,7 @@ export default function LoginPage() {
           </div>
 
           <Button
+            type="button"
             variant="secondary"
             icon={<GoogleIcon />}
             onClick={() => signIn("google")}

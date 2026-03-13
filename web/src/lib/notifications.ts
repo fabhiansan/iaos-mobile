@@ -2,19 +2,9 @@ import { EventEmitter } from "events";
 import { db } from "@/db";
 import { notifications, users } from "@/db/schema";
 
-type NotificationType = "article" | "donation" | "job" | "announcement";
+export type NotificationType = "article" | "donation" | "job" | "announcement";
 
-export interface NotificationPayload {
-  id: string;
-  userId: string;
-  title: string;
-  message: string | null;
-  type: NotificationType;
-  resourceId: string | null;
-  link: string | null;
-  isRead: boolean;
-  createdAt: Date;
-}
+export type NotificationPayload = typeof notifications.$inferSelect;
 
 interface Writer {
   write(chunk: string): void;
@@ -103,11 +93,25 @@ export function buildNotificationLink(type: NotificationType, resourceId?: strin
   }
 }
 
+function resolveArticleId(params: {
+  type: NotificationType;
+  articleId?: string;
+  resourceId?: string;
+}) {
+  if (params.articleId) return params.articleId;
+  return params.type === "article" ? (params.resourceId ?? null) : null;
+}
+
+function toNotificationPayload(row: NotificationPayload): NotificationPayload {
+  return row;
+}
+
 export async function createNotification(params: {
   userId: string;
   title: string;
   message?: string;
   type: NotificationType;
+  articleId?: string;
   resourceId?: string;
   link?: string;
 }): Promise<NotificationPayload> {
@@ -118,22 +122,13 @@ export async function createNotification(params: {
       title: params.title,
       message: params.message ?? null,
       type: params.type,
+      articleId: resolveArticleId(params),
       resourceId: params.resourceId ?? null,
       link: params.link ?? null,
     })
     .returning();
 
-  const payload: NotificationPayload = {
-    id: row.id,
-    userId: row.userId,
-    title: row.title,
-    message: row.message,
-    type: row.type,
-    resourceId: row.resourceId,
-    link: row.link,
-    isRead: row.isRead,
-    createdAt: row.createdAt,
-  };
+  const payload = toNotificationPayload(row);
 
   notificationEmitter.send(params.userId, payload);
   return payload;
@@ -143,6 +138,7 @@ export async function createBroadcastNotification(params: {
   title: string;
   message?: string;
   type: NotificationType;
+  articleId?: string;
   resourceId?: string;
   link?: string;
 }): Promise<void> {
@@ -156,24 +152,15 @@ export async function createBroadcastNotification(params: {
     userId: u.id,
     title: params.title,
     message: params.message ?? null,
-    type: params.type as NotificationType,
+    type: params.type,
+    articleId: resolveArticleId(params),
     resourceId: params.resourceId ?? null,
     link: params.link ?? null,
   }));
 
   const rows = await db.insert(notifications).values(values).returning();
 
-  const payloads = rows.map((row): NotificationPayload => ({
-    id: row.id,
-    userId: row.userId,
-    title: row.title,
-    message: row.message,
-    type: row.type,
-    resourceId: row.resourceId,
-    link: row.link,
-    isRead: row.isRead,
-    createdAt: row.createdAt,
-  }));
+  const payloads = rows.map(toNotificationPayload);
 
   for (const payload of payloads) {
     notificationEmitter.send(payload.userId, payload);
