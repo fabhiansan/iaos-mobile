@@ -8,7 +8,7 @@ export const completeProfileSchema = z.object({
     .max(8, "Student ID must be at most 8 characters")
     .regex(/^[a-zA-Z0-9]+$/, "Student ID must be alphanumeric"),
   yearOfEntry: z
-    .number({ required_error: "Year of entry is required" })
+    .number({ error: "Year of entry is required" })
     .int()
     .min(1950, "Invalid year of entry")
     .max(new Date().getFullYear(), "Invalid year of entry"),

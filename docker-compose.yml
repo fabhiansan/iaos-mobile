@@ -12,6 +12,8 @@ services:
         - STORAGE_S3_SECRET
         - STORAGE_S3_BUCKET
         - STORAGE_S3_ROOT
+        - AUTH_GOOGLE_ID
+        - AUTH_GOOGLE_SECRET
       restart: unless-stopped
 
     nginx:
