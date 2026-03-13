@@ -85,6 +85,7 @@ export async function POST(request: NextRequest) {
       nim,
       yearOfEntry,
       phone,
+      profileComplete: true,
     });
 
     return NextResponse.json({ success: true });
