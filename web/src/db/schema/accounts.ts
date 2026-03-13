@@ -11,12 +11,13 @@ export const accounts = pgTable(
     type: varchar("type", { length: 255 }).notNull(),
     provider: varchar("provider", { length: 255 }).notNull(),
     providerAccountId: varchar("provider_account_id", { length: 255 }).notNull(),
-    accessToken: text("access_token"),
-    refreshToken: text("refresh_token"),
-    expiresAt: integer("expires_at"),
-    tokenType: varchar("token_type", { length: 255 }),
+    access_token: text("access_token"),
+    refresh_token: text("refresh_token"),
+    expires_at: integer("expires_at"),
+    token_type: varchar("token_type", { length: 255 }),
     scope: text("scope"),
-    idToken: text("id_token"),
+    id_token: text("id_token"),
+    session_state: text("session_state"),
   },
   (table) => [
     uniqueIndex("provider_provider_account_id_idx").on(

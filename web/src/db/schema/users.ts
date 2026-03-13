@@ -12,6 +12,7 @@ export const users = pgTable("users", {
   phone: varchar("phone", { length: 20 }),
   role: roleEnum("role").default("user").notNull(),
   emailVerified: timestamp("email_verified"),
+  image: text("image"),
   profileImageUrl: text("profile_image_url"),
   profileComplete: boolean("profile_complete").default(false).notNull(),
   resetToken: varchar("reset_token", { length: 255 }),
