@@ -15,6 +15,20 @@
       "when": 1773241573945,
       "tag": "0001_quiet_magma",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1773372830447,
+      "tag": "0002_known_spencer_smythe",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1773373830450,
+      "tag": "0003_busy_supernaut",
+      "breakpoints": true
     }
   ]
 }
